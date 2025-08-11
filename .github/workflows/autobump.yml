@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */3 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go run ./internal/ci/bump/main.go
+      - run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+          git checkout -B ci/bump
+          git add ./packages
+
+          git commit -m "ci: Bump"
+      - run: |
+          gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

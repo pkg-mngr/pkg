@@ -1,0 +1,6 @@
+.DS_Store
+.pkg/
+
+web/packages
+web/node_modules
+web/.vitepress/cache

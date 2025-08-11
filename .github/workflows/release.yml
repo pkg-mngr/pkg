@@ -1,0 +1,19 @@
+on:
+  push:
+    tags: ["*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: GOOS=darwin GOARCH=arm64 go build -ldflags="-s" -o pkg
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: pkg

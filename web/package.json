@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "@types/bun": "^1.2.20",
+    "vitepress": "^1.6.4",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "dev": "bun build.ts && vitepress dev",
+    "build": "bun build.ts && vitepress build",
+    "preview": "vitepress preview"
+  },
+  "name": "web",
+  "private": true,
+  "type": "module"
+}
