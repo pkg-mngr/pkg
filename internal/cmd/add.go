@@ -65,7 +65,9 @@ func Add(pkg string) {
 	filename := config.PKG_TMP() + "/" + urlParts[len(urlParts)-1]
 	os.RemoveAll(filename)
 
-	fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
+	if pkgManifest.Caveats != "" {
+		fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
+	}
 	fmt.Println("Finished installing " + pkg + ".")
 }
 
