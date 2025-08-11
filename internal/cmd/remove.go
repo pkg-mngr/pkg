@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/noclaps/pkg/internal/config"
@@ -12,9 +13,11 @@ func Remove(pkgs []string) {
 
 	for _, pkg := range pkgs {
 		if _, ok := lockfile.Packages[pkg]; !ok {
-			log.Errorln(pkg + " is not installed.")
+			fmt.Println(pkg + " is not installed.")
 			continue
 		}
+
+		fmt.Println("Removing " + pkg + "...")
 		removeFiles(lockfile.Packages[pkg].Files)
 		lockfile.RemoveFromLockfile(pkg)
 	}
@@ -23,6 +26,7 @@ func Remove(pkgs []string) {
 
 func removeFiles(files []string) {
 	for _, file := range files {
+		fmt.Println("Deleting " + file + "...")
 		if err := os.RemoveAll(config.PKG_HOME() + "/" + file); err != nil {
 			log.Errorln("Error removing file " + config.PKG_HOME() + "/" + file)
 		}

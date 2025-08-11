@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"fmt"
 	"maps"
 	"slices"
 
 	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
@@ -17,10 +17,11 @@ func Update() {
 	for _, pkg := range pkgs {
 		pkgManifest := manifest.GetManifest(pkg)
 		if pkgManifest.Version == lockfile.Packages[pkg].Version {
-			log.Println(pkg + " is already up to date")
+			fmt.Println(pkg + " is already up to date")
 			continue
 		}
 
+		fmt.Println("Updating " + pkg + "...")
 		pkgsToUpdate = append(pkgsToUpdate, pkg)
 	}
 
