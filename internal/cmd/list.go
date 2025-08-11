@@ -13,7 +13,7 @@ func List() []string {
 	output := make([]string, len(lockfile.Packages))
 
 	for i, key := range keys {
-		output[i] = key + " " + lockfile.Packages[key].Version
+		output[i] = "\033[1m" + key + ":\033[0m " + lockfile.Packages[key].Version
 	}
 
 	return output

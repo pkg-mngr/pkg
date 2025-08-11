@@ -54,10 +54,14 @@ func main() {
 		pkgs := cmd.List()
 		if len(pkgs) == 0 {
 			fmt.Println("No packages installed!")
+			return
 		}
+
+		fmt.Println("\n\033[32;1m===\033[0;1m Installed\033[0m")
 		for _, pkg := range pkgs {
 			fmt.Println(pkg)
 		}
+		fmt.Println()
 		return
 	}
 
