@@ -15,7 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: cp -r packages web/public
       - run: bun install
         working-directory: web
       - run: bun run build
