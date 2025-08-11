@@ -45,6 +45,7 @@ func Add(pkg string) {
 	}
 
 	if len(pkgManifest.Scripts.Completions) != 0 {
+		fmt.Println("Running completions script...")
 		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
 		if err := runScript(completionsScript); err != nil && err.Error() != "" {
 			log.Println(err)
