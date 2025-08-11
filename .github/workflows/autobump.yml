@@ -32,8 +32,8 @@ jobs:
             git commit -m "packages: Update packages to latest versions"
             git push origin ci/bump --force
 
-            gh pr list --head ci/bump --state open --json number --jq '.[0].number'
-            if ! gh pr view ci/bump &> /dev/null; then
+            open_pr=$(gh pr list --head ci/bump --state open --json number --jq '.[0].number')
+            if [[ -z "$open_pr" ]]; then
               gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions' --body ''
             fi
           fi
