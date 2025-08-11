@@ -7,9 +7,7 @@
   "sha256": "543852a6f967062aa5ec13f0ed5f4b4dccbed9ed330d537cec3a9cf8d92f8f58",
   "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg",
   "scripts": {
-    "install": [
-      "mv pkg {{ pkg.bin_dir }}/pkg"
-    ],
+    "install": ["install pkg {{ pkg.bin_dir }}/pkg"],
     "latest": [
       "git ls-remote --tags --refs https://github.com/noClaps/pkg | tail -n 1 | cut -d '/' -f 3 | cut -c 2-"
     ]
