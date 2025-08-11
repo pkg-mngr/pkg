@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"slices"
 	"strings"
 
@@ -32,7 +33,7 @@ func Add(pkg string) {
 
 	filesBefore := listFiles()
 	if err := fetchPackage(pkgManifest); err != nil {
-		log.Println(err)
+		log.Errorln(err)
 		return
 	}
 
@@ -40,7 +41,7 @@ func Add(pkg string) {
 	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
 	installScript = "cd " + config.PKG_TMP() + "\n" + installScript
 	if err := runScript(installScript); err != nil && err.Error() != "" {
-		log.Println(err)
+		log.Errorln(err)
 		return
 	}
 
@@ -48,7 +49,7 @@ func Add(pkg string) {
 		fmt.Println("Running completions script...")
 		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
 		if err := runScript(completionsScript); err != nil && err.Error() != "" {
-			log.Println(err)
+			log.Errorln(err)
 			return
 		}
 	}
@@ -62,9 +63,16 @@ func Add(pkg string) {
 		diffFiles(filesBefore, filesAfter),
 	)
 
-	urlParts := strings.Split(pkgManifest.Url, "/")
-	filename := config.PKG_TMP() + "/" + urlParts[len(urlParts)-1]
-	os.RemoveAll(filename)
+	files, err := os.ReadDir(config.PKG_TMP())
+	if err != nil {
+		log.Errorln("Error opening " + config.PKG_TMP() + " directory")
+	}
+	for _, file := range files {
+		filename := filepath.Join(config.PKG_TMP(), file.Name())
+		if err := os.RemoveAll(filename); err != nil {
+			log.Errorln("Error deleting " + filename)
+		}
+	}
 
 	if pkgManifest.Caveats != "" {
 		fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
@@ -164,7 +172,7 @@ func runScript(script string) error {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		log.Println("Error waiting for command")
+		log.Errorln("Error waiting for command")
 		return nil
 	}
 
