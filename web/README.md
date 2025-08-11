@@ -13,10 +13,17 @@ git clone https://github.com/noClaps/pkg.git
 cd pkg
 ```
 
-Run the build script:
+Copy the `packages/` directory into `web/public/`:
 
 ```sh
+cp -r packages/ web/public/
+```
+
+Run the build script inside the `web/` directory:
+
+```sh
+cd web
 bun run build
 ```
 
-The built files will be in `.vitepress/dist`.
+The built files will be in `.vitepress/dist/`.
