@@ -11,6 +11,7 @@ import (
 )
 
 type Manifest struct {
+	Schema      string `json:"$schema,omitempty"`
 	ManifestUrl string `json:"-"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
