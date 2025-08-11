@@ -10,8 +10,7 @@
     "install": [
       "tar -xf go{{ version }}.darwin-arm64.tar.gz go",
       "mv go {{ pkg.opt_dir }}/go",
-      "ln -sf {{ pkg.opt_dir }}/go/bin/go {{ pkg.bin_dir }}/go",
-      "ln -sf {{ pkg.opt_dir }}/go/bin/gofmt {{ pkg.bin_dir }}/gofmt"
+      "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
     ],
     "latest": [
       "curl -fsSL \"https://go.dev/VERSION?m=text\" | grep 'go*' | cut -c 3-"
