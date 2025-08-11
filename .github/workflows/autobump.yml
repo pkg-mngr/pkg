@@ -24,7 +24,7 @@ jobs:
             git checkout -B ci/bump
             git add ./packages
 
-            git commit -m "ci: Bump"
+            git commit -m "packages: Update packages to latest versions"
             git push origin ci/bump --force
 
             if ! gh pr view ci/bump &> /dev/null; then
