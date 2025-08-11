@@ -17,14 +17,16 @@ jobs:
           go-version-file: go.mod
       - run: go run ./internal/ci/bump/main.go
       - run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
+          if [[ `git status --porcelain` ]]; then
+            git config user.name "GitHub Action"
+            git config user.email "action@github.com"
 
-          git checkout -B ci/bump
-          git add ./packages
+            git checkout -B ci/bump
+            git add ./packages
 
-          git commit -m "ci: Bump"
-      - run: |
-          gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions'
+            git commit -m "ci: Bump"
+
+            gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions'
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
