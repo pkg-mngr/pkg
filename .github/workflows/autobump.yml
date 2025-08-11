@@ -27,7 +27,9 @@ jobs:
             git commit -m "ci: Bump"
             git push origin ci/bump --force
 
-            gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions' --body ''
+            if ! gh pr view ci/bump &> /dev/null; then
+              gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions' --body ''
+            fi
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
