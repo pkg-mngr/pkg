@@ -4,13 +4,13 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 	"os/exec"
 	"path"
 	"slices"
 	"strings"
 
+	"github.com/melbahja/got"
 	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
@@ -24,12 +24,12 @@ func Add(pkgs []string) {
 
 		if entry, ok := lockfile.Packages[pkg]; ok {
 			if entry.Version == pkgManifest.Version {
-				log.Errorln(pkg + " is already installed.")
+				fmt.Println(pkg + " is already installed.")
 				continue
 			}
 		}
 
-		fmt.Println("Installing " + pkg)
+		fmt.Println("Installing " + pkg + "...")
 
 		filesBefore := listFiles()
 		if err := fetchPackage(pkgManifest); err != nil {
@@ -37,6 +37,7 @@ func Add(pkgs []string) {
 			continue
 		}
 
+		fmt.Println("Running install script...")
 		installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
 		installScript = "cd " + config.PKG_TMP() + "\n" + installScript
 		if err := runScript(installScript); err != nil && err.Error() != "" {
@@ -64,6 +65,9 @@ func Add(pkgs []string) {
 		urlParts := strings.Split(pkgManifest.Url, "/")
 		filename := config.PKG_TMP() + "/" + urlParts[len(urlParts)-1]
 		os.RemoveAll(filename)
+
+		fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
+		fmt.Println("Finished installing " + pkg + ".")
 	}
 }
 
@@ -100,32 +104,34 @@ func listFiles() []string {
 func fetchPackage(pkgManifest manifest.Manifest) error {
 	filename := config.PKG_TMP() + "/" + path.Base(pkgManifest.Url)
 
-	if _, err := os.Stat(filename); err != nil {
-		res, err := http.Get(pkgManifest.Url)
-		if err != nil || res.StatusCode != http.StatusOK {
-			return fmt.Errorf("Error fetching data from %s", pkgManifest.Url)
+	g := got.New()
+	g.ProgressFunc = func(d *got.Download) {
+		percent := float64(d.Size()) / float64(d.TotalSize()) * 100
+		speed := float64(d.AvgSpeed())
+		speedStr := ""
+		if speed/1024/1024 < 5 {
+			speedStr = fmt.Sprintf("%.2f kB/s", speed/1024)
+		} else {
+			speedStr = fmt.Sprintf("%.2f MB/s", speed/1024/1024)
 		}
-
-		f, err := os.Create(filename)
-		if err != nil {
-			return fmt.Errorf("Error creating temporary file")
-		}
-
-		if _, err := io.Copy(f, res.Body); err != nil {
-			return fmt.Errorf("Error writing data to file")
-		}
-		res.Body.Close()
+		fmt.Printf("\033[2KDownloaded %.2f%% (%s)\r", percent, speedStr)
 	}
+	if err := g.Download(pkgManifest.Url, filename); err != nil {
+		return fmt.Errorf("Error while downloading %s: %v", filename, err)
+	}
+	fmt.Println("\033[2KDownloaded 100%")
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("Error reading data from response")
 	}
 
+	fmt.Print("Verifying checksum...")
 	checksum := fmt.Sprintf("%x", sha256.Sum256(data))
 	if checksum != pkgManifest.Sha256 {
-		return fmt.Errorf("Checksum of data did not match in package manifest")
+		return fmt.Errorf("\nChecksum of data did not match in package manifest")
 	}
+	fmt.Println(" Looks good!")
 
 	return nil
 }
