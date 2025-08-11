@@ -1,4 +1,8 @@
-on: push
+on:
+  push:
+    paths:
+      - packages
+      - web
 
 permissions:
   contents: write
