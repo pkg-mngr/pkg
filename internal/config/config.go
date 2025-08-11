@@ -22,28 +22,28 @@ func PKG_HOME() string {
 		log.Fatalln("User home directory not found")
 	}
 
-	pkgHome = home + "/.pkg"
+	pkgHome = filepath.Join(home, ".pkg")
 	return pkgHome
 }
 
 func PKG_BIN() string {
-	return PKG_HOME() + "/bin"
+	return filepath.Join(PKG_HOME(), "bin")
 }
 
 func PKG_OPT() string {
-	return PKG_HOME() + "/opt"
+	return filepath.Join(PKG_HOME(), "opt")
 }
 
 func PKG_ZSH_COMPLETIONS() string {
-	return PKG_HOME() + "/share/zsh/site-functions"
+	return filepath.Join(PKG_HOME(), "share/zsh/site-functions")
 }
 
 func PKG_TMP() string {
-	return PKG_HOME() + "/tmp"
+	return filepath.Join(PKG_HOME(), "tmp")
 }
 
 func LOCKFILE() string {
-	return PKG_HOME() + "/pkg.lock"
+	return filepath.Join(PKG_HOME(), "pkg.lock")
 }
 
 func MANIFEST_HOST() string {

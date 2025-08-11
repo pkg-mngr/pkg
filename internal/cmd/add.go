@@ -111,7 +111,7 @@ func listFiles() []string {
 }
 
 func fetchPackage(pkgManifest manifest.Manifest) error {
-	filename := config.PKG_TMP() + "/" + path.Base(pkgManifest.Url)
+	filename := filepath.Join(config.PKG_TMP(), path.Base(pkgManifest.Url))
 
 	g := got.New()
 	g.ProgressFunc = func(d *got.Download) {

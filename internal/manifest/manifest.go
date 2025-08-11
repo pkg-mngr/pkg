@@ -2,7 +2,9 @@ package manifest
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -28,10 +30,13 @@ type Manifest struct {
 }
 
 func GetManifest(pkgName string) Manifest {
-	manifestUrl := config.MANIFEST_HOST() + "/" + pkgName + ".json"
+	manifestUrl, err := url.JoinPath(config.MANIFEST_HOST(), pkgName+".json")
+	if err != nil {
+		log.Fatalln("Error creating URL to " + pkgName + " manifest")
+	}
 	res, err := http.Get(manifestUrl)
 	if err != nil || res.StatusCode != http.StatusOK {
-		log.Errorln("Package " + pkgName + " does not exist")
+		fmt.Println("Package " + pkgName + " does not exist")
 		os.Exit(0)
 	}
 	defer res.Body.Close()
