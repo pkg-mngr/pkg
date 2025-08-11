@@ -1,0 +1,15 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "pkg",
+  "description": "A simple package manager for macOS",
+  "homepage": "https://pkg.zerolimits.dev",
+  "version": "0.1.0",
+  "sha256": "063bfe675731fa7f5b3f34aa278d9a095ab41c19e9790664b3e22965f77fd9b9",
+  "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg",
+  "scripts": {
+    "install": ["mv pkg {{ pkg.bin_dir }}/pkg"],
+    "latest": [
+      "git ls-remote --tags --refs https://github.com/noClaps/pkg | cut -d '/' -f 3 | cut -c 2-"
+    ]
+  }
+}
