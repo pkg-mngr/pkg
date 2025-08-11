@@ -25,6 +25,7 @@ jobs:
             git add ./packages
 
             git commit -m "ci: Bump"
+            git push origin ci/bump --force
 
             gh pr create --base main --head ci/bump --title 'ci: Update packages to latest versions' --body ''
           fi
