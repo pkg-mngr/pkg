@@ -1,6 +1,10 @@
 on:
   workflow_dispatch:
-  workflow_call:
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
   schedule:
     - cron: "0 */3 * * *"
 
