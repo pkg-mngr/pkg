@@ -1,9 +1,4 @@
-on:
-  pull_request:
-  push:
-    branches-ignore:
-      - main
-      - ci/**
+on: pull_request
 
 permissions:
   contents: write
