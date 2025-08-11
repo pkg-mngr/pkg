@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the project"
+    },
+    "description": {
+      "type": "string",
+      "description": "A short description of the project"
+    },
+    "homepage": {
+      "type": "string",
+      "description": "A link to the project's homepage"
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of the package being installed"
+    },
+    "sha256": {
+      "type": "string",
+      "description": "The SHA256 checksum of the file being downloaded"
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL to the file being downloaded"
+    },
+    "caveats": {
+      "type": "string",
+      "description": "Extra information the user should know after installation completes, such as setup information"
+    },
+    "scripts": {
+      "type": "object",
+      "properties": {
+        "install": {
+          "type": "array",
+          "description": "The script to run to install the package after downloading",
+          "items": { "type": "string" }
+        },
+        "latest": {
+          "type": "array",
+          "description": "The script to run to check the latest version of the package",
+          "items": { "type": "string" }
+        },
+        "completions": {
+          "type": "array",
+          "description": "The script to run to install ZSH shell completions for the package",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["install", "latest"]
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "homepage",
+    "version",
+    "sha256",
+    "url",
+    "scripts"
+  ]
+}
