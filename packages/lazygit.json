@@ -1,0 +1,18 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "lazygit",
+  "description": "simple terminal UI for git commands",
+  "homepage": "https://github.com/jesseduffield/lazygit",
+  "version": "0.54.2",
+  "sha256": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b",
+  "url": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_arm64.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf lazygit_{{ version }}_darwin_arm64.tar.gz lazygit",
+      "install lazygit {{ pkg.bin_dir }}/lazygit"
+    ],
+    "latest": [
+      "git ls-remote --tags --refs --sort='v:refname' https://github.com/jesseduffield/lazygit | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+    ]
+  }
+}
