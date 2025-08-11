@@ -13,7 +13,6 @@ func Update() {
 	lockfile := config.ReadLockfile()
 	pkgs := slices.Collect(maps.Keys(lockfile.Packages))
 
-	pkgsToUpdate := make([]string, 0, len(pkgs))
 	for _, pkg := range pkgs {
 		pkgManifest := manifest.GetManifest(pkg)
 		if pkgManifest.Version == lockfile.Packages[pkg].Version {
@@ -22,9 +21,7 @@ func Update() {
 		}
 
 		fmt.Println("Updating " + pkg + "...")
-		pkgsToUpdate = append(pkgsToUpdate, pkg)
+		Remove(pkg)
+		Add(pkg)
 	}
-
-	Remove(pkgsToUpdate)
-	Add(pkgsToUpdate)
 }

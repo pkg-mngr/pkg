@@ -31,7 +31,9 @@ func main() {
 	}
 
 	if len(args.Add.Packages) != 0 {
-		cmd.Add(args.Add.Packages)
+		for _, pkg := range args.Add.Packages {
+			cmd.Add(pkg)
+		}
 		return
 	}
 
@@ -41,7 +43,9 @@ func main() {
 	}
 
 	if len(args.Remove.Packages) != 0 {
-		cmd.Remove(args.Remove.Packages)
+		for _, pkg := range args.Remove.Packages {
+			cmd.Remove(pkg)
+		}
 		return
 	}
 

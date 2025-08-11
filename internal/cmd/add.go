@@ -16,59 +16,57 @@ import (
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
-func Add(pkgs []string) {
+func Add(pkg string) {
 	lockfile := config.ReadLockfile()
 
-	for _, pkg := range pkgs {
-		pkgManifest := manifest.GetManifest(pkg)
+	pkgManifest := manifest.GetManifest(pkg)
 
-		if entry, ok := lockfile.Packages[pkg]; ok {
-			if entry.Version == pkgManifest.Version {
-				fmt.Println(pkg + " is already installed.")
-				continue
-			}
+	if entry, ok := lockfile.Packages[pkg]; ok {
+		if entry.Version == pkgManifest.Version {
+			fmt.Println(pkg + " is already installed.")
+			return
 		}
-
-		fmt.Println("Installing " + pkg + "...")
-
-		filesBefore := listFiles()
-		if err := fetchPackage(pkgManifest); err != nil {
-			log.Println(err)
-			continue
-		}
-
-		fmt.Println("Running install script...")
-		installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
-		installScript = "cd " + config.PKG_TMP() + "\n" + installScript
-		if err := runScript(installScript); err != nil && err.Error() != "" {
-			log.Println(err)
-			continue
-		}
-
-		if len(pkgManifest.Scripts.Completions) != 0 {
-			completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
-			if err := runScript(completionsScript); err != nil && err.Error() != "" {
-				log.Println(err)
-				continue
-			}
-		}
-
-		filesAfter := listFiles()
-
-		lockfile.WriteToLockfile(
-			pkgManifest.Name,
-			pkgManifest.ManifestUrl,
-			pkgManifest.Version,
-			diffFiles(filesBefore, filesAfter),
-		)
-
-		urlParts := strings.Split(pkgManifest.Url, "/")
-		filename := config.PKG_TMP() + "/" + urlParts[len(urlParts)-1]
-		os.RemoveAll(filename)
-
-		fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
-		fmt.Println("Finished installing " + pkg + ".")
 	}
+
+	fmt.Println("Installing " + pkg + "...")
+
+	filesBefore := listFiles()
+	if err := fetchPackage(pkgManifest); err != nil {
+		log.Println(err)
+		return
+	}
+
+	fmt.Println("Running install script...")
+	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
+	installScript = "cd " + config.PKG_TMP() + "\n" + installScript
+	if err := runScript(installScript); err != nil && err.Error() != "" {
+		log.Println(err)
+		return
+	}
+
+	if len(pkgManifest.Scripts.Completions) != 0 {
+		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
+		if err := runScript(completionsScript); err != nil && err.Error() != "" {
+			log.Println(err)
+			return
+		}
+	}
+
+	filesAfter := listFiles()
+
+	lockfile.WriteToLockfile(
+		pkgManifest.Name,
+		pkgManifest.ManifestUrl,
+		pkgManifest.Version,
+		diffFiles(filesBefore, filesAfter),
+	)
+
+	urlParts := strings.Split(pkgManifest.Url, "/")
+	filename := config.PKG_TMP() + "/" + urlParts[len(urlParts)-1]
+	os.RemoveAll(filename)
+
+	fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
+	fmt.Println("Finished installing " + pkg + ".")
 }
 
 func listFiles() []string {

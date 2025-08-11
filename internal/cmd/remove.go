@@ -8,20 +8,17 @@ import (
 	"github.com/noclaps/pkg/internal/log"
 )
 
-func Remove(pkgs []string) {
+func Remove(pkg string) {
 	lockfile := config.ReadLockfile()
 
-	for _, pkg := range pkgs {
-		if _, ok := lockfile.Packages[pkg]; !ok {
-			fmt.Println(pkg + " is not installed.")
-			continue
-		}
-
-		fmt.Println("Removing " + pkg + "...")
-		removeFiles(lockfile.Packages[pkg].Files)
-		lockfile.RemoveFromLockfile(pkg)
+	if _, ok := lockfile.Packages[pkg]; !ok {
+		fmt.Println(pkg + " is not installed.")
+		return
 	}
 
+	fmt.Println("Removing " + pkg + "...")
+	removeFiles(lockfile.Packages[pkg].Files)
+	lockfile.RemoveFromLockfile(pkg)
 }
 
 func removeFiles(files []string) {
