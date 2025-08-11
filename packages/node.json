@@ -1,0 +1,19 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "node",
+  "description": "Node.js JavaScript runtime",
+  "homepage": "https://nodejs.org",
+  "version": "24.5.0",
+  "sha256": "2a4172474565ecb8f0c87a1520590e00d6b28a78594c220d38eef991763dc276",
+  "url": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
+      "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
+      "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
+    ],
+    "latest": [
+      "curl -s https://nodejs.org/dist/index.json | jq '.[0].version' -r | cut -c 2-"
+    ]
+  }
+}
