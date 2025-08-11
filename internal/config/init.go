@@ -28,7 +28,7 @@ func Init() {
 Add the following to your ~/.zshrc to complete installation:
 
 export PKG_HOME="%s"
-export PATH="$PKG_HOME:$PATH"
+export PATH="$PKG_HOME/bin:$PATH"
 export FPATH="$PKG_HOME/share/zsh/site-functions:$FPATH"
 
 `, PKG_HOME(), PKG_HOME())
