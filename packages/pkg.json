@@ -9,7 +9,7 @@
   "scripts": {
     "install": ["mv pkg {{ pkg.bin_dir }}/pkg"],
     "latest": [
-      "git ls-remote --tags --refs https://github.com/noClaps/pkg | cut -d '/' -f 3 | cut -c 2-"
+      "git ls-remote --tags --refs https://github.com/noClaps/pkg | tail -n 1 | cut -d '/' -f 3 | cut -c 2-"
     ]
   }
 }
