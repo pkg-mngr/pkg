@@ -30,7 +30,7 @@ Bun.write("./packages/index.md", index);
 
 for (const pkg of manifests) {
   const page = `
-[← See all packages](../)
+[← See all packages](./index.md)
 
 # ${pkg.name}
 
