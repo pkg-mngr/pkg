@@ -16,5 +16,7 @@ func List() []string {
 		output[i] = "\033[1m" + key + ":\033[0m " + lockfile.Packages[key].Version
 	}
 
+	slices.Sort(output)
+
 	return output
 }
