@@ -89,7 +89,7 @@ func listFiles() []string {
 		log.Fatalln("Error listing " + config.PKG_BIN() + " directory")
 	}
 	for _, entry := range entries {
-		files = append(files, "bin/"+entry.Name())
+		files = append(files, filepath.Join("bin", entry.Name()))
 	}
 
 	entries, err = os.ReadDir(config.PKG_OPT())
@@ -97,7 +97,7 @@ func listFiles() []string {
 		log.Fatalln("Error listing " + config.PKG_OPT() + " directory")
 	}
 	for _, entry := range entries {
-		files = append(files, "opt/"+entry.Name())
+		files = append(files, filepath.Join("opt", entry.Name()))
 	}
 
 	entries, err = os.ReadDir(config.PKG_ZSH_COMPLETIONS())
@@ -105,7 +105,7 @@ func listFiles() []string {
 		log.Fatalln("Error listing " + config.PKG_ZSH_COMPLETIONS() + " directory")
 	}
 	for _, entry := range entries {
-		files = append(files, "share/zsh/site-functions/"+entry.Name())
+		files = append(files, filepath.Join("share/zsh/site-functions", entry.Name()))
 	}
 
 	return files
