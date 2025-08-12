@@ -16,10 +16,7 @@ import (
 )
 
 func main() {
-	files, err := os.ReadDir("packages")
-	if err != nil {
-		log.Fatalln("Error reading packages/ directory")
-	}
+	files := os.Args[1:]
 	var wg sync.WaitGroup
 
 	for _, file := range files {
@@ -27,16 +24,16 @@ func main() {
 		go func() {
 			defer wg.Done()
 
-			log.Println("Reading " + file.Name())
-			f, err := os.OpenFile("packages/"+file.Name(), os.O_RDWR, 0o644)
+			log.Println("Reading " + file)
+			f, err := os.OpenFile(file, os.O_RDWR, 0o644)
 			if err != nil {
-				log.Fatalln("Error opening " + file.Name())
+				log.Fatalln("Error opening " + file)
 			}
 
-			log.Println("Decoding manifest from " + file.Name())
+			log.Println("Decoding manifest from " + file)
 			pkgManifest := new(manifest.Manifest)
 			if err := json.NewDecoder(f).Decode(pkgManifest); err != nil {
-				log.Fatalln("Error unmarshalling JSON from " + file.Name())
+				log.Fatalln("Error unmarshalling JSON from " + file)
 			}
 
 			url := strings.ReplaceAll(pkgManifest.Url, "{{ version }}", pkgManifest.Version)
@@ -54,12 +51,12 @@ func main() {
 			}
 			res.Body.Close()
 
-			log.Println("Validating checksum for ", path.Base(url))
+			log.Println("Validating checksum for " + path.Base(url))
 			checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
 			if checksum != pkgManifest.Sha256 {
-				log.Errorln("Calculated checksum did not match checksum in " + file.Name())
+				log.Errorln("Calculated checksum did not match checksum in " + file)
 				log.Errorln("The calculated checksum was: " + checksum)
-				log.Fatalln("The checksum in " + file.Name() + " was " + pkgManifest.Sha256)
+				log.Fatalln("The checksum in " + file + " was " + pkgManifest.Sha256)
 			}
 
 			log.Println("Everything looks good!")
