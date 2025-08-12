@@ -20,7 +20,13 @@ import (
 func Add(pkg string) {
 	lockfile := config.ReadLockfile()
 
-	pkgManifest := manifest.GetManifest(pkg)
+	var pkgManifest manifest.Manifest
+	if strings.HasPrefix(pkg, "./") && strings.HasSuffix(pkg, ".json") {
+		pkgManifest = manifest.GetManifestFromFile(pkg)
+		pkg = pkgManifest.Name
+	} else {
+		pkgManifest = manifest.GetManifest(pkg)
+	}
 
 	if entry, ok := lockfile.Packages[pkg]; ok {
 		if entry.Version == pkgManifest.Version {
@@ -158,6 +164,7 @@ func diffFiles(before, after []string) []string {
 }
 
 func runScript(script string) error {
+	script = "set -e\n" + script
 	cmd := exec.Command("/bin/sh", "-c", script)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
@@ -174,8 +181,8 @@ func runScript(script string) error {
 
 	if err := cmd.Wait(); err != nil {
 		log.Errorln("Error waiting for command")
-		return nil
+		return fmt.Errorf("%s", stderrData)
 	}
 
-	return fmt.Errorf("%s", stderrData)
+	return nil
 }

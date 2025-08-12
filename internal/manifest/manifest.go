@@ -43,7 +43,37 @@ func GetManifest(pkgName string) Manifest {
 
 	manifest := new(Manifest)
 	manifest.ManifestUrl = manifestUrl
-	json.NewDecoder(res.Body).Decode(manifest)
+	if err := json.NewDecoder(res.Body).Decode(manifest); err != nil {
+		log.Fatalln("Error decoding data from manifest")
+	}
+
+	manifest.Url = formatData(manifest.Url, *manifest)
+	manifest.Caveats = formatData(manifest.Caveats, *manifest)
+
+	for i, line := range manifest.Scripts.Install {
+		manifest.Scripts.Install[i] = formatData(line, *manifest)
+	}
+	for i, line := range manifest.Scripts.Latest {
+		manifest.Scripts.Latest[i] = formatData(line, *manifest)
+	}
+	for i, line := range manifest.Scripts.Completions {
+		manifest.Scripts.Completions[i] = formatData(line, *manifest)
+	}
+
+	return *manifest
+}
+
+func GetManifestFromFile(path string) Manifest {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatalln("Error reading data from " + path)
+	}
+
+	manifest := new(Manifest)
+	manifest.ManifestUrl = path
+	if err := json.Unmarshal(data, manifest); err != nil {
+		log.Fatalln("Error unmarshalling data from " + path)
+	}
 
 	manifest.Url = formatData(manifest.Url, *manifest)
 	manifest.Caveats = formatData(manifest.Caveats, *manifest)
