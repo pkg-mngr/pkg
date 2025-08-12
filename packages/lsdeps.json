@@ -1,0 +1,18 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "lsdeps",
+  "description": "A command line tool to show the total number of dependencies that a package on npm has.",
+  "homepage": "https://github.com/noClaps/lsdeps",
+  "version": "0.3.2",
+  "sha256": "7ee7fe6dbfb29f420d83dd6d05ea10e97b63306bbb15d288b4a0f34076806266",
+  "url": "https://github.com/noClaps/lsdeps/releases/download/v{{ version }}/lsdeps-darwin-arm64.tar.xz",
+  "scripts": {
+    "install": [
+      "tar -xf lsdeps-darwin-arm64.tar.xz",
+      "install lsdeps {{ pkg.bin_dir }}/lsdeps"
+    ],
+    "latest": [
+      "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/lsdeps | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+    ]
+  }
+}

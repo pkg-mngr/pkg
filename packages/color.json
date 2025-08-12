@@ -1,0 +1,18 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "color",
+  "description": "A tool to quickly convert between color formats.",
+  "homepage": "https://github.com/noClaps/color",
+  "version": "0.1.2",
+  "sha256": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b",
+  "url": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz",
+  "scripts": {
+    "install": [
+      "tar -xf color-darwin-arm64.tar.xz",
+      "install color {{ pkg.bin_dir }}/color"
+    ],
+    "latest": [
+      "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/color | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+    ]
+  }
+}

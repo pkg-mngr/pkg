@@ -1,0 +1,18 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "serve",
+  "description": "A simple HTTP server for serving a directory",
+  "homepage": "https://github.com/noClaps/serve",
+  "version": "0.1.5",
+  "sha256": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9",
+  "url": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz",
+  "scripts": {
+    "install": [
+      "tar -xf serve-darwin-arm64.tar.xz",
+      "install serve {{ pkg.bin_dir }}/serve"
+    ],
+    "latest": [
+      "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/serve | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+    ]
+  }
+}
