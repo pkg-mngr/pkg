@@ -1,0 +1,21 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "fd",
+  "description": "A simple, fast and user-friendly alternative to 'find'",
+  "homepage": "https://github.com/sharkdp/fd",
+  "version": "10.2.0",
+  "sha256": "ae6327ba8c9a487cd63edd8bddd97da0207887a66d61e067dfe80c1430c5ae36",
+  "url": "https://github.com/sharkdp/fd/releases/download/v{{ version }}/fd-v{{ version }}-aarch64-apple-darwin.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf fd-v{{ version }}-aarch64-apple-darwin.tar.gz",
+      "install fd-v{{ version }}-aarch64-apple-darwin/fd {{ pkg.bin_dir }}/fd"
+    ],
+    "latest": [
+      "git ls-remote --tags --refs --sort='v:refname' https://github.com/sharkdp/fd | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+    ],
+    "completions": [
+      "cp fd-v{{ version }}-aarch64-apple-darwin/autocomplete/_fd {{ pkg.completions.zsh }}/_fd"
+    ]
+  }
+}
