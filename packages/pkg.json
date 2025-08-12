@@ -4,12 +4,10 @@
   "description": "A simple package manager for macOS",
   "homepage": "https://pkg.zerolimits.dev",
   "version": "0.1.3",
-  "sha256": "3a6de7a51481992b83c6658eb70598a63fd47a9c14f29465d3d458efc88616a5",
-  "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg",
+  "sha256": "59cf7a93a5260cb574d84a7a74ac0c969ed594b0de2f7daec336c968153a9753",
+  "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
   "scripts": {
-    "install": [
-      "install pkg {{ pkg.bin_dir }}/pkg"
-    ],
+    "install": ["tar -xf pkg.tar.xz", "install pkg {{ pkg.bin_dir }}/pkg"],
     "latest": [
       "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/pkg | tail -1 | cut -d '/' -f 3 | cut -c 2-"
     ]
