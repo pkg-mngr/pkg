@@ -3,11 +3,14 @@
   "name": "pkg",
   "description": "A simple package manager for macOS",
   "homepage": "https://pkg.zerolimits.dev",
-  "version": "0.1.3",
-  "sha256": "59cf7a93a5260cb574d84a7a74ac0c969ed594b0de2f7daec336c968153a9753",
+  "version": "0.1.4",
+  "sha256": "c1d2cfaeff264c979374c46837ba7cea20c7348f7c1cb6b2c45f4abf17c492fc",
   "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
   "scripts": {
-    "install": ["tar -xf pkg.tar.xz", "install pkg {{ pkg.bin_dir }}/pkg"],
+    "install": [
+      "tar -xf pkg.tar.xz",
+      "install pkg {{ pkg.bin_dir }}/pkg"
+    ],
     "latest": [
       "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/pkg | tail -1 | cut -d '/' -f 3 | cut -c 2-"
     ]
