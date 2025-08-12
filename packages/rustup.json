@@ -9,9 +9,9 @@
   "caveats": "To initialise `rustup`, set a default toolchain by running `rustup default stable`, then add `$HOME/.cargo/bin` to your PATH.",
   "scripts": {
     "install": [
-      "chmod +x rustup-init",
+      "chmod +x ./rustup-init",
       "./rustup-init -y --no-modify-path --default-toolchain none",
-      "ln -sf $HOME/.cargo/bin/rustup {{ pkg.bin_dir}}/rustup"
+      "ln -sf $HOME/.cargo/bin/rustup {{ pkg.bin_dir }}/rustup"
     ],
     "latest": [
       "git ls-remote --tags --refs --sort='v:refname' https://github.com/rust-lang/rustup | tail -1 | cut -d '/' -f 3"
