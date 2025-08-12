@@ -4,7 +4,7 @@
   "description": "A tool to quickly convert between color formats.",
   "homepage": "https://github.com/noClaps/color",
   "version": "0.1.2",
-  "sha256": "9078a8d036240109586f4072e054d662967751102824ce354e93749996d6ef02",
+  "sha256": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b",
   "url": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz",
   "scripts": {
     "install": [
