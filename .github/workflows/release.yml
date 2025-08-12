@@ -15,6 +15,7 @@ jobs:
         with:
           go-version-file: go.mod
       - run: GOOS=darwin GOARCH=arm64 go build -ldflags="-s" -o pkg
+      - run: tar -acf pkg.tar.xz pkg
       - uses: softprops/action-gh-release@v2
         with:
-          files: pkg
+          files: pkg.tar.xz
