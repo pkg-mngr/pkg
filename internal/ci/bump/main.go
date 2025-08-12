@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -29,7 +30,7 @@ func main() {
 			defer wg.Done()
 
 			log.Println("Reading " + file.Name())
-			f, err := os.OpenFile("packages/"+file.Name(), os.O_RDWR, 0o644)
+			f, err := os.OpenFile(filepath.Join("packages", file.Name()), os.O_RDWR, 0o644)
 			if err != nil {
 				log.Errorln("Error opening " + file.Name())
 				return
