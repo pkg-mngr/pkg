@@ -22,9 +22,15 @@ const manifests = await Promise.all(
 ).then((manifests) => manifests.sort((a, b) => a.name.localeCompare(b.name)));
 
 const index = `
+<script setup>
+import Search from "../.vitepress/components/Search.vue";
+</script>
+
 # Packages
 
-${manifests.map((m) => `- [${m.name}](./${m.name}) — ${m.description}`).join("\n")}
+<Search />
+
+${manifests.map((m) => `- [${m.name}](./${m.name}) — ${m.description}{data-name="${m.name}" data-desc="${m.description}"}`).join("\n")}
 `;
 Bun.write("./packages/index.md", index);
 
