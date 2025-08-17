@@ -12,7 +12,7 @@
       "install fd-v{{ version }}-aarch64-apple-darwin/fd {{ pkg.bin_dir }}/fd"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/sharkdp/fd | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R sharkdp/fd --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": [
       "cp fd-v{{ version }}-aarch64-apple-darwin/autocomplete/_fd {{ pkg.completions.zsh }}/_fd"

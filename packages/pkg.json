@@ -12,7 +12,7 @@
       "install pkg {{ pkg.bin_dir }}/pkg"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/pkg | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]
   }
 }

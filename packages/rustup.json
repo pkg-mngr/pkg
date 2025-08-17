@@ -14,7 +14,7 @@
       "ln -sf $HOME/.cargo/bin/rustup {{ pkg.bin_dir }}/rustup"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/rust-lang/rustup | tail -1 | cut -d '/' -f 3"
+      "gh api repos/rust-lang/rustup/tags --jq '.[0].name'"
     ],
     "completions": [
       "rustup completions zsh > {{ pkg.completions.zsh }}/_rustup",

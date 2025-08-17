@@ -12,7 +12,7 @@
       "install lazygit {{ pkg.bin_dir }}/lazygit"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/jesseduffield/lazygit | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R jesseduffield/lazygit --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]
   }
 }

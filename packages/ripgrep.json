@@ -12,7 +12,7 @@
       "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/BurntSushi/ripgrep | grep '/\\d.*.*' | tail -1 | cut -d '/' -f 3"
+      "gh release list -R BurntSushi/ripgrep --json tagName --jq '.[0].tagName'"
     ],
     "completions": [
       "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"

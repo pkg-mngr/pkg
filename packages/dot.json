@@ -12,7 +12,7 @@
       "install dot {{ pkg.bin_dir }}/dot"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/noClaps/dot | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R noClaps/dot --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]
   }
 }

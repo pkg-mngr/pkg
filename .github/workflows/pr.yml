@@ -12,7 +12,7 @@ jobs:
         with:
           go-version-file: go.mod
       - run: |
-          MODIFIED_FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[] | select(.additions > 0) | .path' | tr '\n' ' ')
+          MODIFIED_FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[] | select(.additions > 0) | .path' | grep packages/ |  tr '\n' ' ')
           set -- $MODIFIED_FILES
           go run ./internal/ci/pr/main.go "$@"
         env:
