@@ -12,7 +12,7 @@
       "install hyperfine-v{{ version }}-aarch64-apple-darwin/hyperfine {{ pkg.bin_dir }}/hyperfine"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/sharkdp/hyperfine | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R sharkdp/hyperfine --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": [
       "cp hyperfine-v{{ version }}-aarch64-apple-darwin/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"

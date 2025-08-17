@@ -13,7 +13,7 @@
       "install ./bun-darwin-aarch64/bun {{ pkg.bin_dir }}/bun"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/oven-sh/bun 'bun-v*' | tail -1 | cut -d '/'  -f3 | cut -c 6-"
+      "gh release list -R oven-sh/bun --json tagName --jq '.[0].tagName' | cut -c 6-"
     ]
   }
 }

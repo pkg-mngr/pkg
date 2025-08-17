@@ -12,7 +12,7 @@
       "install gh_{{ version }}_macOS_arm64/bin/gh {{ pkg.bin_dir }}/gh"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/cli/cli | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R cli/cli --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"]
   }

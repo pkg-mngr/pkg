@@ -41,7 +41,10 @@
         "latest": {
           "type": "array",
           "description": "The script to run to check the latest version of the package",
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "default": [
+            "gh release list -R OWNER/REPO --json tagName --jq '.[0].tagName' | cut -c 2-"
+          ]
         },
         "completions": {
           "type": "array",

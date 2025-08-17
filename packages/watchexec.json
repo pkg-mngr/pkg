@@ -12,7 +12,7 @@
       "install watchexec-{{ version }}-aarch64-apple-darwin/watchexec {{ pkg.bin_dir }}/watchexec"
     ],
     "latest": [
-      "git ls-remote --tags --refs --sort='v:refname' https://github.com/watchexec/watchexec 'v*.*.*' | tail -1 | cut -d '/' -f 3 | cut -c 2-"
+      "gh release list -R watchexec/watchexec --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": [
       "cp watchexec-{{ version }}-aarch64-apple-darwin/completions/zsh {{ pkg.completions.zsh }}/_watchexec"
