@@ -1,0 +1,18 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "gleam",
+  "description": "A friendly language for building type-safe, scalable systems!",
+  "homepage": "https://gleam.run",
+  "version": "1.12.0",
+  "sha256": "885396e845fbbc014253dd95da493439b785641022fb92c45657b2b936cf317f",
+  "url": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-aarch64-apple-darwin.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf gleam-v1.12.0-aarch64-apple-darwin.tar.gz",
+      "install gleam {{ pkg.bin_dir }}"
+    ],
+    "latest": [
+      "gh release list -R gleam-lang/gleam --json tagName --jq '.[0].tagName' | cut -c 2-"
+    ]
+  }
+}
