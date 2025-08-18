@@ -14,16 +14,17 @@ import (
 )
 
 type Manifest struct {
-	Schema      string `json:"$schema,omitempty"`
-	ManifestUrl string `json:"-"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Homepage    string `json:"homepage"`
-	Version     string `json:"version"`
-	Sha256      string `json:"sha256"`
-	Url         string `json:"url"`
-	Caveats     string `json:"caveats,omitempty"`
-	Scripts     struct {
+	Schema       string   `json:"$schema,omitempty"`
+	ManifestUrl  string   `json:"-"`
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	Homepage     string   `json:"homepage"`
+	Version      string   `json:"version"`
+	Sha256       string   `json:"sha256"`
+	Url          string   `json:"url"`
+	Dependencies []string `json:"dependencies,omitempty"`
+	Caveats      string   `json:"caveats,omitempty"`
+	Scripts      struct {
 		Install     []string `json:"install"`
 		Latest      []string `json:"latest"`
 		Completions []string `json:"completions,omitempty"`

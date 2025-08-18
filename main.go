@@ -30,32 +30,38 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if len(args.Add.Packages) != 0 {
-		for _, pkg := range args.Add.Packages {
-			cmd.Add(pkg)
-		}
-		return
-	}
-
-	if args.Update {
-		cmd.Update()
-		return
-	}
-
-	if len(args.Remove.Packages) != 0 {
-		for _, pkg := range args.Remove.Packages {
-			cmd.Remove(pkg)
-		}
-		return
-	}
-
 	if args.Info.Package != "" {
 		fmt.Println(cmd.Info(args.Info.Package))
 		return
 	}
 
+	if args.Init {
+		config.Init()
+		return
+	}
+
+	lockfile := config.ReadLockfile()
+	if len(args.Add.Packages) != 0 {
+		for _, pkg := range args.Add.Packages {
+			cmd.Add(pkg, lockfile)
+		}
+		return
+	}
+
+	if args.Update {
+		cmd.Update(lockfile)
+		return
+	}
+
+	if len(args.Remove.Packages) != 0 {
+		for _, pkg := range args.Remove.Packages {
+			cmd.Remove(pkg, lockfile)
+		}
+		return
+	}
+
 	if args.List {
-		pkgs := cmd.List()
+		pkgs := cmd.List(lockfile)
 		if len(pkgs) == 0 {
 			fmt.Println("No packages installed!")
 			return
@@ -66,11 +72,6 @@ func main() {
 			fmt.Println(pkg)
 		}
 		fmt.Println()
-		return
-	}
-
-	if args.Init {
-		config.Init()
 		return
 	}
 }

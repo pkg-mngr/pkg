@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strings"
+
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
@@ -11,8 +13,12 @@ func Info(pkg string) string {
 	output += "\033[34;4m" + pkgManifest.Homepage + "\033[0m\n"
 	output += "From: \033[34;4m" + pkgManifest.ManifestUrl + "\033[0m\n"
 
+	if len(pkgManifest.Dependencies) > 0 {
+		output += "Dependencies: " + strings.Join(pkgManifest.Dependencies, ", ") + "\n"
+	}
+
 	if pkgManifest.Caveats != "" {
-		output += "Caveats: " + pkgManifest.Caveats + "\033[0m\n"
+		output += "Caveats: " + pkgManifest.Caveats + "\n"
 	}
 
 	return output

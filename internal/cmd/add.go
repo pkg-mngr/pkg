@@ -17,16 +17,40 @@ import (
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
-func Add(pkg string) {
-	lockfile := config.ReadLockfile()
-
+func Add(pkg string, lockfile config.Lockfile) {
 	pkgManifest := manifest.GetManifest(pkg)
 	pkg = pkgManifest.Name
 
 	if entry, ok := lockfile[pkg]; ok {
-		if entry.Version == pkgManifest.Version {
+		wasDep := false
+		for installed, data := range lockfile {
+			// if package was installed as a dependency, remove it from the dependency
+			// list of all those packages
+			if i := slices.Index(data.Dependencies, pkg); i != -1 {
+				data.Dependencies = slices.Delete(data.Dependencies, i, i+1)
+				lockfile[installed] = data
+				wasDep = true
+				lockfile.Write()
+			}
+		}
+
+		if wasDep || entry.Version == pkgManifest.Version {
 			fmt.Println(pkg + " is already installed.")
 			return
+		}
+	}
+
+	// skip adding dependencies that are already installed. these were installed
+	// either due to some other package or manually by the user, so they're not
+	// lockfile dependencies of this package
+	dependencies := slices.DeleteFunc(pkgManifest.Dependencies, func(dep string) bool {
+		_, ok := lockfile[dep]
+		return ok
+	})
+	if len(dependencies) > 0 {
+		fmt.Println("Installing dependencies...")
+		for _, dep := range dependencies {
+			Add(dep, lockfile)
 		}
 	}
 
@@ -58,10 +82,11 @@ func Add(pkg string) {
 
 	filesAfter := listFiles()
 
-	lockfile.WriteToLockfile(
+	lockfile.NewEntry(
 		pkgManifest.Name,
 		pkgManifest.ManifestUrl,
 		pkgManifest.Version,
+		dependencies,
 		diffFiles(filesBefore, filesAfter),
 	)
 

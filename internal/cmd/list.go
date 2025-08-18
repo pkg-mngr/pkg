@@ -7,8 +7,7 @@ import (
 	"github.com/noclaps/pkg/internal/config"
 )
 
-func List() []string {
-	lockfile := config.ReadLockfile()
+func List(lockfile config.Lockfile) []string {
 	keys := slices.Collect(maps.Keys(lockfile))
 	output := make([]string, len(lockfile))
 

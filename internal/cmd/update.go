@@ -9,8 +9,7 @@ import (
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
-func Update() {
-	lockfile := config.ReadLockfile()
+func Update(lockfile config.Lockfile) {
 	pkgs := slices.Collect(maps.Keys(lockfile))
 	allUpToDate := true
 
@@ -22,8 +21,8 @@ func Update() {
 
 		allUpToDate = false
 		fmt.Println("Updating " + pkg + "...")
-		Remove(pkg)
-		Add(pkg)
+		Remove(pkg, lockfile)
+		Add(pkg, lockfile)
 	}
 
 	if allUpToDate {
