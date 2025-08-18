@@ -1,0 +1,19 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "flyctl",
+  "description": "Command line tools for fly.io services",
+  "homepage": "https://fly.io",
+  "version": "0.3.170",
+  "sha256": "edca65114b099bab8303ec4672f34fb5c788bc8f6f53b3018fa8c6f095fbfd78",
+  "url": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_arm64.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf flyctl_{{ version }}_macOS_arm64.tar.gz",
+      "install flyctl {{ pkg.bin_dir }}"
+    ],
+    "latest": [
+      "gh release list -R superfly/flyctl --json tagName --jq '.[0].tagName' | cut -c 2-"
+    ],
+    "completions": ["flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"]
+  }
+}
