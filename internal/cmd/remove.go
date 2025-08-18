@@ -12,13 +12,13 @@ import (
 func Remove(pkg string) {
 	lockfile := config.ReadLockfile()
 
-	if _, ok := lockfile.Packages[pkg]; !ok {
+	if _, ok := lockfile[pkg]; !ok {
 		fmt.Println(pkg + " is not installed.")
 		return
 	}
 
 	fmt.Println("Removing " + pkg + "...")
-	removeFiles(lockfile.Packages[pkg].Files)
+	removeFiles(lockfile[pkg].Files)
 	lockfile.RemoveFromLockfile(pkg)
 }
 

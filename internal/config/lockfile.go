@@ -7,12 +7,7 @@ import (
 	"github.com/noclaps/pkg/internal/log"
 )
 
-const LOCKFILE_VERSION = 1
-
-type Lockfile struct {
-	Version  int                        `json:"version"`
-	Packages map[string]LockfilePackage `json:"packages"`
-}
+type Lockfile map[string]LockfilePackage
 
 type LockfilePackage struct {
 	Manifest string   `json:"manifest"`
@@ -20,7 +15,7 @@ type LockfilePackage struct {
 	Files    []string `json:"files"`
 }
 
-func ReadLockfile() *Lockfile {
+func ReadLockfile() Lockfile {
 	data, err := os.ReadFile(LOCKFILE())
 	if err != nil {
 		log.Fatalln("Error reading lockfile")
@@ -31,11 +26,11 @@ func ReadLockfile() *Lockfile {
 		log.Fatalln("Error unmarshalling lockfile")
 	}
 
-	return lf
+	return *lf
 }
 
-func (lf *Lockfile) WriteToLockfile(name, manifest, version string, files []string) {
-	lf.Packages[name] = LockfilePackage{
+func (lf Lockfile) WriteToLockfile(name, manifest, version string, files []string) {
+	lf[name] = LockfilePackage{
 		Manifest: manifest,
 		Version:  version,
 		Files:    files,
@@ -47,13 +42,13 @@ func (lf *Lockfile) WriteToLockfile(name, manifest, version string, files []stri
 	}
 	defer f.Close()
 
-	if err := json.NewEncoder(f).Encode(*lf); err != nil {
+	if err := json.NewEncoder(f).Encode(lf); err != nil {
 		log.Fatalln("Error writing to lockfile")
 	}
 }
 
-func (lf *Lockfile) RemoveFromLockfile(name string) {
-	delete(lf.Packages, name)
+func (lf Lockfile) RemoveFromLockfile(name string) {
+	delete(lf, name)
 
 	f, err := os.Create(LOCKFILE())
 	if err != nil {
@@ -61,7 +56,7 @@ func (lf *Lockfile) RemoveFromLockfile(name string) {
 	}
 	defer f.Close()
 
-	if err := json.NewEncoder(f).Encode(*lf); err != nil {
+	if err := json.NewEncoder(f).Encode(lf); err != nil {
 		log.Fatalln("Error writing to lockfile")
 	}
 }

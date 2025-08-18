@@ -9,11 +9,11 @@ import (
 
 func List() []string {
 	lockfile := config.ReadLockfile()
-	keys := slices.Collect(maps.Keys(lockfile.Packages))
-	output := make([]string, len(lockfile.Packages))
+	keys := slices.Collect(maps.Keys(lockfile))
+	output := make([]string, len(lockfile))
 
 	for i, key := range keys {
-		output[i] = "\033[1m" + key + ":\033[0m " + lockfile.Packages[key].Version
+		output[i] = "\033[1m" + key + ":\033[0m " + lockfile[key].Version
 	}
 
 	slices.Sort(output)

@@ -53,10 +53,7 @@ func initLockfile() {
 		}
 		defer f.Close()
 
-		if err := json.NewEncoder(f).Encode(Lockfile{
-			Version:  LOCKFILE_VERSION,
-			Packages: map[string]LockfilePackage{},
-		}); err != nil {
+		if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
 			log.Fatalln("Error writing to lockfile")
 		}
 	}

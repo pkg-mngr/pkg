@@ -28,7 +28,7 @@ func Add(pkg string) {
 		pkgManifest = manifest.GetManifest(pkg)
 	}
 
-	if entry, ok := lockfile.Packages[pkg]; ok {
+	if entry, ok := lockfile[pkg]; ok {
 		if entry.Version == pkgManifest.Version {
 			fmt.Println(pkg + " is already installed.")
 			return

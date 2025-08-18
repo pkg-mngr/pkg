@@ -11,12 +11,12 @@ import (
 
 func Update() {
 	lockfile := config.ReadLockfile()
-	pkgs := slices.Collect(maps.Keys(lockfile.Packages))
+	pkgs := slices.Collect(maps.Keys(lockfile))
 	allUpToDate := true
 
 	for _, pkg := range pkgs {
 		pkgManifest := manifest.GetManifest(pkg)
-		if pkgManifest.Version == lockfile.Packages[pkg].Version {
+		if pkgManifest.Version == lockfile[pkg].Version {
 			continue
 		}
 
