@@ -87,6 +87,7 @@ func main() {
 			writer := io.NewOffsetWriter(f, 0)
 			encoder := json.NewEncoder(writer)
 			encoder.SetIndent("", "  ")
+			encoder.SetEscapeHTML(false)
 			if err := encoder.Encode(*pkgManifest); err != nil {
 				log.Errorln("Error writing manifest to " + file.Name())
 			}
