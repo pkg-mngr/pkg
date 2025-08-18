@@ -133,19 +133,19 @@ func fetchPackage(pkgManifest manifest.Manifest) error {
 		fmt.Printf("\033[2KDownloaded %.2f%% (%s)\r", percent, speedStr)
 	}
 	if err := g.Download(pkgManifest.Url, filename); err != nil {
-		return fmt.Errorf("Error while downloading %s: %v", filename, err)
+		return fmt.Errorf("%s: Error while downloading %s: %v", pkgManifest.Name, filename, err)
 	}
 	fmt.Println("\033[2KDownloaded 100%")
 
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("Error reading data from response")
+		return fmt.Errorf("%s: Error reading data from response", pkgManifest.Name)
 	}
 
 	fmt.Print("Verifying checksum...")
 	checksum := fmt.Sprintf("%x", sha256.Sum256(data))
 	if checksum != pkgManifest.Sha256 {
-		return fmt.Errorf("\nChecksum of data did not match in package manifest")
+		return fmt.Errorf("\n%s: Checksum of data did not match in package manifest", pkgManifest.Name)
 	}
 	fmt.Println(" Looks good!")
 
