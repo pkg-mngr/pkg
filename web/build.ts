@@ -5,6 +5,7 @@ type Manifest = {
   version: string;
   sha256: string;
   url: string;
+  dependencies: string[];
   caveats?: string;
   scripts: {
     install: string[];
@@ -55,6 +56,9 @@ Homepage: ${pkg.homepage}
 Manifest: [${pkg.name}.json](/${pkg.name}.json)
 
 SHA256 Checksum: \`${pkg.sha256}\`
+
+Dependencies:
+${pkg.dependencies.map((dep) => `- [${dep}](./${dep}.md)`).join("\n")}
 
 ${
   pkg.caveats
