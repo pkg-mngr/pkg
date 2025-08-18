@@ -57,8 +57,13 @@ Manifest: [${pkg.name}.json](/${pkg.name}.json)
 
 SHA256 Checksum: \`${pkg.sha256}\`
 
-Dependencies:
+${
+  pkg.dependencies
+    ? `Dependencies:
 ${pkg.dependencies.map((dep) => `- [${dep}](./${dep}.md)`).join("\n")}
+`
+    : ""
+}
 
 ${
   pkg.caveats
