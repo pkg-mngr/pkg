@@ -119,10 +119,8 @@ func fetchPackage(pkgManifest manifest.Manifest) error {
 	g.ProgressFunc = func(d *got.Download) {
 		percent := float64(d.Size()) / float64(d.TotalSize()) * 100
 		speed := float64(d.AvgSpeed())
-		speedStr := ""
-		if speed/1024/1024 < 5 {
-			speedStr = fmt.Sprintf("%.2f kB/s", speed/1024)
-		} else {
+		speedStr := fmt.Sprintf("%.2f kB/s", speed/1024)
+		if speed/1024/1024 >= 5 {
 			speedStr = fmt.Sprintf("%.2f MB/s", speed/1024/1024)
 		}
 		fmt.Printf("\033[2KDownloaded %.2f%% (%s)\r", percent, speedStr)
