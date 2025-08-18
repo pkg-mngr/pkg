@@ -11,10 +11,11 @@ import (
 func main() {
 	files := os.Args[1:]
 	config.Init()
+	lockfile := config.ReadLockfile()
 
 	for _, file := range files {
 		log.Println("Checking if installation works...")
-		cmd.Add("./" + file)
+		cmd.Add("./"+file, lockfile)
 		log.Println("Everything looks good!")
 	}
 }
