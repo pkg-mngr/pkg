@@ -25,10 +25,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	for _, file := range files {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
+		wg.Go(func() {
 			log.Println("Reading " + file.Name())
 			f, err := os.OpenFile(filepath.Join("packages", file.Name()), os.O_RDWR, 0o644)
 			if err != nil {
@@ -96,7 +93,7 @@ func main() {
 			f.Close()
 
 			log.Println("Done updating " + file.Name())
-		}()
+		})
 	}
 
 	wg.Wait()
