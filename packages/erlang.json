@@ -1,0 +1,21 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "erlang",
+  "description": "Practical functional programming for a parallel world",
+  "homepage": "https://www.erlang.org",
+  "version": "28.0.2",
+  "sha256": "ce43dc8a29ad6bc1b6dbfc97f053d2e850b4a4c290eca065058d6b33ce476db5",
+  "url": "https://github.com/erlang/otp/releases/download/OTP-{{ version }}/otp_src_{{ version }}.tar.gz",
+  "scripts": {
+    "install": [
+      "tar -xf otp_src_{{ version }}.tar.gz",
+      "cd otp_src_{{ version }}",
+      "./configure --prefix={{ pkg.opt_dir }}/erlang",
+      "make -j8 && make -j8 install",
+      "ln -sf {{ pkg.opt_dir }}/erlang/bin/* {{ pkg.bin_dir }}"
+    ],
+    "latest": [
+      "gh release list -R erlang/otp --json tagName --jq '.[0].tagName' | cut -c 5-"
+    ]
+  }
+}
