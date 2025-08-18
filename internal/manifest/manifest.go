@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/noclaps/pkg/internal/config"
@@ -70,7 +71,11 @@ func GetManifestFromFile(path string) Manifest {
 	}
 
 	manifest := new(Manifest)
-	manifest.ManifestUrl = path
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		log.Fatalln("Error getting absolute filepath to " + path)
+	}
+	manifest.ManifestUrl = absPath
 	if err := json.Unmarshal(data, manifest); err != nil {
 		log.Fatalln("Error unmarshalling data from " + path)
 	}
