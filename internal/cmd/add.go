@@ -20,13 +20,8 @@ import (
 func Add(pkg string) {
 	lockfile := config.ReadLockfile()
 
-	var pkgManifest manifest.Manifest
-	if strings.HasPrefix(pkg, "./") && strings.HasSuffix(pkg, ".json") {
-		pkgManifest = manifest.GetManifestFromFile(pkg)
-		pkg = pkgManifest.Name
-	} else {
-		pkgManifest = manifest.GetManifest(pkg)
-	}
+	pkgManifest := manifest.GetManifest(pkg)
+	pkg = pkgManifest.Name
 
 	if entry, ok := lockfile[pkg]; ok {
 		if entry.Version == pkgManifest.Version {

@@ -31,6 +31,10 @@ type Manifest struct {
 }
 
 func GetManifest(pkgName string) Manifest {
+	if strings.HasPrefix(pkgName, "./") && strings.HasSuffix(pkgName, ".json") {
+		return getManifestFromFile(pkgName)
+	}
+
 	manifestUrl, err := url.JoinPath(config.MANIFEST_HOST(), pkgName+".json")
 	if err != nil {
 		log.Fatalln("Error creating URL to " + pkgName + " manifest")
@@ -64,7 +68,7 @@ func GetManifest(pkgName string) Manifest {
 	return *manifest
 }
 
-func GetManifestFromFile(path string) Manifest {
+func getManifestFromFile(path string) Manifest {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatalln("Error reading data from " + path)
