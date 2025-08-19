@@ -13,6 +13,9 @@
     ],
     "latest": [
       "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"
+    ],
+    "completions": [
+      "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
     ]
   }
 }
