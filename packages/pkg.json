@@ -3,8 +3,8 @@
   "name": "pkg",
   "description": "A simple package manager for macOS",
   "homepage": "https://pkg.zerolimits.dev",
-  "version": "0.1.8",
-  "sha256": "2e16fa73e34f14daa930f7cb3149c609568c7e68d9ecf1134ee9ef691d072d7e",
+  "version": "0.1.9",
+  "sha256": "678eb8327fe8affd9c425d80449a21dd4bbba1dc039dd6b1f9e8187e6b6dfe6f",
   "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
   "scripts": {
     "install": [
