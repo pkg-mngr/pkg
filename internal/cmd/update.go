@@ -21,7 +21,7 @@ func Update(lockfile config.Lockfile) {
 
 		allUpToDate = false
 		fmt.Println("Updating " + pkg + "...")
-		Remove(pkg, lockfile)
+		Remove(pkg, lockfile, true)
 		Add(pkg, lockfile)
 	}
 

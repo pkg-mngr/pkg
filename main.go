@@ -55,7 +55,7 @@ func main() {
 
 	if len(args.Remove.Packages) != 0 {
 		for _, pkg := range args.Remove.Packages {
-			cmd.Remove(pkg, lockfile)
+			cmd.Remove(pkg, lockfile, false)
 		}
 		return
 	}
