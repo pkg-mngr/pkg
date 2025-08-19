@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 
 	"github.com/noclaps/applause"
 	"github.com/noclaps/pkg/internal/cmd"
@@ -13,9 +15,11 @@ type Args struct {
 	Add struct {
 		Packages []string `help:"Packages to install."`
 	} `help:"Install packages."`
-	Update bool `type:"command" help:"Update packages."`
+	Update *struct {
+		Packages []string `help:"Packages to update." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
+	} `help:"Update packages."`
 	Remove struct {
-		Packages []string `help:"Packages to remove."`
+		Packages []string `help:"Packages to remove." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
 	} `help:"Remove packages."`
 	Info struct {
 		Package string `help:"The package to get the info for"`
@@ -48,8 +52,12 @@ func main() {
 		return
 	}
 
-	if args.Update {
-		cmd.Update(lockfile)
+	if args.Update != nil {
+		pkgs := slices.Collect(maps.Keys(lockfile))
+		if len(args.Update.Packages) > 0 {
+			pkgs = args.Update.Packages
+		}
+		cmd.Update(pkgs, lockfile)
 		return
 	}
 

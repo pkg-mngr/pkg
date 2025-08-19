@@ -2,15 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"maps"
-	"slices"
 
 	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
-func Update(lockfile config.Lockfile) {
-	pkgs := slices.Collect(maps.Keys(lockfile))
+func Update(pkgs []string, lockfile config.Lockfile) {
 	allUpToDate := true
 
 	for _, pkg := range pkgs {
