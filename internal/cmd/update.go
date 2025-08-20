@@ -17,7 +17,7 @@ func Update(pkgs []string, skipConfirmation bool, lockfile config.Lockfile) {
 		}
 
 		allUpToDate = false
-		fmt.Println("Updating " + pkg + "...")
+		fmt.Printf("Updating %s...\n", pkg)
 		Remove(pkg, lockfile, true)
 		Add(pkg, skipConfirmation, lockfile)
 	}

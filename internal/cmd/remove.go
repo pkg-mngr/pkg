@@ -12,19 +12,19 @@ import (
 
 func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) {
 	if _, ok := lockfile[pkg]; !ok {
-		fmt.Println(pkg + " is not installed.")
+		fmt.Printf("%s is not installed.\n", pkg)
 		return
 	}
 	if !isForUpdate {
 		for installed := range lockfile {
 			if slices.Contains(lockfile[installed].Dependencies, pkg) {
-				fmt.Println("Cannot uninstall " + pkg + " as it is a dependency of " + installed)
+				fmt.Printf("Cannot uninstall %s as it is a dependency of %s\n", pkg, installed)
 				return
 			}
 		}
 	}
 
-	fmt.Println("Removing " + pkg + "...")
+	fmt.Printf("Removing %s...\n", pkg)
 	removeFiles(lockfile[pkg].Files)
 
 	for _, dep := range lockfile[pkg].Dependencies {

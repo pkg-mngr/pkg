@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"maps"
 	"slices"
 
@@ -12,7 +13,7 @@ func List(lockfile config.Lockfile) []string {
 	output := make([]string, len(lockfile))
 
 	for i, key := range keys {
-		output[i] = "\033[1m" + key + ":\033[0m " + lockfile[key].Version
+		output[i] = fmt.Sprintf("\033[1m%s:\033[0m %s", key, lockfile[key].Version)
 	}
 
 	slices.Sort(output)

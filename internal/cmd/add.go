@@ -34,7 +34,7 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 		}
 
 		if wasDep || entry.Version == pkgManifest.Version {
-			fmt.Println(pkg + " is already installed.")
+			fmt.Printf("%s is already installed.\n", pkg)
 			return
 		}
 	}
@@ -53,7 +53,7 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 		}
 	}
 
-	fmt.Println("Installing " + pkg + "...")
+	fmt.Printf("Installing %s...\n", pkg)
 
 	filesBefore := listFiles()
 	if err := fetchPackage(pkgManifest); err != nil {

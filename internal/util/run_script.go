@@ -14,8 +14,7 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	if !skipConfirmation && !getConfirmation(script) {
 		return "", nil
 	}
-	script = "set -euo pipefail\n" + script
-	script = "cd " + config.PKG_TMP() + "\n" + script
+	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP(), script)
 	cmd := exec.Command("/bin/sh", "-c", script)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
