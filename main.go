@@ -14,9 +14,11 @@ import (
 type Args struct {
 	Add struct {
 		Packages []string `help:"Packages to install."`
+		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts."`
 	} `help:"Install packages."`
 	Update *struct {
 		Packages []string `help:"Packages to update." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
+		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts."`
 	} `help:"Update packages."`
 	Remove struct {
 		Packages []string `help:"Packages to remove." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
@@ -47,7 +49,7 @@ func main() {
 	lockfile := config.ReadLockfile()
 	if len(args.Add.Packages) != 0 {
 		for _, pkg := range args.Add.Packages {
-			cmd.Add(pkg, lockfile)
+			cmd.Add(pkg, args.Add.Yes, lockfile)
 		}
 		return
 	}
@@ -57,7 +59,7 @@ func main() {
 		if len(args.Update.Packages) > 0 {
 			pkgs = args.Update.Packages
 		}
-		cmd.Update(pkgs, lockfile)
+		cmd.Update(pkgs, args.Update.Yes, lockfile)
 		return
 	}
 

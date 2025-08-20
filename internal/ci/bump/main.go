@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"strings"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/noclaps/pkg/internal/util"
 )
 
 func main() {
@@ -41,8 +41,8 @@ func main() {
 			}
 
 			latestScript := strings.Join(pkgManifest.Scripts.Latest, "\n")
-			log.Println("Running `latest` script: \n" + latestScript)
-			output, err := runScript(latestScript)
+			log.Printf("Running `latest` script: \n%s\n", latestScript)
+			output, err := util.RunScript(latestScript, true)
 			if err != nil && err.Error() != "" {
 				log.Printf("stdout: %s\n", output)
 				log.Printf("stderr: %v\n", err)
@@ -98,35 +98,4 @@ func main() {
 	}
 
 	wg.Wait()
-}
-
-func runScript(script string) (string, error) {
-	cmd := exec.Command("/bin/sh", "-c", script)
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return "", fmt.Errorf("Error getting stdout pipe")
-	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		return "", fmt.Errorf("Error getting stderr pipe")
-	}
-	if err := cmd.Start(); err != nil {
-		return "", fmt.Errorf("Error while starting command")
-	}
-
-	stdoutData, err := io.ReadAll(stdout)
-	if err != nil {
-		return "", fmt.Errorf("Error getting data from stdout")
-	}
-	stderrData, err := io.ReadAll(stderr)
-	if err != nil {
-		return "", fmt.Errorf("Error getting data from stderr")
-	}
-
-	if err := cmd.Wait(); err != nil {
-		log.Println("Error waiting for command")
-		return "", err
-	}
-
-	return string(stdoutData), fmt.Errorf("%s", stderrData)
 }

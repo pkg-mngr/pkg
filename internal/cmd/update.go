@@ -7,7 +7,7 @@ import (
 	"github.com/noclaps/pkg/internal/manifest"
 )
 
-func Update(pkgs []string, lockfile config.Lockfile) {
+func Update(pkgs []string, skipConfirmation bool, lockfile config.Lockfile) {
 	allUpToDate := true
 
 	for _, pkg := range pkgs {
@@ -19,7 +19,7 @@ func Update(pkgs []string, lockfile config.Lockfile) {
 		allUpToDate = false
 		fmt.Println("Updating " + pkg + "...")
 		Remove(pkg, lockfile, true)
-		Add(pkg, lockfile)
+		Add(pkg, skipConfirmation, lockfile)
 	}
 
 	if allUpToDate {

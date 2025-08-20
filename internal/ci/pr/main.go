@@ -15,7 +15,7 @@ func main() {
 
 	for _, file := range files {
 		log.Printf("Checking if installation works...\n")
-		cmd.Add("./"+file, lockfile)
+		cmd.Add("./"+file, true, lockfile)
 		log.Printf("Everything looks good!\n")
 	}
 }

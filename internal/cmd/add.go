@@ -3,9 +3,7 @@ package cmd
 import (
 	"crypto/sha256"
 	"fmt"
-	"io"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"slices"
@@ -15,9 +13,10 @@ import (
 	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/noclaps/pkg/internal/util"
 )
 
-func Add(pkg string, lockfile config.Lockfile) {
+func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 	pkgManifest := manifest.GetManifest(pkg)
 	pkg = pkgManifest.Name
 
@@ -50,7 +49,7 @@ func Add(pkg string, lockfile config.Lockfile) {
 	if len(dependencies) > 0 {
 		fmt.Println("Installing dependencies...")
 		for _, dep := range dependencies {
-			Add(dep, lockfile)
+			Add(dep, skipConfirmation, lockfile)
 		}
 	}
 
@@ -64,18 +63,16 @@ func Add(pkg string, lockfile config.Lockfile) {
 
 	fmt.Println("Running install script...")
 	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
-	installScript = "cd " + config.PKG_TMP() + "\n" + installScript
-	if err := runScript(installScript); err != nil && err.Error() != "" {
-		log.Errorln(err)
+	if _, err := util.RunScript(installScript, skipConfirmation); err != nil && err.Error() != "" {
+		log.Errorf("%v\n", err)
 		return
 	}
 
 	if len(pkgManifest.Scripts.Completions) != 0 {
 		fmt.Println("Running completions script...")
 		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
-		completionsScript = "cd " + config.PKG_TMP() + "\n" + completionsScript
-		if err := runScript(completionsScript); err != nil && err.Error() != "" {
-			log.Errorln(err)
+		if _, err := util.RunScript(completionsScript, skipConfirmation); err != nil && err.Error() != "" {
+			log.Errorf("%v\n", err)
 			return
 		}
 	}
@@ -179,28 +176,4 @@ func diffFiles(before, after []string) []string {
 	}
 
 	return diff
-}
-
-func runScript(script string) error {
-	script = "set -e\n" + script
-	cmd := exec.Command("/bin/sh", "-c", script)
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		return fmt.Errorf("Error getting stderr pipe")
-	}
-	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("Error while starting command")
-	}
-
-	stderrData, err := io.ReadAll(stderr)
-	if err != nil {
-		return fmt.Errorf("Error getting data from stderr")
-	}
-
-	if err := cmd.Wait(); err != nil {
-		log.Errorln("Error waiting for command")
-		return fmt.Errorf("%s", stderrData)
-	}
-
-	return nil
 }
