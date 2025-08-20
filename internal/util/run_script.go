@@ -16,6 +16,11 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	}
 	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP(), script)
 	cmd := exec.Command("/bin/sh", "-c", script)
+
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return "", fmt.Errorf("Error getting stderr pipe: %v", err)
+	}
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		return "", fmt.Errorf("Error getting stderr pipe: %v", err)
@@ -24,7 +29,7 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 		return "", fmt.Errorf("Error while starting command: %v", err)
 	}
 
-	stdoutData, err := io.ReadAll(stderr)
+	stdoutData, err := io.ReadAll(stdout)
 	if err != nil {
 		return "", fmt.Errorf("Error getting data from stderr: %v", err)
 	}
