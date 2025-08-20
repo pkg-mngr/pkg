@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/noclaps/pkg/internal/util"
 )
 
 func Info(pkg string) string {
@@ -19,7 +20,18 @@ func Info(pkg string) string {
 	}
 
 	if pkgManifest.Caveats != "" {
-		output += "Caveats: " + pkgManifest.Caveats + "\n"
+		output += util.WrapText(fmt.Sprintf("Caveats: %s\n", pkgManifest.Caveats), 90)
+	}
+
+	output += "\nInstall:\n"
+	for _, line := range pkgManifest.Scripts.Install {
+		output += fmt.Sprintf("  %s\n", util.SyntaxHighlight(line))
+	}
+	if len(pkgManifest.Scripts.Completions) > 0 {
+		output += "Completions:\n"
+		for _, line := range pkgManifest.Scripts.Completions {
+			output += fmt.Sprintf("  %s\n", util.SyntaxHighlight(line))
+		}
 	}
 
 	return output

@@ -43,7 +43,7 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 func getConfirmation(script string) bool {
 	fmt.Printf("Commands to run:\n")
 	for line := range strings.Lines(script) {
-		fmt.Printf("  %s", line)
+		fmt.Printf("  %s", SyntaxHighlight(line))
 	}
 	confirmation := "N"
 	fmt.Print("\nProceed? [y/N]: ")
