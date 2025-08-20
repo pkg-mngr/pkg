@@ -1,0 +1,22 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "zig",
+  "description": "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software.",
+  "homepage": "https://ziglang.org",
+  "version": "0.14.1",
+  "sha256": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
+  "url": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz",
+  "scripts": {
+    "install": [
+      "tar -xf zig-aarch64-macos-{{ version }}.tar.xz",
+      "mv zig-aarch64-macos-{{ version }} {{ pkg.opt_dir }}/zig",
+      "ln -sf {{ pkg.opt_dir }}/zig/zig {{ pkg.bin_dir }}"
+    ],
+    "latest": [
+      "gh release list -R ziglang/zig --json tagName --jq '.[0].tagName'"
+    ],
+    "completions": [
+      "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+    ]
+  }
+}
