@@ -36,6 +36,37 @@ ${manifests.map((m) => `- [${m.name}](./${m.name}) — ${m.description}{data-nam
 Bun.write("./packages/index.md", index);
 
 for (const pkg of manifests) {
+  const installScript = pkg.scripts.install
+    .join("\n")
+    .replaceAll("{{ version }}", pkg.version)
+    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
+    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
+    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
+    .replaceAll(
+      "{{ pkg.completions.zsh }}",
+      "$PKG_HOME/share/zsh/site-functions",
+    );
+  const latestScript = pkg.scripts.latest
+    .join("\n")
+    .replaceAll("{{ version }}", pkg.version)
+    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
+    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
+    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
+    .replaceAll(
+      "{{ pkg.completions.zsh }}",
+      "$PKG_HOME/share/zsh/site-functions",
+    );
+  const completionsScript = pkg.scripts.completions
+    ?.join("\n")
+    .replaceAll("{{ version }}", pkg.version)
+    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
+    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
+    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
+    .replaceAll(
+      "{{ pkg.completions.zsh }}",
+      "$PKG_HOME/share/zsh/site-functions",
+    );
+
   const page = `
 [← See all packages](./index.md)
 
@@ -79,22 +110,22 @@ ${pkg.caveats}
 ### Install
 
 \`\`\`sh
-${pkg.scripts.install.join("\n")}
+${installScript}
 \`\`\`
 
 ### Latest
 
 \`\`\`sh
-${pkg.scripts.latest.join("\n")}
+${latestScript}
 \`\`\`
 
 ${
-  pkg.scripts.completions
+  completionsScript
     ? `
 ### Completions
 
 \`\`\`sh
-${pkg.scripts.completions.join("\n")}
+${completionsScript}
 \`\`\`
 `
     : ""
