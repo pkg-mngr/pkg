@@ -12,12 +12,15 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
 	"github.com/noclaps/pkg/internal/util"
 )
 
 func main() {
+	config.Init()
+
 	files, err := os.ReadDir("packages")
 	if err != nil {
 		log.Fatalf("Error reading packages/ directory: %v\n", err)
