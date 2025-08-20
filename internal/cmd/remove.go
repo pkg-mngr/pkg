@@ -36,9 +36,9 @@ func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) {
 
 func removeFiles(files []string) {
 	for _, file := range files {
-		fmt.Println("Deleting " + file + "...")
+		fmt.Printf("Deleting %s...\n", file)
 		if err := os.RemoveAll(filepath.Join(config.PKG_HOME(), file)); err != nil {
-			log.Errorln("Error removing file " + filepath.Join(config.PKG_HOME(), file))
+			log.Errorf("Error removing file %s: %v\n", filepath.Join(config.PKG_HOME(), file), err)
 		}
 	}
 }

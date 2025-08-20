@@ -31,7 +31,7 @@ type Args struct {
 func main() {
 	args := Args{}
 	if err := applause.Parse(&args); err != nil {
-		log.Fatalln(err)
+		log.Fatalf("%v\n", err)
 	}
 
 	if args.Info.Package != "" {

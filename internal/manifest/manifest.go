@@ -38,11 +38,11 @@ func GetManifest(pkgName string) Manifest {
 
 	manifestUrl, err := url.JoinPath(config.MANIFEST_HOST(), pkgName+".json")
 	if err != nil {
-		log.Fatalln("Error creating URL to " + pkgName + " manifest")
+		log.Fatalf("Error creating URL to %s manifest: %v\n", pkgName, err)
 	}
 	res, err := http.Get(manifestUrl)
 	if err != nil || res.StatusCode != http.StatusOK {
-		fmt.Println("Package " + pkgName + " does not exist")
+		fmt.Printf("Package %s does not exist\n", pkgName)
 		os.Exit(0)
 	}
 	defer res.Body.Close()
@@ -50,7 +50,7 @@ func GetManifest(pkgName string) Manifest {
 	manifest := new(Manifest)
 	manifest.ManifestUrl = manifestUrl
 	if err := json.NewDecoder(res.Body).Decode(manifest); err != nil {
-		log.Fatalln("Error decoding data from manifest")
+		log.Fatalf("Error decoding data from manifest: %v\n", err)
 	}
 
 	manifest.Url = formatData(manifest.Url, *manifest)
@@ -72,17 +72,17 @@ func GetManifest(pkgName string) Manifest {
 func getManifestFromFile(path string) Manifest {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatalln("Error reading data from " + path)
+		log.Fatalf("Error reading data from %s: %v\n", path, err)
 	}
 
 	manifest := new(Manifest)
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		log.Fatalln("Error getting absolute filepath to " + path)
+		log.Fatalf("Error getting absolute filepath to %s: %v\n", path, err)
 	}
 	manifest.ManifestUrl = absPath
 	if err := json.Unmarshal(data, manifest); err != nil {
-		log.Fatalln("Error unmarshalling data from " + path)
+		log.Fatalf("Error unmarshalling data from %s: %v\n", path, err)
 	}
 
 	manifest.Url = formatData(manifest.Url, *manifest)

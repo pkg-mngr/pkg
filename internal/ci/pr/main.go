@@ -14,8 +14,8 @@ func main() {
 	lockfile := config.ReadLockfile()
 
 	for _, file := range files {
-		log.Println("Checking if installation works...")
+		log.Printf("Checking if installation works...\n")
 		cmd.Add("./"+file, lockfile)
-		log.Println("Everything looks good!")
+		log.Printf("Everything looks good!\n")
 	}
 }

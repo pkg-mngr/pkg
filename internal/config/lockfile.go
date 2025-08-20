@@ -19,12 +19,12 @@ type LockfilePackage struct {
 func ReadLockfile() Lockfile {
 	data, err := os.ReadFile(LOCKFILE())
 	if err != nil {
-		log.Fatalln("Error reading lockfile")
+		log.Fatalf("Error reading lockfile: %v\n", err)
 	}
 
 	lf := new(Lockfile)
 	if err := json.Unmarshal(data, lf); err != nil {
-		log.Fatalln("Error unmarshalling lockfile")
+		log.Fatalf("Error unmarshalling lockfile: %v\n", err)
 	}
 
 	return *lf
@@ -44,12 +44,12 @@ func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files 
 func (lf Lockfile) Write() {
 	f, err := os.Create(LOCKFILE())
 	if err != nil {
-		log.Fatalln("Error opening lockfile")
+		log.Fatalf("Error opening lockfile: %v\n", err)
 	}
 	defer f.Close()
 
 	if err := json.NewEncoder(f).Encode(lf); err != nil {
-		log.Fatalln("Error writing to lockfile")
+		log.Fatalf("Error writing to lockfile: %v\n", err)
 	}
 }
 

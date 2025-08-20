@@ -20,23 +20,23 @@ import (
 func main() {
 	files, err := os.ReadDir("packages")
 	if err != nil {
-		log.Fatalln("Error reading packages/ directory")
+		log.Fatalf("Error reading packages/ directory: %v\n", err)
 	}
 	var wg sync.WaitGroup
 
 	for _, file := range files {
 		wg.Go(func() {
-			log.Println("Reading " + file.Name())
+			log.Printf("Reading %s\n", file.Name())
 			f, err := os.OpenFile(filepath.Join("packages", file.Name()), os.O_RDWR, 0o644)
 			if err != nil {
-				log.Errorln("Error opening " + file.Name())
+				log.Errorf("Error opening %s: %v\n", file.Name(), err)
 				return
 			}
 
-			log.Println("Decoding manifest from " + file.Name())
+			log.Printf("Decoding manifest from %s\n", file.Name())
 			pkgManifest := new(manifest.Manifest)
 			if err := json.NewDecoder(f).Decode(pkgManifest); err != nil {
-				log.Errorln("Error unmarshalling JSON from " + file.Name())
+				log.Errorf("Error unmarshalling JSON from %s: %v\n", file.Name(), err)
 				return
 			}
 
@@ -44,44 +44,44 @@ func main() {
 			log.Println("Running `latest` script: \n" + latestScript)
 			output, err := runScript(latestScript)
 			if err != nil && err.Error() != "" {
-				log.Println("stdout: " + output)
-				log.Println("stderr: " + err.Error())
-				log.Errorln("Error running latest script in " + file.Name())
+				log.Printf("stdout: %s\n", output)
+				log.Printf("stderr: %v\n", err)
+				log.Errorf("Error running latest script in %s\n", file.Name())
 				return
 			}
 
 			latestVersion := strings.TrimSpace(output)
-			log.Println("Found latest version: " + latestVersion)
+			log.Printf("Found latest version: %s\n", latestVersion)
 			if pkgManifest.Version == latestVersion {
-				log.Println(pkgManifest.Name + " is already up to date")
+				log.Printf("%s is already up to date\n", pkgManifest.Name)
 				return
 			}
 
 			pkgManifest.Version = latestVersion
 			url := strings.ReplaceAll(pkgManifest.Url, "{{ version }}", pkgManifest.Version)
 
-			log.Println("Fetching file from " + url)
+			log.Printf("Fetching file from %s\n", url)
 			res, err := http.Get(url)
 			if err != nil {
-				log.Errorln("Error fetching from " + url)
+				log.Errorf("Error fetching from %s: %v\n", url, err)
 				return
 			}
 
-			log.Println("Reading file from response from " + url)
+			log.Printf("Reading file from response from %s\n", url)
 			downloadedFile, err := io.ReadAll(res.Body)
 			if err != nil {
-				log.Errorln("Error reading file from response body")
+				log.Errorf("Error reading file from response body: %v\n", err)
 				return
 			}
 			res.Body.Close()
 
-			log.Println("Validating checksum for ", path.Base(url))
+			log.Printf("Validating checksum for %s\n", path.Base(url))
 			checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
 			pkgManifest.Sha256 = checksum
 
-			log.Println("Updating " + file.Name())
+			log.Printf("Updating %s\n", file.Name())
 			if err := f.Truncate(0); err != nil {
-				log.Errorln("Error truncating " + file.Name())
+				log.Errorf("Error truncating %s\n", file.Name())
 				return
 			}
 			writer := io.NewOffsetWriter(f, 0)
@@ -89,11 +89,11 @@ func main() {
 			encoder.SetIndent("", "  ")
 			encoder.SetEscapeHTML(false)
 			if err := encoder.Encode(*pkgManifest); err != nil {
-				log.Errorln("Error writing manifest to " + file.Name())
+				log.Errorf("Error writing manifest to %s\n", file.Name())
 			}
 			f.Close()
 
-			log.Println("Done updating " + file.Name())
+			log.Printf("Done updating %s\n", file.Name())
 		})
 	}
 

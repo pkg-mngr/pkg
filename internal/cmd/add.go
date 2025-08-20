@@ -58,7 +58,7 @@ func Add(pkg string, lockfile config.Lockfile) {
 
 	filesBefore := listFiles()
 	if err := fetchPackage(pkgManifest); err != nil {
-		log.Errorln(err)
+		log.Errorf("%v\n", err)
 		return
 	}
 
@@ -92,19 +92,19 @@ func Add(pkg string, lockfile config.Lockfile) {
 
 	files, err := os.ReadDir(config.PKG_TMP())
 	if err != nil {
-		log.Errorln("Error opening " + config.PKG_TMP() + " directory")
+		log.Errorf("Error opening %s directory: %v\n", config.PKG_TMP(), err)
 	}
 	for _, file := range files {
 		filename := filepath.Join(config.PKG_TMP(), file.Name())
 		if err := os.RemoveAll(filename); err != nil {
-			log.Errorln("Error deleting " + filename)
+			log.Errorf("Error deleting %s: %v\n", filename, err)
 		}
 	}
 
 	if pkgManifest.Caveats != "" {
-		fmt.Println("\nCaveats:\n" + pkgManifest.Caveats + "\n")
+		fmt.Printf("\nCaveats:\n %s\n\n", pkgManifest.Caveats)
 	}
-	fmt.Println("Finished installing " + pkg + ".")
+	fmt.Printf("Finished installing %s.\n", pkg)
 }
 
 func listFiles() []string {
@@ -112,7 +112,7 @@ func listFiles() []string {
 
 	entries, err := os.ReadDir(config.PKG_BIN())
 	if err != nil {
-		log.Fatalln("Error listing " + config.PKG_BIN() + " directory")
+		log.Fatalf("Error listing %s directory: %v\n", config.PKG_BIN(), err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("bin", entry.Name()))
@@ -120,7 +120,7 @@ func listFiles() []string {
 
 	entries, err = os.ReadDir(config.PKG_OPT())
 	if err != nil {
-		log.Fatalln("Error listing " + config.PKG_OPT() + " directory")
+		log.Fatalf("Error listing %s directory: %v\n", config.PKG_OPT(), err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("opt", entry.Name()))
@@ -128,7 +128,7 @@ func listFiles() []string {
 
 	entries, err = os.ReadDir(config.PKG_ZSH_COMPLETIONS())
 	if err != nil {
-		log.Fatalln("Error listing " + config.PKG_ZSH_COMPLETIONS() + " directory")
+		log.Fatalf("Error listing %s directory: %v\n", config.PKG_ZSH_COMPLETIONS(), err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("share/zsh/site-functions", entry.Name()))

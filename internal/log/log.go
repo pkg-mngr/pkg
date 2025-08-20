@@ -5,18 +5,18 @@ import (
 	"os"
 )
 
-func Fatalln(a ...any) {
+func Fatalf(format string, a ...any) {
 	fmt.Fprint(os.Stderr, "\033[31mERROR:\033[0m ")
-	fmt.Fprintln(os.Stderr, a...)
+	fmt.Fprintf(os.Stderr, format, a...)
 	os.Exit(1)
 }
 
-func Errorln(a ...any) {
+func Errorf(format string, a ...any) {
 	fmt.Fprint(os.Stderr, "\033[31mERROR:\033[0m ")
-	fmt.Fprintln(os.Stderr, a...)
+	fmt.Fprintf(os.Stderr, format, a...)
 }
 
-func Println(a ...any) {
+func Printf(format string, a ...any) {
 	fmt.Fprint(os.Stderr, "\033[34mINFO:\033[0m ")
-	fmt.Fprintln(os.Stderr, a...)
+	fmt.Fprintf(os.Stderr, format, a...)
 }

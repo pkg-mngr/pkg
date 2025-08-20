@@ -12,14 +12,14 @@ func PKG_HOME() string {
 	if pkgHome != "" {
 		path, err := filepath.Abs(pkgHome)
 		if err != nil {
-			log.Fatalln("Error making absolute path to .pkg directory")
+			log.Fatalf("Error making absolute path to .pkg directory: %v\n", err)
 		}
 		return path
 	}
 
 	home, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatalln("User home directory not found")
+		log.Fatalf("User home directory not found: %v\n", err)
 	}
 
 	pkgHome = filepath.Join(home, ".pkg")

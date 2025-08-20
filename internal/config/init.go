@@ -38,7 +38,7 @@ func initDir(dir string) {
 	if _, err := os.Stat(dir); err != nil {
 		alreadyInitialised = false
 		if err := os.MkdirAll(dir, 0o750); err != nil {
-			log.Fatalln("Error creating " + dir + " directory")
+			log.Fatalf("Error creating %s directory: %v\n", dir, err)
 		}
 	}
 }
@@ -49,12 +49,12 @@ func initLockfile() {
 		alreadyInitialised = false
 		f, err := os.Create(LOCKFILE())
 		if err != nil {
-			log.Fatalln("Error creating " + file + " file")
+			log.Fatalf("Error creating %s file: %v\n", file, err)
 		}
 		defer f.Close()
 
 		if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
-			log.Fatalln("Error writing to lockfile")
+			log.Fatalf("Error writing to lockfile: %v\n", err)
 		}
 	}
 }
