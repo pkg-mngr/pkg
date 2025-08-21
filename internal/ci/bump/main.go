@@ -44,7 +44,7 @@ func main() {
 				return
 			}
 
-			latestScript := strings.Join(pkgManifest.GetLatestScripts(), "\n")
+			latestScript := strings.Join(pkgManifest.GetLatestScripts(config.GetCurrentPlatform()), "\n")
 			log.Printf("Running `latest` script: \n%s\n", latestScript)
 			output, err := util.RunScript(latestScript, true)
 			if err != nil && err.Error() != "" {
