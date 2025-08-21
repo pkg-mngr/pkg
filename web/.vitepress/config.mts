@@ -4,7 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "pkg",
   description: "A simple cross-platform package manager",
-  srcExclude: ["README.md"],
+  srcExclude: ["README.md", "**.tmpl.md"],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

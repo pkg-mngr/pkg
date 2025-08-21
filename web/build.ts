@@ -1,3 +1,6 @@
+import packageTemplate from "./package.tmpl.md" with { type: "text" };
+import indexTemplate from "./packages-index.tmpl.md" with { type: "text" };
+
 type Manifest = {
   name: string;
   description: string;
@@ -23,17 +26,15 @@ const manifests = await Promise.all(
   ),
 ).then((manifests) => manifests.sort((a, b) => a.name.localeCompare(b.name)));
 
-const index = `
-<script setup>
-import Search from "../.vitepress/components/Search.vue";
-</script>
-
-# Packages
-
-<Search />
-
-${manifests.map((m) => `- [${m.name}](./${m.name}) — ${m.description}{data-name="${m.name}" data-desc="${m.description}"}`).join("\n")}
-`;
+const index = indexTemplate.replace(
+  "{{ manifests }}",
+  manifests
+    .map(
+      (m) =>
+        `- [${m.name}](./${m.name}) — ${m.description}{data-name="${m.name}" data-desc="${m.description}"}`,
+    )
+    .join("\n"),
+);
 Bun.write("./packages/index.md", index);
 
 function formatData(data: string, pkg: Manifest): string {
@@ -60,87 +61,50 @@ ${formatData(pkg.scripts.install[platform]!.join("\n"), pkg)}
 
   const latestScript = formatData(pkg.scripts.latest.join("\n"), pkg);
 
-  const completionsScripts: string[] = [];
-  for (const platform in pkg.scripts.completions) {
-    completionsScripts.push(`
+  let completionsScripts = "";
+  if (pkg.scripts.completions) {
+    completionsScripts = `### Completions
+
+::: code-group
+
+`;
+    for (const platform in pkg.scripts.completions) {
+      completionsScripts += `
 \`\`\`sh [${platform}]
 ${formatData(pkg.scripts.completions[platform]!.join("\n"), pkg)}
 \`\`\`
-  `);
+`;
+    }
+    completionsScripts += ":::";
   }
 
-  const page = `
-[← See all packages](./index.md)
+  const sha256 = Object.entries(pkg.sha256)
+    .map(([platform, sha256]) => `| ${platform} | \`${sha256}\` |`)
+    .join("\n");
 
-# ${pkg.name}
-
-Install command:
-
-\`\`\`sh
-pkg add ${pkg.name}
-\`\`\`
-
-${pkg.description}
-
-Version: \`${pkg.version}\`
-
-Homepage: ${pkg.homepage}
-
-Manifest: [${pkg.name}.json](/${pkg.name}.json)
-
-| Platform | SHA256 Checksum |
-| -------- | --------------- |
-${Object.entries(pkg.sha256)
-  .map(([platform, sha256]) => `| ${platform} | \`${sha256}\` |`)
-  .join("\n")}
-
-${
-  pkg.dependencies
+  const dependencies = pkg.dependencies
     ? `Dependencies:
 ${pkg.dependencies.map((dep) => `- [${dep}](./${dep}.md)`).join("\n")}
 `
-    : ""
-}
+    : "";
 
-${
-  pkg.caveats
+  const caveats = pkg.caveats
     ? `
 ::: warning CAVEATS
 ${pkg.caveats}
 :::`
-    : ""
-}
+    : "";
 
-## Scripts
-
-### Install
-
-::: code-group
-
-${installScripts.join("\n")}
-
-:::
-
-### Latest
-
-\`\`\`sh
-${latestScript}
-\`\`\`
-
-${
-  completionsScripts.length > 0
-    ? `
-### Completions
-
-::: code-group
-
-${completionsScripts.join("\n")}
-
-:::
-`
-    : ""
-}
-`;
-
+  const page = packageTemplate
+    .replaceAll("{{ name }}", pkg.name)
+    .replaceAll("{{ description }}", pkg.description)
+    .replaceAll("{{ version }}", pkg.version)
+    .replaceAll("{{ homepage }}", pkg.homepage)
+    .replaceAll("{{ sha256 }}", sha256)
+    .replaceAll("{{ dependencies }}", dependencies)
+    .replaceAll("{{ caveats }}", caveats)
+    .replaceAll("{{ scripts.install }}", installScripts.join("\n"))
+    .replaceAll("{{ scripts.latest }}", latestScript)
+    .replaceAll("{{ completions }}", completionsScripts);
   Bun.write(`packages/${pkg.name}.md`, page);
 }
