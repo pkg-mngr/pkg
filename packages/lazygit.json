@@ -4,13 +4,19 @@
   "description": "simple terminal UI for git commands",
   "homepage": "https://github.com/jesseduffield/lazygit",
   "version": "0.54.2",
-  "sha256": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b",
-  "url": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_arm64.tar.gz",
+  "sha256": {
+    "macos-arm64": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_arm64.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf lazygit_{{ version }}_darwin_arm64.tar.gz lazygit",
-      "install lazygit {{ pkg.bin_dir }}/lazygit"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf lazygit_{{ version }}_darwin_arm64.tar.gz lazygit",
+        "install lazygit {{ pkg.bin_dir }}/lazygit"
+      ]
+    },
     "latest": [
       "gh release list -R jesseduffield/lazygit --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

@@ -4,13 +4,19 @@
   "description": "A simple HTTP server for serving a directory",
   "homepage": "https://github.com/noClaps/serve",
   "version": "0.1.5",
-  "sha256": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9",
-  "url": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz",
+  "sha256": {
+    "macos-arm64": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf serve-darwin-arm64.tar.xz",
-      "install serve {{ pkg.bin_dir }}/serve"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf serve-darwin-arm64.tar.xz",
+        "install serve {{ pkg.bin_dir }}/serve"
+      ]
+    },
     "latest": [
       "gh release list -R noClaps/serve --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

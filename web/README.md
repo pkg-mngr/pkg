@@ -1,6 +1,6 @@
 # pkg
 
-A simple package manager for macOS.
+A simple cross-platform package manager.
 
 ## Website build instructions
 
@@ -11,12 +11,6 @@ Clone the repository:
 ```sh
 git clone https://github.com/noClaps/pkg.git
 cd pkg
-```
-
-Copy the `packages/` directory into `web/public/`:
-
-```sh
-cp -r packages/ web/public/
 ```
 
 Run the build script inside the `web/` directory:

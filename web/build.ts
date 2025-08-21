@@ -3,18 +3,19 @@ type Manifest = {
   description: string;
   homepage: string;
   version: string;
-  sha256: string;
-  url: string;
+  sha256: Record<string, string>;
+  url: Record<string, string>;
   dependencies: string[];
   caveats?: string;
   scripts: {
-    install: string[];
+    install: Record<string, string[]>;
     latest: string[];
-    completions?: string[];
+    completions?: Record<string, string[]>;
   };
 };
 
-await Bun.$`rm -rf packages`;
+await Bun.$`rm -rf packages public`;
+await Bun.$`cp -r ../packages public`;
 
 const manifests = await Promise.all(
   Array.from(new Bun.Glob("*.json").scanSync("./public")).map(
@@ -35,37 +36,38 @@ ${manifests.map((m) => `- [${m.name}](./${m.name}) — ${m.description}{data-nam
 `;
 Bun.write("./packages/index.md", index);
 
+function formatData(data: string, pkg: Manifest): string {
+  return data
+    .replaceAll("{{ version }}", pkg.version)
+    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
+    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
+    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
+    .replaceAll(
+      "{{ pkg.completions.zsh }}",
+      "$PKG_HOME/share/zsh/site-functions",
+    );
+}
+
 for (const pkg of manifests) {
-  const installScript = pkg.scripts.install
-    .join("\n")
-    .replaceAll("{{ version }}", pkg.version)
-    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
-    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
-    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
-    .replaceAll(
-      "{{ pkg.completions.zsh }}",
-      "$PKG_HOME/share/zsh/site-functions",
-    );
-  const latestScript = pkg.scripts.latest
-    .join("\n")
-    .replaceAll("{{ version }}", pkg.version)
-    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
-    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
-    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
-    .replaceAll(
-      "{{ pkg.completions.zsh }}",
-      "$PKG_HOME/share/zsh/site-functions",
-    );
-  const completionsScript = pkg.scripts.completions
-    ?.join("\n")
-    .replaceAll("{{ version }}", pkg.version)
-    .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
-    .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
-    .replaceAll("{{ pkg.tmp_dir }}", "$PKG_HOME/tmp")
-    .replaceAll(
-      "{{ pkg.completions.zsh }}",
-      "$PKG_HOME/share/zsh/site-functions",
-    );
+  const installScripts: string[] = [];
+  for (const platform in pkg.scripts.install) {
+    installScripts.push(`
+\`\`\`sh [${platform}]
+${formatData(pkg.scripts.install[platform]!.join("\n"), pkg)}
+\`\`\`
+  `);
+  }
+
+  const latestScript = formatData(pkg.scripts.latest.join("\n"), pkg);
+
+  const completionsScripts: string[] = [];
+  for (const platform in pkg.scripts.completions) {
+    completionsScripts.push(`
+\`\`\`sh [${platform}]
+${formatData(pkg.scripts.completions[platform]!.join("\n"), pkg)}
+\`\`\`
+  `);
+  }
 
   const page = `
 [← See all packages](./index.md)
@@ -86,7 +88,11 @@ Homepage: ${pkg.homepage}
 
 Manifest: [${pkg.name}.json](/${pkg.name}.json)
 
-SHA256 Checksum: \`${pkg.sha256}\`
+| Platform | SHA256 Checksum |
+| -------- | --------------- |
+${Object.entries(pkg.sha256)
+  .map(([platform, sha256]) => `| ${platform} | \`${sha256}\` |`)
+  .join("\n")}
 
 ${
   pkg.dependencies
@@ -109,9 +115,11 @@ ${pkg.caveats}
 
 ### Install
 
-\`\`\`sh
-${installScript}
-\`\`\`
+::: code-group
+
+${installScripts.join("\n")}
+
+:::
 
 ### Latest
 
@@ -120,13 +128,15 @@ ${latestScript}
 \`\`\`
 
 ${
-  completionsScript
+  completionsScripts.length > 0
     ? `
 ### Completions
 
-\`\`\`sh
-${completionsScript}
-\`\`\`
+::: code-group
+
+${completionsScripts.join("\n")}
+
+:::
 `
     : ""
 }

@@ -11,6 +11,7 @@ import (
 func main() {
 	files := os.Args[1:]
 	config.Init()
+	os.Setenv("PATH", config.PKG_BIN()+":"+os.Getenv("PATH"))
 	lockfile := config.ReadLockfile()
 
 	for _, file := range files {

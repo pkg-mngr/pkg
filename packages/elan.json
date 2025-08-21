@@ -4,18 +4,26 @@
   "description": "The Lean version manager",
   "homepage": "https://github.com/leanprover/elan",
   "version": "4.1.2",
-  "sha256": "79f4c33e497cd50864de2388fafff43f7ca98bd27f63847fb6a6b59102ae1fd1",
-  "url": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-aarch64-apple-darwin.tar.gz",
+  "sha256": {
+    "macos-arm64": "79f4c33e497cd50864de2388fafff43f7ca98bd27f63847fb6a6b59102ae1fd1"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-aarch64-apple-darwin.tar.gz"
+  },
   "caveats": "To initialise `elan`, set a default toolchain by running `elan default stable`, then add `$HOME/.elan/bin` to your PATH.",
   "scripts": {
-    "install": [
-      "tar -xf elan-aarch64-apple-darwin.tar.gz",
-      "./elan-init -y --no-modify-path --default-toolchain none",
-      "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf elan-aarch64-apple-darwin.tar.gz",
+        "./elan-init -y --no-modify-path --default-toolchain none",
+        "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
+      ]
+    },
     "latest": [
       "gh release list -R leanprover/elan --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
-    "completions": ["elan completions zsh > {{ pkg.completions.zsh }}/_elan"]
+    "completions": {
+      "macos-arm64": ["elan completions zsh > {{ pkg.completions.zsh }}/_elan"]
+    }
   }
 }

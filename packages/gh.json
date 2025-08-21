@@ -4,16 +4,24 @@
   "description": "GitHub’s official command line tool",
   "homepage": "https://cli.github.com/",
   "version": "2.76.2",
-  "sha256": "43cea90fbd5d3b607b6125082f4a5faf7d5fc2e548d3d349a3b0310706a4f878",
-  "url": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_macOS_arm64.zip",
+  "sha256": {
+    "macos-arm64": "43cea90fbd5d3b607b6125082f4a5faf7d5fc2e548d3d349a3b0310706a4f878"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_macOS_arm64.zip"
+  },
   "scripts": {
-    "install": [
-      "unzip gh_{{ version }}_macOS_arm64.zip",
-      "install gh_{{ version }}_macOS_arm64/bin/gh {{ pkg.bin_dir }}/gh"
-    ],
+    "install": {
+      "macos-arm64": [
+        "unzip gh_{{ version }}_macOS_arm64.zip",
+        "install gh_{{ version }}_macOS_arm64/bin/gh {{ pkg.bin_dir }}/gh"
+      ]
+    },
     "latest": [
       "gh release list -R cli/cli --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
-    "completions": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"]
+    "completions": {
+      "macos-arm64": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"]
+    }
   }
 }

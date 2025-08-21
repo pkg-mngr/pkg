@@ -4,18 +4,26 @@
   "description": "ripgrep recursively searches directories for a regex pattern while respecting your gitignore",
   "homepage": "https://github.com/BurntSushi/ripgrep",
   "version": "14.1.1",
-  "sha256": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be",
-  "url": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+  "sha256": {
+    "macos-arm64": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
-      "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+        "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
+      ]
+    },
     "latest": [
       "gh release list -R BurntSushi/ripgrep --json tagName --jq '.[0].tagName'"
     ],
-    "completions": [
-      "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
-    ]
+    "completions": {
+      "macos-arm64": [
+        "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
+      ]
+    }
   }
 }

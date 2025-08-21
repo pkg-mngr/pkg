@@ -4,14 +4,20 @@
   "description": "hyperextensible Vim-based text editor",
   "homepage": "https://neovim.io",
   "version": "0.11.3",
-  "sha256": "17d22826f19fe28a11f9ab4bee13c43399fdcce485eabfa2bea6c5b3d660740f",
-  "url": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-macos-arm64.tar.gz",
+  "sha256": {
+    "macos-arm64": "17d22826f19fe28a11f9ab4bee13c43399fdcce485eabfa2bea6c5b3d660740f"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-macos-arm64.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf nvim-macos-arm64.tar.gz",
-      "mv nvim-macos-arm64 {{ pkg.opt_dir }}/nvim",
-      "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf nvim-macos-arm64.tar.gz",
+        "mv nvim-macos-arm64 {{ pkg.opt_dir }}/nvim",
+        "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"
+      ]
+    },
     "latest": [
       "gh repo view neovim/neovim --json latestRelease --jq '.latestRelease.tagName' | cut -c 2-"
     ]

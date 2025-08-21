@@ -4,18 +4,24 @@
   "description": "A modern runtime for JavaScript and TypeScript.",
   "homepage": "https://deno.com",
   "version": "2.4.5",
-  "sha256": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee",
-  "url": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip",
+  "sha256": {
+    "macos-arm64": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip"
+  },
   "scripts": {
-    "install": [
-      "unzip deno-aarch64-apple-darwin.zip",
-      "install deno {{ pkg.bin_dir }}"
-    ],
+    "install": {
+      "macos-arm64": [
+        "unzip deno-aarch64-apple-darwin.zip",
+        "install deno {{ pkg.bin_dir }}"
+      ]
+    },
     "latest": [
       "gh release list -R denoland/deno --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
-    "completions": [
-      "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
-    ]
+    "completions": {
+      "macos-arm64": ["deno completions zsh > {{ pkg.completions.zsh }}/_deno"]
+    }
   }
 }

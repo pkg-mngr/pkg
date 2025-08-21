@@ -4,21 +4,27 @@
   "description": "The Rust toolchain installer",
   "homepage": "https://rustup.rs/",
   "version": "1.28.2",
-  "sha256": "20ef5516c31b1ac2290084199ba77dbbcaa1406c45c1d978ca68558ef5964ef5",
-  "url": "https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init",
+  "sha256": {
+    "macos-arm64": "20ef5516c31b1ac2290084199ba77dbbcaa1406c45c1d978ca68558ef5964ef5"
+  },
+  "url": {
+    "macos-arm64": "https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init"
+  },
   "caveats": "To initialise `rustup`, set a default toolchain by running `rustup default stable`, then add `$HOME/.cargo/bin` to your PATH.",
   "scripts": {
-    "install": [
-      "chmod +x ./rustup-init",
-      "./rustup-init -y --no-modify-path --default-toolchain none",
-      "ln -sf $HOME/.cargo/bin/rustup {{ pkg.bin_dir }}/rustup"
-    ],
-    "latest": [
-      "gh api repos/rust-lang/rustup/tags --jq '.[0].name'"
-    ],
-    "completions": [
-      "rustup completions zsh > {{ pkg.completions.zsh }}/_rustup",
-      "rustup completions zsh cargo > {{ pkg.completions.zsh }}/_cargo"
-    ]
+    "install": {
+      "macos-arm64": [
+        "chmod +x ./rustup-init",
+        "./rustup-init -y --no-modify-path --default-toolchain none",
+        "ln -sf $HOME/.cargo/bin/rustup {{ pkg.bin_dir }}/rustup"
+      ]
+    },
+    "latest": ["gh api repos/rust-lang/rustup/tags --jq '.[0].name'"],
+    "completions": {
+      "macos-arm64": [
+        "rustup completions zsh > {{ pkg.completions.zsh }}/_rustup",
+        "rustup completions zsh cargo > {{ pkg.completions.zsh }}/_cargo"
+      ]
+    }
   }
 }
