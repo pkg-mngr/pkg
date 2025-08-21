@@ -76,7 +76,7 @@ func GetCurrentPlatform() platforms.Platform {
 	// Normalize OS names
 	switch os {
 	case "darwin":
-		os = "mac"
+		os = "macos"
 	case "windows":
 		os = "windows"
 	case "linux":
