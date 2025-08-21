@@ -7,6 +7,12 @@ permissions:
   contents: write
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
   release:
     strategy:
       fail-fast: false
@@ -28,5 +34,6 @@ jobs:
       - run: tar -acf pkg-${{ matrix.goos }}-${{ matrix.goarch }}.tar.xz pkg
       - uses: softprops/action-gh-release@v2
         with:
+          draft: false
           files: |
             pkg-${{ matrix.goos }}-${{ matrix.goarch }}.tar.xz
