@@ -1,21 +1,16 @@
 {
   "$schema": "../package.schema.json",
   "name": "pkg",
-  "description": "A simple package manager for macOS",
+  "description": "A simple cross-platform package manager",
   "homepage": "https://pkg.zerolimits.dev",
   "version": "0.2.0",
   "sha256": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
   "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
   "scripts": {
-    "install": [
-      "tar -xf pkg.tar.xz",
-      "install pkg {{ pkg.bin_dir }}/pkg"
-    ],
+    "install": ["tar -xf pkg.tar.xz", "install pkg {{ pkg.bin_dir }}/pkg"],
     "latest": [
       "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
-    "completions": [
-      "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
-    ]
+    "completions": ["pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"]
   }
 }
