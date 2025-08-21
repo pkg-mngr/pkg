@@ -27,37 +27,21 @@ type PlatformConfig struct {
 }
 
 type Manifest struct {
-	Schema       string                    `json:"$schema,omitempty"`
-	ManifestUrl  string                    `json:"-"`
-	Name         string                    `json:"name"`
-	Description  string                    `json:"description"`
-	Homepage     string                    `json:"homepage"`
-	Version      string                    `json:"version"`
-	Sha256       map[string]string         `json:"sha256"` // Platform-specific SHA256 checksums
-	Url          map[string]string         `json:"url"`    // Platform-specific URLs
-	Dependencies []string                  `json:"dependencies,omitempty"`
-	Caveats      string                    `json:"caveats,omitempty"`
-	Platforms    map[string]PlatformConfig `json:"platforms,omitempty"`
-	Scripts      map[string]interface{}    `json:"scripts"` // Scripts can be global arrays or platform-specific objects
-}
-
-// GetPlatformConfig returns the platform-specific configuration for the current platform
-func (m *Manifest) GetPlatformConfig() (PlatformConfig, bool) {
-	for _, platform := range platforms.Platforms {
-		if config, exists := m.Platforms[platform.String()]; exists {
-			return config, true
-		}
-	}
-
-	return PlatformConfig{}, false
+	Schema       string                 `json:"$schema,omitempty"`
+	ManifestUrl  string                 `json:"-"`
+	Name         string                 `json:"name"`
+	Description  string                 `json:"description"`
+	Homepage     string                 `json:"homepage"`
+	Version      string                 `json:"version"`
+	Sha256       map[string]string      `json:"sha256"` // Platform-specific SHA256 checksums
+	Url          map[string]string      `json:"url"`    // Platform-specific URLs
+	Dependencies []string               `json:"dependencies,omitempty"`
+	Caveats      string                 `json:"caveats,omitempty"`
+	Scripts      map[string]interface{} `json:"scripts"` // Scripts can be global arrays or platform-specific objects
 }
 
 // GetURL returns the appropriate URL for the current platform
 func (m *Manifest) GetURL() string {
-	if platformConfig, exists := m.GetPlatformConfig(); exists {
-		return platformConfig.Url
-	}
-
 	// Get platform-specific URL
 	currentPlatform := config.GetCurrentPlatform()
 	if url, exists := m.Url[currentPlatform.String()]; exists {
@@ -69,10 +53,6 @@ func (m *Manifest) GetURL() string {
 
 // GetSHA256 returns the appropriate SHA256 for the current platform
 func (m *Manifest) GetSHA256() string {
-	if platformConfig, exists := m.GetPlatformConfig(); exists {
-		return platformConfig.Sha256
-	}
-
 	// Get platform-specific SHA256
 	currentPlatform := config.GetCurrentPlatform()
 	if sha256, exists := m.Sha256[currentPlatform.String()]; exists {
@@ -84,10 +64,6 @@ func (m *Manifest) GetSHA256() string {
 
 // GetInstallScripts returns the appropriate install scripts for the current platform
 func (m *Manifest) GetInstallScripts(platform platforms.Platform) []string {
-	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Install) > 0 {
-		return platformConfig.Scripts.Install
-	}
-
 	// Handle platform-specific scripts
 	if installScripts, exists := m.Scripts["install"]; exists {
 		if platformScripts, ok := installScripts.(map[string]interface{}); ok {
@@ -120,10 +96,6 @@ func (m *Manifest) GetInstallScripts(platform platforms.Platform) []string {
 
 // GetLatestScripts returns the appropriate latest version scripts for the current platform
 func (m *Manifest) GetLatestScripts(platform platforms.Platform) []string {
-	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Latest) > 0 {
-		return platformConfig.Scripts.Latest
-	}
-
 	// Handle platform-specific scripts
 	if latestScripts, exists := m.Scripts["latest"]; exists {
 		if platformScripts, ok := latestScripts.(map[string]interface{}); ok {
@@ -156,10 +128,6 @@ func (m *Manifest) GetLatestScripts(platform platforms.Platform) []string {
 
 // GetCompletionsScripts returns the appropriate completions scripts for the current platform
 func (m *Manifest) GetCompletionsScripts(platform platforms.Platform) []string {
-	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Completions) > 0 {
-		return platformConfig.Scripts.Completions
-	}
-
 	// Handle platform-specific scripts
 	if completionsScripts, exists := m.Scripts["completions"]; exists {
 		if platformScripts, ok := completionsScripts.(map[string]interface{}); ok {
@@ -194,11 +162,6 @@ func (m *Manifest) GetCompletionsScripts(platform platforms.Platform) []string {
 func (m *Manifest) ValidatePlatformSupport() error {
 	currentPlatform := config.GetCurrentPlatform()
 
-	// Check if we have platform-specific config
-	if _, exists := m.Platforms[currentPlatform.String()]; exists {
-		return nil
-	}
-
 	// Check if we have platform-specific URL/SHA256
 	if _, exists := m.Url[currentPlatform.String()]; exists {
 		if _, exists := m.Sha256[currentPlatform.String()]; exists {
@@ -229,25 +192,6 @@ func GetManifest(pkgName string) Manifest {
 	manifest.ManifestUrl = manifestUrl
 	if err := json.NewDecoder(res.Body).Decode(manifest); err != nil {
 		log.Fatalf("Error decoding data from manifest: %v\n", err)
-	}
-
-	// Format platform-specific data
-	if manifest.Platforms != nil {
-		for platform, platformConfig := range manifest.Platforms {
-			platformConfig.Url = formatData(platformConfig.Url, *manifest)
-			if platformConfig.Scripts != nil {
-				for i, line := range platformConfig.Scripts.Install {
-					platformConfig.Scripts.Install[i] = formatData(line, *manifest)
-				}
-				for i, line := range platformConfig.Scripts.Latest {
-					platformConfig.Scripts.Latest[i] = formatData(line, *manifest)
-				}
-				for i, line := range platformConfig.Scripts.Completions {
-					platformConfig.Scripts.Completions[i] = formatData(line, *manifest)
-				}
-			}
-			manifest.Platforms[platform] = platformConfig
-		}
 	}
 
 	// Format platform-specific URL and SHA256
@@ -300,25 +244,6 @@ func getManifestFromFile(path string) Manifest {
 	manifest.ManifestUrl = absPath
 	if err := json.Unmarshal(data, manifest); err != nil {
 		log.Fatalf("Error unmarshalling data from %s: %v\n", path, err)
-	}
-
-	// Format platform-specific data
-	if manifest.Platforms != nil {
-		for platform, platformConfig := range manifest.Platforms {
-			platformConfig.Url = formatData(platformConfig.Url, *manifest)
-			if platformConfig.Scripts != nil {
-				for i, line := range platformConfig.Scripts.Install {
-					platformConfig.Scripts.Install[i] = formatData(line, *manifest)
-				}
-				for i, line := range platformConfig.Scripts.Latest {
-					platformConfig.Scripts.Latest[i] = formatData(line, *manifest)
-				}
-				for i, line := range platformConfig.Scripts.Completions {
-					platformConfig.Scripts.Completions[i] = formatData(line, *manifest)
-				}
-			}
-			manifest.Platforms[platform] = platformConfig
-		}
 	}
 
 	// Format platform-specific URL and SHA256

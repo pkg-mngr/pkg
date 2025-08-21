@@ -61,14 +61,6 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 
 	fmt.Printf("Installing %s...\n", pkg)
 
-	// Show which platform configuration is being used
-	if _, exists := pkgManifest.GetPlatformConfig(); exists {
-		currentPlatform := config.GetCurrentPlatform()
-		fmt.Printf("Using platform-specific configuration for: %s\n", currentPlatform)
-	} else {
-		fmt.Println("Using fallback configuration")
-	}
-
 	filesBefore := listFiles()
 	if err := fetchPackage(pkgManifest); err != nil {
 		log.Errorf("%v\n", err)
