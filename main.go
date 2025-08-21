@@ -27,9 +27,8 @@ type Args struct {
 	Info struct {
 		Package string `help:"The package to get the info for"`
 	} `help:"Get the info for a package."`
-	List     bool `type:"command" help:"List installed packages"`
-	Init     bool `type:"option" help:"Initialise pkg"`
-	Platform bool `type:"command" help:"Show current platform information"`
+	List bool `type:"command" help:"List installed packages"`
+	Init bool `type:"option" help:"Initialise pkg"`
 }
 
 func main() {
@@ -92,13 +91,6 @@ func main() {
 			fmt.Println(pkg)
 		}
 		fmt.Println()
-		return
-	}
-
-	if args.Platform {
-		currentPlatform := config.GetCurrentPlatform()
-
-		fmt.Printf("Current platform: %s\n", currentPlatform)
 		return
 	}
 }
