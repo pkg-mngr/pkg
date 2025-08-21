@@ -14,18 +14,6 @@ import (
 	"github.com/noclaps/pkg/internal/platforms"
 )
 
-type PlatformScripts struct {
-	Install     []string `json:"install,omitempty"`
-	Latest      []string `json:"latest,omitempty"`
-	Completions []string `json:"completions,omitempty"`
-}
-
-type PlatformConfig struct {
-	Url     string           `json:"url"`
-	Sha256  string           `json:"sha256"`
-	Scripts *PlatformScripts `json:"scripts,omitempty"`
-}
-
 type Manifest struct {
 	Schema       string                 `json:"$schema,omitempty"`
 	ManifestUrl  string                 `json:"-"`

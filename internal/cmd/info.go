@@ -61,25 +61,27 @@ func Info(pkg string) string {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
-
-		output += "\n"
 	}
 
 	// Show dependencies
 	if len(pkgManifest.Dependencies) > 0 {
+		output += "\n"
 		output += fmt.Sprintf("Dependencies: %s\n", strings.Join(pkgManifest.Dependencies, ", "))
 	}
 
 	// Show caveats
 	if pkgManifest.Caveats != "" {
+		output += "\n"
 		output += util.WrapText(fmt.Sprintf("Caveats: %s\n", pkgManifest.Caveats), 90)
 	}
 
 	// Show current platform compatibility
 	if err := pkgManifest.ValidatePlatformSupport(); err != nil {
+		output += "\n"
 		output += "\033[31;1mPlatform Compatibility:\033[0m\n"
 		output += "  \033[31m✗ Not compatible with current platform\033[0m\n"
 	} else {
+		output += "\n"
 		output += "\033[32;1mPlatform Compatibility:\033[0m\n"
 		output += "  \033[32m✓ Compatible with current platform\033[0m\n"
 	}
