@@ -65,7 +65,7 @@ func GetCurrentPlatform() platforms.Platform {
 	// Normalize architecture names to match common package naming conventions
 	switch arch {
 	case "amd64":
-		arch = "x86_64"
+		arch = "x64"
 	case "arm64":
 		// macOS uses "arm64" but packages often use "arm64"
 		if os == "darwin" {
