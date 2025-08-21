@@ -31,8 +31,8 @@ type Manifest struct {
 // GetURL returns the appropriate URL for the current platform
 func (m *Manifest) GetURL() string {
 	// Get platform-specific URL
-	currentPlatform := config.GetCurrentPlatform()
-	if url, exists := m.Url[currentPlatform.String()]; exists {
+	currentPlatform := platforms.GetPlatform()
+	if url, exists := m.Url[string(currentPlatform)]; exists {
 		return url
 	}
 
@@ -42,8 +42,8 @@ func (m *Manifest) GetURL() string {
 // GetSHA256 returns the appropriate SHA256 for the current platform
 func (m *Manifest) GetSHA256() string {
 	// Get platform-specific SHA256
-	currentPlatform := config.GetCurrentPlatform()
-	if sha256, exists := m.Sha256[currentPlatform.String()]; exists {
+	currentPlatform := platforms.GetPlatform()
+	if sha256, exists := m.Sha256[string(currentPlatform)]; exists {
 		return sha256
 	}
 
@@ -56,7 +56,7 @@ func (m *Manifest) GetInstallScripts(platform platforms.Platform) []string {
 	if installScripts, exists := m.Scripts["install"]; exists {
 		if platformScripts, ok := installScripts.(map[string]interface{}); ok {
 			// Platform-specific install scripts
-			if scripts, exists := platformScripts[platform.String()]; exists {
+			if scripts, exists := platformScripts[string(platform)]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -88,7 +88,7 @@ func (m *Manifest) GetLatestScripts(platform platforms.Platform) []string {
 	if latestScripts, exists := m.Scripts["latest"]; exists {
 		if platformScripts, ok := latestScripts.(map[string]interface{}); ok {
 			// Platform-specific latest scripts
-			if scripts, exists := platformScripts[platform.String()]; exists {
+			if scripts, exists := platformScripts[string(platform)]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -120,7 +120,7 @@ func (m *Manifest) GetCompletionsScripts(platform platforms.Platform) []string {
 	if completionsScripts, exists := m.Scripts["completions"]; exists {
 		if platformScripts, ok := completionsScripts.(map[string]interface{}); ok {
 			// Platform-specific completions scripts
-			if scripts, exists := platformScripts[platform.String()]; exists {
+			if scripts, exists := platformScripts[string(platform)]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -148,11 +148,11 @@ func (m *Manifest) GetCompletionsScripts(platform platforms.Platform) []string {
 
 // ValidatePlatformSupport checks if the current platform is supported
 func (m *Manifest) ValidatePlatformSupport() error {
-	currentPlatform := config.GetCurrentPlatform()
+	currentPlatform := platforms.GetPlatform()
 
 	// Check if we have platform-specific URL/SHA256
-	if _, exists := m.Url[currentPlatform.String()]; exists {
-		if _, exists := m.Sha256[currentPlatform.String()]; exists {
+	if _, exists := m.Url[string(currentPlatform)]; exists {
+		if _, exists := m.Sha256[string(currentPlatform)]; exists {
 			return nil
 		}
 	}

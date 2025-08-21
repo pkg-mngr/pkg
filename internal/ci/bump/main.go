@@ -44,7 +44,7 @@ func main() {
 				return
 			}
 
-			latestScript := strings.Join(pkgManifest.GetLatestScripts(config.GetCurrentPlatform()), "\n")
+			latestScript := strings.Join(pkgManifest.GetLatestScripts(platforms.GetPlatform()), "\n")
 			log.Printf("Running `latest` script: \n%s\n", latestScript)
 			output, err := util.RunScript(latestScript, true)
 			if err != nil && err.Error() != "" {
@@ -62,13 +62,14 @@ func main() {
 			}
 
 			pkgManifest.Version = latestVersion
-			for _, platform := range platforms.Platforms {
-				if pkgManifest.Url[platform.String()] == "" {
-					log.Printf("No URL for %s in %s\n", platform.String(), file.Name())
+
+			for platform := range pkgManifest.Url {
+				if pkgManifest.Url[platform] == "" {
+					log.Printf("No URL for %s in %s\n", platform, file.Name())
 					continue
 				}
 
-				url := strings.ReplaceAll(pkgManifest.Url[platform.String()], "{{ version }}", pkgManifest.Version)
+				url := strings.ReplaceAll(pkgManifest.Url[platform], "{{ version }}", pkgManifest.Version)
 
 				log.Printf("Fetching file from %s\n", url)
 				res, err := http.Get(url)
@@ -87,7 +88,7 @@ func main() {
 
 				log.Printf("Validating checksum for %s\n", path.Base(url))
 				checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
-				pkgManifest.Sha256[platform.String()] = checksum
+				pkgManifest.Sha256[platform] = checksum
 			}
 
 			log.Printf("Updating %s\n", file.Name())

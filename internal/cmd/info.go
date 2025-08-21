@@ -41,23 +41,23 @@ func Info(pkg string) string {
 		}
 		output += "\n"
 
-		if len(pkgManifest.GetInstallScripts(platforms.ToPlatform(platform))) > 0 {
+		if len(pkgManifest.GetInstallScripts(platforms.Platform(platform))) > 0 {
 			output += "    Install:\n"
-			for _, line := range pkgManifest.GetInstallScripts(platforms.ToPlatform(platform)) {
+			for _, line := range pkgManifest.GetInstallScripts(platforms.Platform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
 
-		if len(pkgManifest.GetCompletionsScripts(platforms.ToPlatform(platform))) > 0 {
+		if len(pkgManifest.GetCompletionsScripts(platforms.Platform(platform))) > 0 {
 			output += "    Completions:\n"
-			for _, line := range pkgManifest.GetCompletionsScripts(platforms.ToPlatform(platform)) {
+			for _, line := range pkgManifest.GetCompletionsScripts(platforms.Platform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
 
-		if len(pkgManifest.GetLatestScripts(platforms.ToPlatform(platform))) > 0 {
+		if len(pkgManifest.GetLatestScripts(platforms.Platform(platform))) > 0 {
 			output += "    Latest:\n"
-			for _, line := range pkgManifest.GetLatestScripts(platforms.ToPlatform(platform)) {
+			for _, line := range pkgManifest.GetLatestScripts(platforms.Platform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
