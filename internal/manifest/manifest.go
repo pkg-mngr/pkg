@@ -57,13 +57,13 @@ func (m *Manifest) GetURL() string {
 	if platformConfig, exists := m.GetPlatformConfig(); exists {
 		return platformConfig.Url
 	}
-	
+
 	// Get platform-specific URL
 	currentPlatform := config.GetCurrentPlatform()
 	if url, exists := m.Url[currentPlatform.String()]; exists {
 		return url
 	}
-	
+
 	return ""
 }
 
@@ -72,28 +72,27 @@ func (m *Manifest) GetSHA256() string {
 	if platformConfig, exists := m.GetPlatformConfig(); exists {
 		return platformConfig.Sha256
 	}
-	
+
 	// Get platform-specific SHA256
 	currentPlatform := config.GetCurrentPlatform()
 	if sha256, exists := m.Sha256[currentPlatform.String()]; exists {
 		return sha256
 	}
-	
+
 	return ""
 }
 
 // GetInstallScripts returns the appropriate install scripts for the current platform
-func (m *Manifest) GetInstallScripts() []string {
+func (m *Manifest) GetInstallScripts(platform platforms.Platform) []string {
 	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Install) > 0 {
 		return platformConfig.Scripts.Install
 	}
-	
+
 	// Handle platform-specific scripts
 	if installScripts, exists := m.Scripts["install"]; exists {
 		if platformScripts, ok := installScripts.(map[string]interface{}); ok {
 			// Platform-specific install scripts
-			currentPlatform := config.GetCurrentPlatform()
-			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+			if scripts, exists := platformScripts[platform.String()]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -115,22 +114,21 @@ func (m *Manifest) GetInstallScripts() []string {
 			return result
 		}
 	}
-	
+
 	return []string{}
 }
 
 // GetLatestScripts returns the appropriate latest version scripts for the current platform
-func (m *Manifest) GetLatestScripts() []string {
+func (m *Manifest) GetLatestScripts(platform platforms.Platform) []string {
 	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Latest) > 0 {
 		return platformConfig.Scripts.Latest
 	}
-	
+
 	// Handle platform-specific scripts
 	if latestScripts, exists := m.Scripts["latest"]; exists {
 		if platformScripts, ok := latestScripts.(map[string]interface{}); ok {
 			// Platform-specific latest scripts
-			currentPlatform := config.GetCurrentPlatform()
-			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+			if scripts, exists := platformScripts[platform.String()]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -152,22 +150,21 @@ func (m *Manifest) GetLatestScripts() []string {
 			return result
 		}
 	}
-	
+
 	return []string{}
 }
 
 // GetCompletionsScripts returns the appropriate completions scripts for the current platform
-func (m *Manifest) GetCompletionsScripts() []string {
+func (m *Manifest) GetCompletionsScripts(platform platforms.Platform) []string {
 	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Completions) > 0 {
 		return platformConfig.Scripts.Completions
 	}
-	
+
 	// Handle platform-specific scripts
 	if completionsScripts, exists := m.Scripts["completions"]; exists {
 		if platformScripts, ok := completionsScripts.(map[string]interface{}); ok {
 			// Platform-specific completions scripts
-			currentPlatform := config.GetCurrentPlatform()
-			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+			if scripts, exists := platformScripts[platform.String()]; exists {
 				if scriptsArr, ok := scripts.([]interface{}); ok {
 					result := make([]string, len(scriptsArr))
 					for i, v := range scriptsArr {
@@ -189,7 +186,7 @@ func (m *Manifest) GetCompletionsScripts() []string {
 			return result
 		}
 	}
-	
+
 	return []string{}
 }
 

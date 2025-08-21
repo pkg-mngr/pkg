@@ -9,6 +9,15 @@ func (p Platform) String() string {
 	return p.Name + "-" + p.Arch
 }
 
+func ToPlatform(platform string) Platform {
+	for _, p := range Platforms {
+		if p.String() == platform {
+			return p
+		}
+	}
+	return Platform{}
+}
+
 var Platforms = []Platform{
 	LinuxX86_64,
 	LinuxArm64,

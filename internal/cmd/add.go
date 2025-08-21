@@ -76,15 +76,15 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 	}
 
 	fmt.Println("Running install script...")
-	installScript := strings.Join(pkgManifest.GetInstallScripts(), "\n")
+	installScript := strings.Join(pkgManifest.GetInstallScripts(config.GetCurrentPlatform()), "\n")
 	if _, err := util.RunScript(installScript, skipConfirmation); err != nil && err.Error() != "" {
 		log.Errorf("%v\n", err)
 		return
 	}
 
-	if len(pkgManifest.GetCompletionsScripts()) != 0 {
+	if len(pkgManifest.GetCompletionsScripts(config.GetCurrentPlatform())) != 0 {
 		fmt.Println("Running completions script...")
-		completionsScript := strings.Join(pkgManifest.GetCompletionsScripts(), "\n")
+		completionsScript := strings.Join(pkgManifest.GetCompletionsScripts(config.GetCurrentPlatform()), "\n")
 		if _, err := util.RunScript(completionsScript, skipConfirmation); err != nil && err.Error() != "" {
 			log.Errorf("%v\n", err)
 			return

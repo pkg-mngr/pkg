@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/noclaps/pkg/internal/platforms"
 	"github.com/noclaps/pkg/internal/util"
 )
 
@@ -40,23 +41,23 @@ func Info(pkg string) string {
 		}
 		output += "\n"
 
-		if len(pkgManifest.GetInstallScripts()) > 0 {
+		if len(pkgManifest.GetInstallScripts(platforms.ToPlatform(platform))) > 0 {
 			output += "    Install:\n"
-			for _, line := range pkgManifest.GetInstallScripts() {
+			for _, line := range pkgManifest.GetInstallScripts(platforms.ToPlatform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
 
-		if len(pkgManifest.GetCompletionsScripts()) > 0 {
+		if len(pkgManifest.GetCompletionsScripts(platforms.ToPlatform(platform))) > 0 {
 			output += "    Completions:\n"
-			for _, line := range pkgManifest.GetCompletionsScripts() {
+			for _, line := range pkgManifest.GetCompletionsScripts(platforms.ToPlatform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
 
-		if len(pkgManifest.GetLatestScripts()) > 0 {
+		if len(pkgManifest.GetLatestScripts(platforms.ToPlatform(platform))) > 0 {
 			output += "    Latest:\n"
-			for _, line := range pkgManifest.GetLatestScripts() {
+			for _, line := range pkgManifest.GetLatestScripts(platforms.ToPlatform(platform)) {
 				output += fmt.Sprintf("      %s\n", util.SyntaxHighlight(line))
 			}
 		}
