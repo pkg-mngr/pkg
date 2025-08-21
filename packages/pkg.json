@@ -1,31 +1,19 @@
 {
   "$schema": "../package.schema.json",
   "name": "pkg",
-  "description": "A simple cross-platform package manager",
+  "description": "A simple package manager for macOS",
   "homepage": "https://pkg.zerolimits.dev",
   "version": "0.3.0",
   "sha256": {
-    "macos-arm64": "7f5422385813bcad647f810a85d9f00d2d26a70b3d3727654e031f42c7a2423d",
-    "macos-x64": "7d50a97f827496c0a4060262dadb472b4f30f65cbac12ef66bc65e0bb6254b64",
-    "linux-x64": "443a3bbaf049e0f8268df8575c56840d714b45e961d2f7a9ee3f6099d28a7149"
+    "macos-arm64": "6695f4385b2ef912324467b7ebe33c5993d8e65bdc1ec5a3eba822de502e6540"
   },
   "url": {
-    "macos-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg-darwin-arm64.tar.xz",
-    "macos-x64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg-darwin-amd64.tar.xz",
-    "linux-x64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg-linux-amd64.tar.xz"
+    "macos-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz"
   },
   "scripts": {
     "install": {
       "macos-arm64": [
-        "tar -xf pkg-darwin-arm64.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ],
-      "macos-x64": [
-        "tar -xf pkg-darwin-amd64.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ],
-      "linux-x64": [
-        "tar -xf pkg-linux-amd64.tar.xz",
+        "tar -xf pkg.tar.xz",
         "install pkg {{ pkg.bin_dir }}/pkg"
       ]
     },
@@ -33,9 +21,9 @@
       "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": {
-      "macos-arm64": ["pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"],
-      "macos-x64": ["pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"],
-      "linux-x64": ["pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"]
+      "macos-arm64": [
+        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
+      ]
     }
   }
 }

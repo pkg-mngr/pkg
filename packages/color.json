@@ -5,13 +5,19 @@
   "homepage": "https://github.com/noClaps/color",
   "version": "0.1.2",
   "sha256": {
+    "linux-x64": "accb8f9a065d04ab9b461aee71729273ad0c1e968cfe9b91ea39839c72cc870d",
     "macos-arm64": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b"
   },
   "url": {
+    "linux-x64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-linux-amd64.tar.xz",
     "macos-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz"
   },
   "scripts": {
     "install": {
+      "linux-x64": [
+        "tar -xf color-linux-amd64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ],
       "macos-arm64": [
         "tar -xf color-darwin-arm64.tar.xz",
         "install color {{ pkg.bin_dir }}/color"
