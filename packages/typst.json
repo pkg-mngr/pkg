@@ -4,13 +4,19 @@
   "description": "A new markup-based typesetting system that is powerful and easy to learn.",
   "homepage": "https://typst.app",
   "version": "0.13.1",
-  "sha256": "541e4f9eaca3f34ee865f81fc663e4839cb84d6253f71a372cd855b0a7283213",
-  "url": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-aarch64-apple-darwin.tar.xz",
+  "sha256": {
+    "macos-arm64": "541e4f9eaca3f34ee865f81fc663e4839cb84d6253f71a372cd855b0a7283213"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-aarch64-apple-darwin.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf typst-aarch64-apple-darwin.tar.xz",
-      "install typst-aarch64-apple-darwin/typst {{ pkg.bin_dir }}"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf typst-aarch64-apple-darwin.tar.xz",
+        "install typst-aarch64-apple-darwin/typst {{ pkg.bin_dir }}"
+      ]
+    },
     "latest": [
       "gh release list -R typst/typst --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

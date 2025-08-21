@@ -4,14 +4,20 @@
   "description": "Incredibly fast JavaScript runtime, bundler, test runner, and package manager – all in one",
   "homepage": "https://bun.com",
   "version": "1.2.20",
-  "sha256": "404f5a6dd1f604b40eb3b156d4197bb8d398bb26e0ae4c8ac8e7aa490f7e235f",
-  "url": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-darwin-aarch64.zip",
+  "sha256": {
+    "macos-arm64": "404f5a6dd1f604b40eb3b156d4197bb8d398bb26e0ae4c8ac8e7aa490f7e235f"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-darwin-aarch64.zip"
+  },
   "caveats": "Due to the way Bun installs shell completions, they will not be installed during package installation. Instead, you can manually run `bun completions` to get completions for your shell.",
   "scripts": {
-    "install": [
-      "unzip bun-darwin-aarch64.zip",
-      "install ./bun-darwin-aarch64/bun {{ pkg.bin_dir }}/bun"
-    ],
+    "install": {
+      "macos-arm64": [
+        "unzip bun-darwin-aarch64.zip",
+        "install ./bun-darwin-aarch64/bun {{ pkg.bin_dir }}/bun"
+      ]
+    },
     "latest": [
       "gh release list -R oven-sh/bun --json tagName --jq '.[0].tagName' | cut -c 6-"
     ]

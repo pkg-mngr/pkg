@@ -4,18 +4,26 @@
   "description": "Command line tools for fly.io services",
   "homepage": "https://fly.io",
   "version": "0.3.171",
-  "sha256": "c74e810921070352b74d4d857ffc8a9f10ea2ca4ef16d2f6965ff9544361e19a",
-  "url": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_arm64.tar.gz",
+  "sha256": {
+    "macos-arm64": "c74e810921070352b74d4d857ffc8a9f10ea2ca4ef16d2f6965ff9544361e19a"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_arm64.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf flyctl_{{ version }}_macOS_arm64.tar.gz",
-      "install flyctl {{ pkg.bin_dir }}"
-    ],
+    "install": {
+      "macos-arm64": [
+        "tar -xf flyctl_{{ version }}_macOS_arm64.tar.gz",
+        "install flyctl {{ pkg.bin_dir }}"
+      ]
+    },
     "latest": [
       "gh release list -R superfly/flyctl --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
-    "completions": [
-      "flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"
-    ]
+    "completions": {
+      "macos-arm64": [
+        "flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"
+      ]
+    }
   }
 }
