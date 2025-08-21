@@ -24,6 +24,6 @@ jobs:
       - run: |
           MODIFIED_FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[] | select(.additions > 0) | .path' | grep packages/ |  tr '\n' ' ')
           set -- $MODIFIED_FILES
-          GOOS={{ matrix.goos }} GOARCH={{ matrix.goarch }} go run ./internal/ci/pr/main.go "$@"
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go run ./internal/ci/pr/main.go "$@"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
