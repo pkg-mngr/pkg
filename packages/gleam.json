@@ -5,16 +5,34 @@
   "homepage": "https://gleam.run",
   "version": "1.12.0",
   "sha256": {
-    "macos-arm64": "885396e845fbbc014253dd95da493439b785641022fb92c45657b2b936cf317f"
+    "linux-arm64": "eb9707e42e452d5bbfb48b12d81571a098238a5afb4b7d16c1d07df7089e2bde",
+    "linux-x64": "039a87bd7294d3cfd2425f56e8ffef508b170ecec42e760806833fb1e0319d49",
+    "macos-arm64": "885396e845fbbc014253dd95da493439b785641022fb92c45657b2b936cf317f",
+    "macos-x64": "fca2a8cf5424cfa096710c191bbf8c02b635ed0e6c0e2ed38b95eba5e8df0302"
   },
   "url": {
-    "macos-arm64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-aarch64-apple-darwin.tar.gz"
+    "linux-arm64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-aarch64-unknown-linux-musl.tar.gz",
+    "linux-x64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+    "macos-arm64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-aarch64-apple-darwin.tar.gz",
+    "macos-x64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-x86_64-apple-darwin.tar.gz"
   },
   "caveats": "To use the Erlang target, you'll need to install Erlang and Rebar3. To use the JavaScript target, you'll need to install a JavaScript runtime like Node, Deno or Bun.",
   "scripts": {
     "install": {
+      "linux-arm64": [
+        "tar -xf gleam-v{{ version }}-aarch64-unknown-linux-musl.tar.gz",
+        "install gleam {{ pkg.bin_dir }}"
+      ],
+      "linux-x64": [
+        "tar -xf gleam-v{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+        "install gleam {{ pkg.bin_dir }}"
+      ],
       "macos-arm64": [
-        "tar -xf gleam-v1.12.0-aarch64-apple-darwin.tar.gz",
+        "tar -xf gleam-v{{ version }}-aarch64-apple-darwin.tar.gz",
+        "install gleam {{ pkg.bin_dir }}"
+      ],
+      "macos-x64": [
+        "tar -xf gleam-v{{ version }}-x86_64-apple-darwin.tar.gz",
         "install gleam {{ pkg.bin_dir }}"
       ]
     },

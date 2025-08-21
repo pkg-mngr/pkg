@@ -5,23 +5,52 @@
   "homepage": "https://deno.com",
   "version": "2.4.5",
   "sha256": {
-    "macos-arm64": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee"
+    "linux-arm64": "4e3e86739fe527c6891dbfa73799a5ec1b11f45898aaebf73bf3247c2e6a53dd",
+    "linux-x64": "6f9d8115bb3df582c0c5674507e906323b680be0f0b15e735d0cd5ec6be44444",
+    "macos-arm64": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee",
+    "macos-x64": "cd46e3d5c06fbd21ef12742def67cc12ef83a2f99d44e00419615f99de056574"
   },
   "url": {
-    "macos-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip"
+    "linux-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-unknown-linux-gnu.zip",
+    "linux-x64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-unknown-linux-gnu.zip",
+    "macos-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip",
+    "macos-x64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-apple-darwin.zip"
   },
   "scripts": {
+    "completions": {
+      "linux-arm64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "linux-x64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "macos-arm64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "macos-x64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ]
+    },
     "install": {
+      "linux-arm64": [
+        "unzip deno-aarch64-unknown-linux-gnu.zip",
+        "install deno {{ pkg.bin_dir }}"
+      ],
+      "linux-x64": [
+        "unzip deno-x86_64-unknown-linux-gnu.zip",
+        "install deno {{ pkg.bin_dir }}"
+      ],
       "macos-arm64": [
         "unzip deno-aarch64-apple-darwin.zip",
+        "install deno {{ pkg.bin_dir }}"
+      ],
+      "macos-x64": [
+        "unzip deno-x86_64-apple-darwin.zip",
         "install deno {{ pkg.bin_dir }}"
       ]
     },
     "latest": [
       "gh release list -R denoland/deno --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ],
-    "completions": {
-      "macos-arm64": ["deno completions zsh > {{ pkg.completions.zsh }}/_deno"]
-    }
+    ]
   }
 }

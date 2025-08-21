@@ -5,17 +5,35 @@
   "homepage": "https://bun.com",
   "version": "1.2.20",
   "sha256": {
-    "macos-arm64": "404f5a6dd1f604b40eb3b156d4197bb8d398bb26e0ae4c8ac8e7aa490f7e235f"
+    "linux-arm64": "98d2e0b2c09421569172b4d46b6f81378c2dbdd77480ebb27f3989dd4e72e18b",
+    "linux-x64": "4e9edc4cba0c7c1623a288be01e53bbde11a4d073f2cf339cab026627858b548",
+    "macos-arm64": "404f5a6dd1f604b40eb3b156d4197bb8d398bb26e0ae4c8ac8e7aa490f7e235f",
+    "macos-x64": "e1cc2f4b8e4d4172dde107982db42a22f8c5c8d8bb26078c23285704a4b72cd6"
   },
   "url": {
-    "macos-arm64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-darwin-aarch64.zip"
+    "linux-arm64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-linux-aarch64.zip",
+    "linux-x64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-linux-x64.zip",
+    "macos-arm64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-darwin-aarch64.zip",
+    "macos-x64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-darwin-x64.zip"
   },
   "caveats": "Due to the way Bun installs shell completions, they will not be installed during package installation. Instead, you can manually run `bun completions` to get completions for your shell.",
   "scripts": {
     "install": {
+      "linux-arm64": [
+        "unzip bun-linux-aarch64.zip",
+        "install ./bun-linux-aarch64/bun {{ pkg.bin_dir }}/bun"
+      ],
+      "linux-x64": [
+        "unzip bun-linux-x64.zip",
+        "install ./bun-linux-x64/bun {{ pkg.bin_dir }}/bun"
+      ],
       "macos-arm64": [
         "unzip bun-darwin-aarch64.zip",
         "install ./bun-darwin-aarch64/bun {{ pkg.bin_dir }}/bun"
+      ],
+      "macos-x64": [
+        "unzip bun-darwin-x64.zip",
+        "install ./bun-darwin-x64/bun {{ pkg.bin_dir }}/bun"
       ]
     },
     "latest": [

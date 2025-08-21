@@ -5,13 +5,19 @@
   "homepage": "https://github.com/noClaps/serve",
   "version": "0.1.5",
   "sha256": {
+    "linux-x64": "18a84914147793227ce13435891f850a02c2e97bdf65b72eb5fc16fbad96c78c",
     "macos-arm64": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9"
   },
   "url": {
+    "linux-x64": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-linux-amd64.tar.xz",
     "macos-arm64": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz"
   },
   "scripts": {
     "install": {
+      "linux-x64": [
+        "tar -xf serve-linux-amd64.tar.xz",
+        "install serve {{ pkg.bin_dir }}/serve"
+      ],
       "macos-arm64": [
         "tar -xf serve-darwin-arm64.tar.xz",
         "install serve {{ pkg.bin_dir }}/serve"

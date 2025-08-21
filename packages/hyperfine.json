@@ -5,25 +5,52 @@
   "homepage": "https://github.com/sharkdp/hyperfine",
   "version": "1.19.0",
   "sha256": {
-    "macos-arm64": "502e7c7f99e7e1919321eaa23a4a694c34b1b92d99cbd773a4a2497e100e088f"
+    "linux-arm64": "7f9c0522e1acf869e0558e085c43f2cea3e30e4f7a4b7bc3d5540cbdee7b4273",
+    "linux-x64": "d5550bbdc240d2aaa8f43ea2dc8b03a306afb30ea8464cd8b2faa9486ed1019e",
+    "macos-arm64": "502e7c7f99e7e1919321eaa23a4a694c34b1b92d99cbd773a4a2497e100e088f",
+    "macos-x64": "80ad420c0a9a5d090f6ca0ddc9305a139d57ba6b6e8e7adf22c800389baf3ab6"
   },
   "url": {
-    "macos-arm64": "https://github.com/sharkdp/hyperfine/releases/download/v{{ version }}/hyperfine-v{{ version }}-aarch64-apple-darwin.tar.gz"
+    "linux-arm64": "https://github.com/sharkdp/hyperfine/releases/download/v{{ version }}/hyperfine-v{{ version }}-aarch64-unknown-linux-gnu.tar.gz",
+    "linux-x64": "https://github.com/sharkdp/hyperfine/releases/download/v{{ version }}/hyperfine-v{{ version }}-x86_64-unknown-linux-gnu.tar.gz",
+    "macos-arm64": "https://github.com/sharkdp/hyperfine/releases/download/v{{ version }}/hyperfine-v{{ version }}-aarch64-apple-darwin.tar.gz",
+    "macos-x64": "https://github.com/sharkdp/hyperfine/releases/download/v{{ version }}/hyperfine-v{{ version }}-x86_64-apple-darwin.tar.gz"
   },
   "scripts": {
+    "completions": {
+      "linux-arm64": [
+        "cp hyperfine-v{{ version }}-aarch64-unknown-linux-gnu/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"
+      ],
+      "linux-x64": [
+        "cp hyperfine-v{{ version }}-x86_64-unknown-linux-gnu/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"
+      ],
+      "macos-arm64": [
+        "cp hyperfine-v{{ version }}-aarch64-apple-darwin/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"
+      ],
+      "macos-x64": [
+        "cp hyperfine-v{{ version }}-x86_64-apple-darwin/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"
+      ]
+    },
     "install": {
+      "linux-arm64": [
+        "tar -xf hyperfine-v{{ version }}-aarch64-unknown-linux-gnu.tar.gz",
+        "install hyperfine-v{{ version }}-aarch64-unknown-linux-gnu/hyperfine {{ pkg.bin_dir }}/hyperfine"
+      ],
+      "linux-x64": [
+        "tar -xf hyperfine-v{{ version }}-x86_64-unknown-linux-gnu.tar.gz",
+        "install hyperfine-v{{ version }}-x86_64-unknown-linux-gnu/hyperfine {{ pkg.bin_dir }}/hyperfine"
+      ],
       "macos-arm64": [
         "tar -xf hyperfine-v{{ version }}-aarch64-apple-darwin.tar.gz",
         "install hyperfine-v{{ version }}-aarch64-apple-darwin/hyperfine {{ pkg.bin_dir }}/hyperfine"
+      ],
+      "macos-x64": [
+        "tar -xf hyperfine-v{{ version }}-x86_64-apple-darwin.tar.gz",
+        "install hyperfine-v{{ version }}-x86_64-apple-darwin/hyperfine {{ pkg.bin_dir }}/hyperfine"
       ]
     },
     "latest": [
       "gh release list -R sharkdp/hyperfine --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ],
-    "completions": {
-      "macos-arm64": [
-        "cp hyperfine-v{{ version }}-aarch64-apple-darwin/autocomplete/_hyperfine {{ pkg.completions.zsh }}/_hyperfine"
-      ]
-    }
+    ]
   }
 }

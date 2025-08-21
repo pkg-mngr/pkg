@@ -5,25 +5,57 @@
   "homepage": "https://github.com/leanprover/elan",
   "version": "4.1.2",
   "sha256": {
-    "macos-arm64": "79f4c33e497cd50864de2388fafff43f7ca98bd27f63847fb6a6b59102ae1fd1"
+    "linux-arm64": "dd69d970f615ebe74e2a54cd193f8b7471d1d5facef624808f14f290dec8ee62",
+    "linux-x64": "f81c2e48c1588d4612cd2c8851947898a45ac8d72748a07dff3a5694f1cf589b",
+    "macos-arm64": "79f4c33e497cd50864de2388fafff43f7ca98bd27f63847fb6a6b59102ae1fd1",
+    "macos-x64": "368755cfc86f382b88427d57bd0bdbd1e2a14cf385e2d331bf5ab79f5975d1f9"
   },
   "url": {
-    "macos-arm64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-aarch64-apple-darwin.tar.gz"
+    "linux-arm64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-aarch64-unknown-linux-gnu.tar.gz",
+    "linux-x64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-x86_64-unknown-linux-gnu.tar.gz",
+    "macos-arm64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-aarch64-apple-darwin.tar.gz",
+    "macos-x64": "https://github.com/leanprover/elan/releases/download/v{{ version }}/elan-x86_64-apple-darwin.tar.gz"
   },
   "caveats": "To initialise `elan`, set a default toolchain by running `elan default stable`, then add `$HOME/.elan/bin` to your PATH.",
   "scripts": {
+    "completions": {
+      "linux-arm64": [
+        "elan completions zsh > {{ pkg.completions.zsh }}/_elan"
+      ],
+      "linux-x64": [
+        "elan completions zsh > {{ pkg.completions.zsh }}/_elan"
+      ],
+      "macos-arm64": [
+        "elan completions zsh > {{ pkg.completions.zsh }}/_elan"
+      ],
+      "macos-x64": [
+        "elan completions zsh > {{ pkg.completions.zsh }}/_elan"
+      ]
+    },
     "install": {
+      "linux-arm64": [
+        "tar -xf elan-aarch64-unknown-linux-gnu.tar.gz",
+        "./elan-init -y --no-modify-path --default-toolchain none",
+        "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
+      ],
+      "linux-x64": [
+        "tar -xf elan-x86_64-unknown-linux-gnu.tar.gz",
+        "./elan-init -y --no-modify-path --default-toolchain none",
+        "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
+      ],
       "macos-arm64": [
         "tar -xf elan-aarch64-apple-darwin.tar.gz",
+        "./elan-init -y --no-modify-path --default-toolchain none",
+        "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
+      ],
+      "macos-x64": [
+        "tar -xf elan-x86_64-apple-darwin.tar.gz",
         "./elan-init -y --no-modify-path --default-toolchain none",
         "ln -sf $HOME/.elan/bin/elan {{ pkg.bin_dir }}/elan"
       ]
     },
     "latest": [
       "gh release list -R leanprover/elan --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ],
-    "completions": {
-      "macos-arm64": ["elan completions zsh > {{ pkg.completions.zsh }}/_elan"]
-    }
+    ]
   }
 }
