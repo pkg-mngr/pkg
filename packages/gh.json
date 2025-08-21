@@ -6,7 +6,7 @@
   "version": "2.78.0",
   "sha256": {
     "linux-arm64": "9e3ca75b227a5503f6ef92c4b8b6dbf94e34bfdd8069ac0f16b8739856ebba7b",
-    "linux-x64": "62544b0f3759bbf1155c0ac3d75838b5fe23d66dfb75cf8368f84fff8f82b93e",
+    "linux-x64": "ac309f70c5d6b122c82e6138ce82cb65ca5d8595cc09d11751fbc4e3907e1a05",
     "macos-arm64": "62290b0dbc9965ebbc20d2b481fe83aa167fadc28e0d81a5d93eec6efc9d3b72",
     "macos-x64": "a8d27429a00f50ae3318fc75a9ed1e8400932c109a657e1570467eab76f6c419"
   },

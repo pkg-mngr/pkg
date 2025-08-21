@@ -15,7 +15,7 @@
   "scripts": {
     "install": {
       "linux-x64": [
-        "tar -xf serve-linux-x86_64.tar.xz",
+        "tar -xf serve-linux-amd64.tar.xz",
         "install serve {{ pkg.bin_dir }}/serve"
       ],
       "macos-arm64": [
