@@ -3,8 +3,8 @@
   "name": "deno",
   "description": "A modern runtime for JavaScript and TypeScript.",
   "homepage": "https://deno.com",
-  "version": "2.4.4",
-  "sha256": "aa6d97661f1edd5f74b70164be893171f57c213ad06a2e9e663fb803707645c0",
+  "version": "2.4.5",
+  "sha256": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee",
   "url": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip",
   "scripts": {
     "install": [
