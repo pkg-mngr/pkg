@@ -7,15 +7,26 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    runs-on: macos-latest
+  release:
+    strategy:
+      fail-fast: true
+      matrix:
+        goos: [darwin, linux]
+        goarch: [amd64, arm64]
+        include:
+          - goos: darwin
+            os: macos-latest
+          - goos: linux
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - run: GOOS=darwin GOARCH=arm64 go build -ldflags="-s" -o pkg
-      - run: tar -acf pkg.tar.xz pkg
+      - run: GOOS={{ matrix.goos }} GOARCH={{ matrix.goarch }} go build -ldflags="-s" -o pkg
+      - run: tar -acf pkg-{{ matrix.goos }}-{{ matrix.goarch }}.tar.xz pkg
       - uses: softprops/action-gh-release@v2
         with:
-          files: pkg.tar.xz
+          files: |
+            pkg-{{ matrix.goos }}-{{ matrix.goarch }}.tar.xz
