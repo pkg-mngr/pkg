@@ -4,13 +4,25 @@
   "description": "A simple HTTP server for serving a directory",
   "homepage": "https://github.com/noClaps/serve",
   "version": "0.1.5",
-  "sha256": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9",
-  "url": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz",
+  "sha256": {
+    "linux-x86_64": "5df6809eee9ff4260338f7ae9d9872d07558f2bb10b7828fb5e78546a1ee8e3c",
+    "macos-arm64": "1bd9542c2301122e049423993601f0e12a1bc64ff291e5ad7df7fea61f9b6ce9"
+  },
+  "url": {
+    "linux-x86_64": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-linux-x86_64.tar.xz",
+    "macos-arm64": "https://github.com/noClaps/serve/releases/download/v{{ version }}/serve-darwin-arm64.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf serve-darwin-arm64.tar.xz",
-      "install serve {{ pkg.bin_dir }}/serve"
-    ],
+    "install": {
+      "linux-x86_64": [
+        "tar -xf serve-linux-x86_64.tar.xz",
+        "install serve {{ pkg.bin_dir }}/serve"
+      ],
+      "macos-arm64": [
+        "tar -xf serve-darwin-arm64.tar.xz",
+        "install serve {{ pkg.bin_dir }}/serve"
+      ]
+    },
     "latest": [
       "gh release list -R noClaps/serve --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

@@ -1,6 +1,6 @@
 # pkg
 
-A simple package manager for macOS.
+A simple cross-platform package manager.
 
 ## Installation
 
@@ -15,7 +15,7 @@ or download a prebuilt binary in [Releases](https://github.com/noClaps/pkg/relea
 ## Usage
 
 ```
-USAGE: pkg [add | update | remove | info | list] [--init]
+USAGE: pkg [add | update | remove | info | list | platform] [--init]
 
 COMMANDS:
   add               Install packages.
@@ -23,6 +23,7 @@ COMMANDS:
   remove            Remove packages.
   info              Get the info for a package.
   list              List installed packages
+  platform          Show current platform information
 
 OPTIONS:
   --init            Initialise pkg
@@ -71,3 +72,57 @@ You can view the help by using `-h` or `--help`:
 pkg -h
 pkg --help
 ```
+
+## Platform Support
+
+`pkg` now supports platform-specific package configurations, allowing packages to provide different URLs, checksums, and installation scripts for different operating systems and architectures.
+
+### Supported Platforms
+
+- **Linux**: `linux-x86_64`, `linux-arm64`
+- **macOS**: `macos-x86_64`, `macos-arm64`
+
+### Platform Detection
+
+You can check your current platform with:
+
+```sh
+pkg platform
+```
+
+This will show your current platform.
+
+### Package Manifest Format
+
+Packages can now specify platform-specific configurations:
+
+```json
+{
+  "name": "example-package",
+  "platforms": {
+    "linux-x86_64": {
+      "url": "https://example.com/linux-x86_64.tar.gz",
+      "sha256": "abc123...",
+      "scripts": {
+        "install": ["./install-linux.sh"],
+        "latest": ["curl -s https://api.github.com/repos/owner/repo/releases/latest"]
+      }
+    },
+    "macos-x86_64": {
+      "url": "https://example.com/macos-x86_64.tar.gz",
+      "sha256": "def456...",
+      "scripts": {
+        "install": ["./install-mac.sh"]
+      }
+    }
+  },
+  "scripts": {
+    "install": ["./install-fallback.sh"],
+    "latest": ["./check-latest.sh"]
+  }
+}
+```
+
+### Fallback Behavior
+
+If no platform-specific configuration is found, `pkg` will fall back to the default `url`, `sha256`, and `scripts` fields. This ensures backward compatibility with existing packages.

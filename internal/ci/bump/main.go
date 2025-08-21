@@ -15,6 +15,7 @@ import (
 	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/log"
 	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/noclaps/pkg/internal/platforms"
 	"github.com/noclaps/pkg/internal/util"
 )
 
@@ -43,7 +44,7 @@ func main() {
 				return
 			}
 
-			latestScript := strings.Join(pkgManifest.Scripts.Latest, "\n")
+			latestScript := strings.Join(pkgManifest.GetLatestScripts(), "\n")
 			log.Printf("Running `latest` script: \n%s\n", latestScript)
 			output, err := util.RunScript(latestScript, true)
 			if err != nil && err.Error() != "" {
@@ -61,26 +62,33 @@ func main() {
 			}
 
 			pkgManifest.Version = latestVersion
-			url := strings.ReplaceAll(pkgManifest.Url, "{{ version }}", pkgManifest.Version)
+			for _, platform := range platforms.Platforms {
+				if pkgManifest.Url[platform.String()] == "" {
+					log.Printf("No URL for %s in %s\n", platform.String(), file.Name())
+					continue
+				}
 
-			log.Printf("Fetching file from %s\n", url)
-			res, err := http.Get(url)
-			if err != nil {
-				log.Errorf("Error fetching from %s: %v\n", url, err)
-				return
+				url := strings.ReplaceAll(pkgManifest.Url[platform.String()], "{{ version }}", pkgManifest.Version)
+
+				log.Printf("Fetching file from %s\n", url)
+				res, err := http.Get(url)
+				if err != nil {
+					log.Errorf("Error fetching from %s: %v\n", url, err)
+					return
+				}
+
+				log.Printf("Reading file from response from %s\n", url)
+				downloadedFile, err := io.ReadAll(res.Body)
+				if err != nil {
+					log.Errorf("Error reading file from response body: %v\n", err)
+					return
+				}
+				res.Body.Close()
+
+				log.Printf("Validating checksum for %s\n", path.Base(url))
+				checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
+				pkgManifest.Sha256[platform.String()] = checksum
 			}
-
-			log.Printf("Reading file from response from %s\n", url)
-			downloadedFile, err := io.ReadAll(res.Body)
-			if err != nil {
-				log.Errorf("Error reading file from response body: %v\n", err)
-				return
-			}
-			res.Body.Close()
-
-			log.Printf("Validating checksum for %s\n", path.Base(url))
-			checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
-			pkgManifest.Sha256 = checksum
 
 			log.Printf("Updating %s\n", file.Name())
 			if err := f.Truncate(0); err != nil {

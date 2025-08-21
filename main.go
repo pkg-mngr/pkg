@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 
 	"github.com/noclaps/applause"
 	"github.com/noclaps/pkg/internal/cmd"
@@ -26,8 +27,9 @@ type Args struct {
 	Info struct {
 		Package string `help:"The package to get the info for"`
 	} `help:"Get the info for a package."`
-	List bool `type:"command" help:"List installed packages"`
-	Init bool `type:"option" help:"Initialise pkg"`
+	List     bool `type:"command" help:"List installed packages"`
+	Init     bool `type:"option" help:"Initialise pkg"`
+	Platform bool `type:"command" help:"Show current platform information"`
 }
 
 func main() {
@@ -37,6 +39,10 @@ func main() {
 	}
 
 	if args.Info.Package != "" {
+		// Check if package name contains .json and treat as local file
+		if strings.Contains(args.Info.Package, ".json") && !strings.HasPrefix(args.Info.Package, "./") {
+			args.Info.Package = "./" + args.Info.Package
+		}
 		fmt.Println(cmd.Info(args.Info.Package))
 		return
 	}
@@ -49,6 +55,10 @@ func main() {
 	lockfile := config.ReadLockfile()
 	if len(args.Add.Packages) != 0 {
 		for _, pkg := range args.Add.Packages {
+			// Check if package name contains .json and treat as local file
+			if strings.Contains(pkg, ".json") && !strings.HasPrefix(pkg, "./") {
+				pkg = "./" + pkg
+			}
 			cmd.Add(pkg, args.Add.Yes, lockfile)
 		}
 		return
@@ -82,6 +92,13 @@ func main() {
 			fmt.Println(pkg)
 		}
 		fmt.Println()
+		return
+	}
+
+	if args.Platform {
+		currentPlatform := config.GetCurrentPlatform()
+
+		fmt.Printf("Current platform: %s\n", currentPlatform)
 		return
 	}
 }

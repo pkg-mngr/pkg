@@ -4,14 +4,41 @@
   "description": "Node.js JavaScript runtime",
   "homepage": "https://nodejs.org",
   "version": "24.6.0",
-  "sha256": "768f14952403e3025fed8e2887500dfa63eeb55628a9b203e4b8ebb0fb09c7eb",
-  "url": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz",
+  "sha256": {
+    "linux-arm64": "768f14952403e3025fed8e2887500dfa63eeb55628a9b203e4b8ebb0fb09c7eb",
+    "linux-x86_64": "768f14952403e3025fed8e2887500dfa63eeb55628a9b203e4b8ebb0fb09c7eb",
+    "macos-arm64": "768f14952403e3025fed8e2887500dfa63eeb55628a9b203e4b8ebb0fb09c7eb",
+    "macos-x86_64": "768f14952403e3025fed8e2887500dfa63eeb55628a9b203e4b8ebb0fb09c7eb"
+  },
+  "url": {
+    "linux-arm64": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz",
+    "linux-x86_64": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz",
+    "macos-arm64": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz",
+    "macos-x86_64": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-darwin-arm64.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
-      "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
-      "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
-    ],
+    "install": {
+      "linux-arm64": [
+        "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
+        "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
+        "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
+      ],
+      "linux-x86_64": [
+        "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
+        "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
+        "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
+      ],
+      "macos-arm64": [
+        "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
+        "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
+        "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
+      ],
+      "macos-x86_64": [
+        "tar -xf node-v{{ version }}-darwin-arm64.tar.gz",
+        "mv node-v{{ version }}-darwin-arm64 {{ pkg.opt_dir }}/node",
+        "ln -sf {{ pkg.opt_dir }}/node/bin/* {{ pkg.bin_dir }}"
+      ]
+    },
     "latest": [
       "curl -s https://nodejs.org/dist/index.json | jq '.[0].version' -r | cut -c 2-"
     ]

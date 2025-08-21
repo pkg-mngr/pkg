@@ -4,18 +4,53 @@
   "description": "A simple package manager for macOS",
   "homepage": "https://pkg.zerolimits.dev",
   "version": "0.2.0",
-  "sha256": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
-  "url": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
+  "sha256": {
+    "darwin-arm64": "",
+    "darwin-x86_64": "",
+    "linux-arm64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
+    "linux-x86_64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5"
+  },
+  "url": {
+    "darwin-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
+    "darwin-x86_64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
+    "linux-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
+    "linux-x86_64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf pkg.tar.xz",
-      "install pkg {{ pkg.bin_dir }}/pkg"
-    ],
+    "completions": {
+      "darwin-arm64": [
+        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
+      ],
+      "darwin-x86_64": [
+        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
+      ],
+      "linux-arm64": [
+        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
+      ],
+      "linux-x86_64": [
+        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
+      ]
+    },
+    "install": {
+      "darwin-arm64": [
+        "tar -xf pkg.tar.xz",
+        "install pkg {{ pkg.bin_dir }}/pkg"
+      ],
+      "darwin-x86_64": [
+        "tar -xf pkg.tar.xz",
+        "install pkg {{ pkg.bin_dir }}/pkg"
+      ],
+      "linux-arm64": [
+        "tar -xf pkg.tar.xz",
+        "install pkg {{ pkg.bin_dir }}/pkg"
+      ],
+      "linux-x86_64": [
+        "tar -xf pkg.tar.xz",
+        "install pkg {{ pkg.bin_dir }}/pkg"
+      ]
+    },
     "latest": [
       "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ],
-    "completions": [
-      "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
     ]
   }
 }

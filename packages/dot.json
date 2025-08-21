@@ -4,13 +4,25 @@
   "description": "My cleaned up fork of doot that has only the features I want",
   "homepage": "https://github.com/noClaps/dot",
   "version": "0.2.5",
-  "sha256": "2fbcaed7c4109dc5f01813bfd6a6cc996be061c5ee980659c6b3589ba1b429aa",
-  "url": "https://github.com/noClaps/dot/releases/download/v{{ version }}/dot-darwin-arm64.tar.xz",
+  "sha256": {
+    "linux-x86_64": "6b128226e158221a343daa8ddd45621ceb634791c436e99baefa4e44ac57ba42",
+    "macos-arm64": "2fbcaed7c4109dc5f01813bfd6a6cc996be061c5ee980659c6b3589ba1b429aa"
+  },
+  "url": {
+    "linux-x86_64": "https://github.com/noClaps/dot/releases/download/v{{ version }}/dot-linux-amd64.tar.xz",
+    "macos-arm64": "https://github.com/noClaps/dot/releases/download/v{{ version }}/dot-darwin-arm64.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf dot-darwin-arm64.tar.xz",
-      "install dot {{ pkg.bin_dir }}/dot"
-    ],
+    "install": {
+      "linux-x86_64": [
+        "tar -xf dot-linux-x86_64.tar.xz",
+        "install dot {{ pkg.bin_dir }}/dot"
+      ],
+      "macos-arm64": [
+        "tar -xf dot-darwin-arm64.tar.xz",
+        "install dot {{ pkg.bin_dir }}/dot"
+      ]
+    },
     "latest": [
       "gh release list -R noClaps/dot --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

@@ -4,13 +4,37 @@
   "description": "simple terminal UI for git commands",
   "homepage": "https://github.com/jesseduffield/lazygit",
   "version": "0.54.2",
-  "sha256": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b",
-  "url": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_arm64.tar.gz",
+  "sha256": {
+    "linux-arm64": "f7d35dcf41db87fabc0f505539c329f94f3dfc89bf12932d4d25080e410e8f62",
+    "linux-x86_64": "cf98decf3c29f9f47e78967cb56cafc06021f616107be0200e6aefbe6fe50cd0",
+    "macos-arm64": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b",
+    "macos-x86_64": "1e901177d024e02e45df6a7436bfb7d66b193707227c54372949b1680329f887"
+  },
+  "url": {
+    "linux-arm64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_linux_arm64.tar.gz",
+    "linux-x86_64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_linux_x86_64.tar.gz",
+    "macos-arm64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_arm64.tar.gz",
+    "macos-x86_64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_darwin_x86_64.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf lazygit_{{ version }}_darwin_arm64.tar.gz lazygit",
-      "install lazygit {{ pkg.bin_dir }}/lazygit"
-    ],
+    "install": {
+      "linux-arm64": [
+        "tar -xf lazygit_{{ version }}_linux_arm64.tar.gz lazygit",
+        "install lazygit {{ pkg.bin_dir }}/lazygit"
+      ],
+      "linux-x86_64": [
+        "tar -xf lazygit_{{ version }}_linux_x86_64.tar.gz lazygit",
+        "install lazygit {{ pkg.bin_dir }}/lazygit"
+      ],
+      "macos-arm64": [
+        "tar -xf lazygit_{{ version }}_darwin_arm64.tar.gz lazygit",
+        "install lazygit {{ pkg.bin_dir }}/lazygit"
+      ],
+      "macos-x86_64": [
+        "tar -xf lazygit_{{ version }}_darwin_x86_64.tar.gz lazygit",
+        "install lazygit {{ pkg.bin_dir }}/lazygit"
+      ]
+    },
     "latest": [
       "gh release list -R jesseduffield/lazygit --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

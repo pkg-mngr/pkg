@@ -4,13 +4,37 @@
   "description": "A tool to quickly convert between color formats.",
   "homepage": "https://github.com/noClaps/color",
   "version": "0.1.2",
-  "sha256": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b",
-  "url": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz",
+  "sha256": {
+    "linux-arm64": "9eae8402b801997aa8837c4eff08f613dad60cdeee52462685eb2e9f086d37eb",
+    "linux-x86_64": "756da37209ae59ecd3589e9d72d1cff027c1c9971715f8e5292b6cce49b4b7b1",
+    "macos-arm64": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b",
+    "macos-x86_64": "23548ef2ed7225ee6fb9e44baf9fe09444267bdbbb91b05945f6b45b0900f5ab"
+  },
+  "url": {
+    "linux-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-linux-arm64.tar.xz",
+    "linux-x86_64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-linux-x86_64.tar.xz",
+    "macos-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz",
+    "macos-x86_64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-x86_64.tar.xz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf color-darwin-arm64.tar.xz",
-      "install color {{ pkg.bin_dir }}/color"
-    ],
+    "install": {
+      "linux-arm64": [
+        "tar -xf color-linux-arm64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ],
+      "linux-x86_64": [
+        "tar -xf color-linux-x86_64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ],
+      "macos-arm64": [
+        "tar -xf color-darwin-arm64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ],
+      "macos-x86_64": [
+        "tar -xf color-darwin-x86_64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ]
+    },
     "latest": [
       "gh release list -R noClaps/color --json tagName --jq '.[0].tagName' | cut -c 2-"
     ]

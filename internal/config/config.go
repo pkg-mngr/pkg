@@ -3,8 +3,10 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/noclaps/pkg/internal/log"
+	"github.com/noclaps/pkg/internal/platforms"
 )
 
 func PKG_HOME() string {
@@ -53,4 +55,36 @@ func MANIFEST_HOST() string {
 	}
 
 	return "https://pkg.zerolimits.dev"
+}
+
+// GetCurrentPlatform returns the current platform identifier in the format "os-arch"
+func GetCurrentPlatform() platforms.Platform {
+	os := runtime.GOOS
+	arch := runtime.GOARCH
+
+	// Normalize architecture names to match common package naming conventions
+	switch arch {
+	case "amd64":
+		arch = "x86_64"
+	case "arm64":
+		// macOS uses "arm64" but packages often use "arm64"
+		if os == "darwin" {
+			arch = "arm64"
+		}
+	}
+
+	// Normalize OS names
+	switch os {
+	case "darwin":
+		os = "mac"
+	case "windows":
+		os = "windows"
+	case "linux":
+		os = "linux"
+	}
+
+	return platforms.Platform{
+		Name: os,
+		Arch: arch,
+	}
 }

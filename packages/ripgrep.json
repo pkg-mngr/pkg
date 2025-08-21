@@ -4,18 +4,53 @@
   "description": "ripgrep recursively searches directories for a regex pattern while respecting your gitignore",
   "homepage": "https://github.com/BurntSushi/ripgrep",
   "version": "14.1.1",
-  "sha256": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be",
-  "url": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+  "sha256": {
+    "linux-arm64": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be",
+    "linux-x86_64": "4cf9f2741e6c465ffdb7c26f38056a59e2a2544b51f7cc128ef28337eeae4d8e",
+    "macos-arm64": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be",
+    "macos-x86_64": "fc87e78f7cb3fea12d69072e7ef3b21509754717b746368fd40d88963630e2b3"
+  },
+  "url": {
+    "linux-arm64": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+    "linux-x86_64": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+    "macos-arm64": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+    "macos-x86_64": "https://github.com/BurntSushi/ripgrep/releases/download/{{ version }}/ripgrep-{{ version }}-x86_64-apple-darwin.tar.gz"
+  },
   "scripts": {
-    "install": [
-      "tar -xf ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
-      "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
-    ],
+    "completions": {
+      "linux-arm64": [
+        "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
+      ],
+      "linux-x86_64": [
+        "cp ripgrep-{{ version }}-x86_64-unknown-linux-musl/complete/_rg {{ pkg.completions.zsh }}/_rg"
+      ],
+      "macos-arm64": [
+        "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
+      ],
+      "macos-x86_64": [
+        "cp ripgrep-{{ version }}-x86_64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
+      ]
+    },
+    "install": {
+      "linux-arm64": [
+        "tar -xf ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+        "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
+      ],
+      "linux-x86_64": [
+        "tar -xf ripgrep-{{ version }}-x86_64-unknown-linux-musl.tar.gz",
+        "install ripgrep-{{ version }}-x86_64-unknown-linux-musl/rg {{ pkg.bin_dir }}/rg"
+      ],
+      "macos-arm64": [
+        "tar -xf ripgrep-{{ version }}-aarch64-apple-darwin.tar.gz",
+        "install ripgrep-{{ version }}-aarch64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
+      ],
+      "macos-x86_64": [
+        "tar -xf ripgrep-{{ version }}-x86_64-apple-darwin.tar.gz",
+        "install ripgrep-{{ version }}-x86_64-apple-darwin/rg {{ pkg.bin_dir }}/rg"
+      ]
+    },
     "latest": [
       "gh release list -R BurntSushi/ripgrep --json tagName --jq '.[0].tagName'"
-    ],
-    "completions": [
-      "cp ripgrep-{{ version }}-aarch64-apple-darwin/complete/_rg {{ pkg.completions.zsh }}/_rg"
     ]
   }
 }

@@ -11,24 +11,205 @@ import (
 
 	"github.com/noclaps/pkg/internal/config"
 	"github.com/noclaps/pkg/internal/log"
+	"github.com/noclaps/pkg/internal/platforms"
 )
 
+type PlatformScripts struct {
+	Install     []string `json:"install,omitempty"`
+	Latest      []string `json:"latest,omitempty"`
+	Completions []string `json:"completions,omitempty"`
+}
+
+type PlatformConfig struct {
+	Url     string           `json:"url"`
+	Sha256  string           `json:"sha256"`
+	Scripts *PlatformScripts `json:"scripts,omitempty"`
+}
+
 type Manifest struct {
-	Schema       string   `json:"$schema,omitempty"`
-	ManifestUrl  string   `json:"-"`
-	Name         string   `json:"name"`
-	Description  string   `json:"description"`
-	Homepage     string   `json:"homepage"`
-	Version      string   `json:"version"`
-	Sha256       string   `json:"sha256"`
-	Url          string   `json:"url"`
-	Dependencies []string `json:"dependencies,omitempty"`
-	Caveats      string   `json:"caveats,omitempty"`
-	Scripts      struct {
-		Install     []string `json:"install"`
-		Latest      []string `json:"latest"`
-		Completions []string `json:"completions,omitempty"`
-	} `json:"scripts"`
+	Schema       string                    `json:"$schema,omitempty"`
+	ManifestUrl  string                    `json:"-"`
+	Name         string                    `json:"name"`
+	Description  string                    `json:"description"`
+	Homepage     string                    `json:"homepage"`
+	Version      string                    `json:"version"`
+	Sha256       map[string]string         `json:"sha256"` // Platform-specific SHA256 checksums
+	Url          map[string]string         `json:"url"`    // Platform-specific URLs
+	Dependencies []string                  `json:"dependencies,omitempty"`
+	Caveats      string                    `json:"caveats,omitempty"`
+	Platforms    map[string]PlatformConfig `json:"platforms,omitempty"`
+	Scripts      map[string]interface{}    `json:"scripts"` // Scripts can be global arrays or platform-specific objects
+}
+
+// GetPlatformConfig returns the platform-specific configuration for the current platform
+func (m *Manifest) GetPlatformConfig() (PlatformConfig, bool) {
+	for _, platform := range platforms.Platforms {
+		if config, exists := m.Platforms[platform.String()]; exists {
+			return config, true
+		}
+	}
+
+	return PlatformConfig{}, false
+}
+
+// GetURL returns the appropriate URL for the current platform
+func (m *Manifest) GetURL() string {
+	if platformConfig, exists := m.GetPlatformConfig(); exists {
+		return platformConfig.Url
+	}
+	
+	// Get platform-specific URL
+	currentPlatform := config.GetCurrentPlatform()
+	if url, exists := m.Url[currentPlatform.String()]; exists {
+		return url
+	}
+	
+	return ""
+}
+
+// GetSHA256 returns the appropriate SHA256 for the current platform
+func (m *Manifest) GetSHA256() string {
+	if platformConfig, exists := m.GetPlatformConfig(); exists {
+		return platformConfig.Sha256
+	}
+	
+	// Get platform-specific SHA256
+	currentPlatform := config.GetCurrentPlatform()
+	if sha256, exists := m.Sha256[currentPlatform.String()]; exists {
+		return sha256
+	}
+	
+	return ""
+}
+
+// GetInstallScripts returns the appropriate install scripts for the current platform
+func (m *Manifest) GetInstallScripts() []string {
+	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Install) > 0 {
+		return platformConfig.Scripts.Install
+	}
+	
+	// Handle platform-specific scripts
+	if installScripts, exists := m.Scripts["install"]; exists {
+		if platformScripts, ok := installScripts.(map[string]interface{}); ok {
+			// Platform-specific install scripts
+			currentPlatform := config.GetCurrentPlatform()
+			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+				if scriptsArr, ok := scripts.([]interface{}); ok {
+					result := make([]string, len(scriptsArr))
+					for i, v := range scriptsArr {
+						if str, ok := v.(string); ok {
+							result[i] = str
+						}
+					}
+					return result
+				}
+			}
+		} else if globalScripts, ok := installScripts.([]interface{}); ok {
+			// Global install scripts
+			result := make([]string, len(globalScripts))
+			for i, v := range globalScripts {
+				if str, ok := v.(string); ok {
+					result[i] = str
+				}
+			}
+			return result
+		}
+	}
+	
+	return []string{}
+}
+
+// GetLatestScripts returns the appropriate latest version scripts for the current platform
+func (m *Manifest) GetLatestScripts() []string {
+	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Latest) > 0 {
+		return platformConfig.Scripts.Latest
+	}
+	
+	// Handle platform-specific scripts
+	if latestScripts, exists := m.Scripts["latest"]; exists {
+		if platformScripts, ok := latestScripts.(map[string]interface{}); ok {
+			// Platform-specific latest scripts
+			currentPlatform := config.GetCurrentPlatform()
+			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+				if scriptsArr, ok := scripts.([]interface{}); ok {
+					result := make([]string, len(scriptsArr))
+					for i, v := range scriptsArr {
+						if str, ok := v.(string); ok {
+							result[i] = str
+						}
+					}
+					return result
+				}
+			}
+		} else if globalScripts, ok := latestScripts.([]interface{}); ok {
+			// Global latest scripts
+			result := make([]string, len(globalScripts))
+			for i, v := range globalScripts {
+				if str, ok := v.(string); ok {
+					result[i] = str
+				}
+			}
+			return result
+		}
+	}
+	
+	return []string{}
+}
+
+// GetCompletionsScripts returns the appropriate completions scripts for the current platform
+func (m *Manifest) GetCompletionsScripts() []string {
+	if platformConfig, exists := m.GetPlatformConfig(); exists && platformConfig.Scripts != nil && len(platformConfig.Scripts.Completions) > 0 {
+		return platformConfig.Scripts.Completions
+	}
+	
+	// Handle platform-specific scripts
+	if completionsScripts, exists := m.Scripts["completions"]; exists {
+		if platformScripts, ok := completionsScripts.(map[string]interface{}); ok {
+			// Platform-specific completions scripts
+			currentPlatform := config.GetCurrentPlatform()
+			if scripts, exists := platformScripts[currentPlatform.String()]; exists {
+				if scriptsArr, ok := scripts.([]interface{}); ok {
+					result := make([]string, len(scriptsArr))
+					for i, v := range scriptsArr {
+						if str, ok := v.(string); ok {
+							result[i] = str
+						}
+					}
+					return result
+				}
+			}
+		} else if globalScripts, ok := completionsScripts.([]interface{}); ok {
+			// Global completions scripts
+			result := make([]string, len(globalScripts))
+			for i, v := range globalScripts {
+				if str, ok := v.(string); ok {
+					result[i] = str
+				}
+			}
+			return result
+		}
+	}
+	
+	return []string{}
+}
+
+// ValidatePlatformSupport checks if the current platform is supported
+func (m *Manifest) ValidatePlatformSupport() error {
+	currentPlatform := config.GetCurrentPlatform()
+
+	// Check if we have platform-specific config
+	if _, exists := m.Platforms[currentPlatform.String()]; exists {
+		return nil
+	}
+
+	// Check if we have platform-specific URL/SHA256
+	if _, exists := m.Url[currentPlatform.String()]; exists {
+		if _, exists := m.Sha256[currentPlatform.String()]; exists {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("package '%s' does not support the current platform '%s'", m.Name, currentPlatform)
 }
 
 func GetManifest(pkgName string) Manifest {
@@ -53,18 +234,57 @@ func GetManifest(pkgName string) Manifest {
 		log.Fatalf("Error decoding data from manifest: %v\n", err)
 	}
 
-	manifest.Url = formatData(manifest.Url, *manifest)
-	manifest.Caveats = formatData(manifest.Caveats, *manifest)
+	// Format platform-specific data
+	if manifest.Platforms != nil {
+		for platform, platformConfig := range manifest.Platforms {
+			platformConfig.Url = formatData(platformConfig.Url, *manifest)
+			if platformConfig.Scripts != nil {
+				for i, line := range platformConfig.Scripts.Install {
+					platformConfig.Scripts.Install[i] = formatData(line, *manifest)
+				}
+				for i, line := range platformConfig.Scripts.Latest {
+					platformConfig.Scripts.Latest[i] = formatData(line, *manifest)
+				}
+				for i, line := range platformConfig.Scripts.Completions {
+					platformConfig.Scripts.Completions[i] = formatData(line, *manifest)
+				}
+			}
+			manifest.Platforms[platform] = platformConfig
+		}
+	}
 
-	for i, line := range manifest.Scripts.Install {
-		manifest.Scripts.Install[i] = formatData(line, *manifest)
+	// Format platform-specific URL and SHA256
+	for platform, url := range manifest.Url {
+		manifest.Url[platform] = formatData(url, *manifest)
 	}
-	for i, line := range manifest.Scripts.Latest {
-		manifest.Scripts.Latest[i] = formatData(line, *manifest)
+
+	// Format platform-specific scripts
+	for scriptType, scriptConfig := range manifest.Scripts {
+		if platformScripts, ok := scriptConfig.(map[string]interface{}); ok {
+			// Platform-specific scripts
+			for platform, scripts := range platformScripts {
+				if scriptsArr, ok := scripts.([]interface{}); ok {
+					for i, line := range scriptsArr {
+						if lineStr, ok := line.(string); ok {
+							scriptsArr[i] = formatData(lineStr, *manifest)
+						}
+					}
+					platformScripts[platform] = scriptsArr
+				}
+			}
+			manifest.Scripts[scriptType] = platformScripts
+		} else if globalScripts, ok := scriptConfig.([]interface{}); ok {
+			// Global scripts
+			for i, line := range globalScripts {
+				if lineStr, ok := line.(string); ok {
+					globalScripts[i] = formatData(lineStr, *manifest)
+				}
+			}
+			manifest.Scripts[scriptType] = globalScripts
+		}
 	}
-	for i, line := range manifest.Scripts.Completions {
-		manifest.Scripts.Completions[i] = formatData(line, *manifest)
-	}
+
+	manifest.Caveats = formatData(manifest.Caveats, *manifest)
 
 	return *manifest
 }
@@ -85,18 +305,57 @@ func getManifestFromFile(path string) Manifest {
 		log.Fatalf("Error unmarshalling data from %s: %v\n", path, err)
 	}
 
-	manifest.Url = formatData(manifest.Url, *manifest)
-	manifest.Caveats = formatData(manifest.Caveats, *manifest)
+	// Format platform-specific data
+	if manifest.Platforms != nil {
+		for platform, platformConfig := range manifest.Platforms {
+			platformConfig.Url = formatData(platformConfig.Url, *manifest)
+			if platformConfig.Scripts != nil {
+				for i, line := range platformConfig.Scripts.Install {
+					platformConfig.Scripts.Install[i] = formatData(line, *manifest)
+				}
+				for i, line := range platformConfig.Scripts.Latest {
+					platformConfig.Scripts.Latest[i] = formatData(line, *manifest)
+				}
+				for i, line := range platformConfig.Scripts.Completions {
+					platformConfig.Scripts.Completions[i] = formatData(line, *manifest)
+				}
+			}
+			manifest.Platforms[platform] = platformConfig
+		}
+	}
 
-	for i, line := range manifest.Scripts.Install {
-		manifest.Scripts.Install[i] = formatData(line, *manifest)
+	// Format platform-specific URL and SHA256
+	for platform, url := range manifest.Url {
+		manifest.Url[platform] = formatData(url, *manifest)
 	}
-	for i, line := range manifest.Scripts.Latest {
-		manifest.Scripts.Latest[i] = formatData(line, *manifest)
+
+	// Format platform-specific scripts
+	for scriptType, scriptConfig := range manifest.Scripts {
+		if platformScripts, ok := scriptConfig.(map[string]interface{}); ok {
+			// Platform-specific scripts
+			for platform, scripts := range platformScripts {
+				if scriptsArr, ok := scripts.([]interface{}); ok {
+					for i, line := range scriptsArr {
+						if lineStr, ok := line.(string); ok {
+							scriptsArr[i] = formatData(lineStr, *manifest)
+						}
+					}
+					platformScripts[platform] = scriptsArr
+				}
+			}
+			manifest.Scripts[scriptType] = platformScripts
+		} else if globalScripts, ok := scriptConfig.([]interface{}); ok {
+			// Global scripts
+			for i, line := range globalScripts {
+				if lineStr, ok := line.(string); ok {
+					globalScripts[i] = formatData(lineStr, *manifest)
+				}
+			}
+			manifest.Scripts[scriptType] = globalScripts
+		}
 	}
-	for i, line := range manifest.Scripts.Completions {
-		manifest.Scripts.Completions[i] = formatData(line, *manifest)
-	}
+
+	manifest.Caveats = formatData(manifest.Caveats, *manifest)
 
 	return *manifest
 }

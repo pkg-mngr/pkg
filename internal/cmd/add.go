@@ -20,6 +20,12 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 	pkgManifest := manifest.GetManifest(pkg)
 	pkg = pkgManifest.Name
 
+	// Validate platform support
+	if err := pkgManifest.ValidatePlatformSupport(); err != nil {
+		log.Errorf("Validation failed: %v\n", err)
+		return
+	}
+
 	if entry, ok := lockfile[pkg]; ok {
 		wasDep := false
 		for installed, data := range lockfile {
@@ -55,6 +61,14 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 
 	fmt.Printf("Installing %s...\n", pkg)
 
+	// Show which platform configuration is being used
+	if _, exists := pkgManifest.GetPlatformConfig(); exists {
+		currentPlatform := config.GetCurrentPlatform()
+		fmt.Printf("Using platform-specific configuration for: %s\n", currentPlatform)
+	} else {
+		fmt.Println("Using fallback configuration")
+	}
+
 	filesBefore := listFiles()
 	if err := fetchPackage(pkgManifest); err != nil {
 		log.Errorf("%v\n", err)
@@ -62,15 +76,15 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {
 	}
 
 	fmt.Println("Running install script...")
-	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
+	installScript := strings.Join(pkgManifest.GetInstallScripts(), "\n")
 	if _, err := util.RunScript(installScript, skipConfirmation); err != nil && err.Error() != "" {
 		log.Errorf("%v\n", err)
 		return
 	}
 
-	if len(pkgManifest.Scripts.Completions) != 0 {
+	if len(pkgManifest.GetCompletionsScripts()) != 0 {
 		fmt.Println("Running completions script...")
-		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
+		completionsScript := strings.Join(pkgManifest.GetCompletionsScripts(), "\n")
 		if _, err := util.RunScript(completionsScript, skipConfirmation); err != nil && err.Error() != "" {
 			log.Errorf("%v\n", err)
 			return
@@ -135,7 +149,18 @@ func listFiles() []string {
 }
 
 func fetchPackage(pkgManifest manifest.Manifest) error {
-	filename := filepath.Join(config.PKG_TMP(), path.Base(pkgManifest.Url))
+	url := pkgManifest.GetURL()
+	expectedSHA256 := pkgManifest.GetSHA256()
+
+	if url == "" {
+		return fmt.Errorf("%s: No URL found for current platform", pkgManifest.Name)
+	}
+
+	if expectedSHA256 == "" {
+		return fmt.Errorf("%s: No SHA256 found for current platform", pkgManifest.Name)
+	}
+
+	filename := filepath.Join(config.PKG_TMP(), path.Base(url))
 
 	g := got.New()
 	g.ProgressFunc = func(d *got.Download) {
@@ -147,7 +172,7 @@ func fetchPackage(pkgManifest manifest.Manifest) error {
 		}
 		fmt.Printf("\033[2KDownloaded %.2f%% (%s)\r", percent, speedStr)
 	}
-	if err := g.Download(pkgManifest.Url, filename); err != nil {
+	if err := g.Download(url, filename); err != nil {
 		return fmt.Errorf("%s: Error while downloading %s: %v", pkgManifest.Name, filename, err)
 	}
 	fmt.Println("\033[2KDownloaded 100%")
@@ -159,7 +184,7 @@ func fetchPackage(pkgManifest manifest.Manifest) error {
 
 	fmt.Print("Verifying checksum...")
 	checksum := fmt.Sprintf("%x", sha256.Sum256(data))
-	if checksum != pkgManifest.Sha256 {
+	if checksum != expectedSHA256 {
 		return fmt.Errorf("\n%s: Checksum of data did not match in package manifest", pkgManifest.Name)
 	}
 	fmt.Println(" Looks good!")
