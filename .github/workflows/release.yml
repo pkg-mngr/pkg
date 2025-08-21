@@ -11,15 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        goos: [darwin, linux]
+        goarch: [arm64, amd64]
         include:
           - goos: darwin
-            goarch: arm64
-            os: macos-latest
-          - goos: darwin
-            goarch: amd64
             os: macos-latest
           - goos: linux
-            goarch: amd64
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     steps:
