@@ -1,6 +1,6 @@
 # pkg
 
-A simple package manager for macOS.
+A simple cross-platform package manager for macOS and Linux.
 
 ## Website build instructions
 
