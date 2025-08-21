@@ -37,7 +37,7 @@ func main() {
 			}
 
 			log.Printf("Decoding manifest from %s\n", file.Name())
-			pkgManifest := new(manifest.Manifest)
+			pkgManifest := new(manifest.ManifestJson)
 			if err := json.NewDecoder(f).Decode(pkgManifest); err != nil {
 				log.Errorf("Error unmarshalling JSON from %s: %v\n", file.Name(), err)
 				return
@@ -61,42 +61,45 @@ func main() {
 			}
 
 			pkgManifest.Version = latestVersion
-			url := strings.ReplaceAll(pkgManifest.Url, "{{ version }}", pkgManifest.Version)
 
-			log.Printf("Fetching file from %s\n", url)
-			res, err := http.Get(url)
-			if err != nil {
-				log.Errorf("Error fetching from %s: %v\n", url, err)
-				return
+			for platform := range pkgManifest.Url {
+				url := strings.ReplaceAll(pkgManifest.Url[platform], "{{ version }}", pkgManifest.Version)
+
+				log.Printf("Fetching file from %s\n", url)
+				res, err := http.Get(url)
+				if err != nil {
+					log.Errorf("Error fetching from %s: %v\n", url, err)
+					return
+				}
+
+				log.Printf("Reading file from response from %s\n", url)
+				downloadedFile, err := io.ReadAll(res.Body)
+				if err != nil {
+					log.Errorf("Error reading file from response body: %v\n", err)
+					return
+				}
+				res.Body.Close()
+
+				log.Printf("Validating checksum for %s\n", path.Base(url))
+				checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
+				pkgManifest.Sha256[platform] = checksum
+
+				log.Printf("Updating %s\n", file.Name())
+				if err := f.Truncate(0); err != nil {
+					log.Errorf("Error truncating %s\n", file.Name())
+					return
+				}
+				writer := io.NewOffsetWriter(f, 0)
+				encoder := json.NewEncoder(writer)
+				encoder.SetIndent("", "  ")
+				encoder.SetEscapeHTML(false)
+				if err := encoder.Encode(*pkgManifest); err != nil {
+					log.Errorf("Error writing manifest to %s\n", file.Name())
+				}
+				f.Close()
+
+				log.Printf("Done updating %s\n", file.Name())
 			}
-
-			log.Printf("Reading file from response from %s\n", url)
-			downloadedFile, err := io.ReadAll(res.Body)
-			if err != nil {
-				log.Errorf("Error reading file from response body: %v\n", err)
-				return
-			}
-			res.Body.Close()
-
-			log.Printf("Validating checksum for %s\n", path.Base(url))
-			checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
-			pkgManifest.Sha256 = checksum
-
-			log.Printf("Updating %s\n", file.Name())
-			if err := f.Truncate(0); err != nil {
-				log.Errorf("Error truncating %s\n", file.Name())
-				return
-			}
-			writer := io.NewOffsetWriter(f, 0)
-			encoder := json.NewEncoder(writer)
-			encoder.SetIndent("", "  ")
-			encoder.SetEscapeHTML(false)
-			if err := encoder.Encode(*pkgManifest); err != nil {
-				log.Errorf("Error writing manifest to %s\n", file.Name())
-			}
-			f.Close()
-
-			log.Printf("Done updating %s\n", file.Name())
 		})
 	}
 
