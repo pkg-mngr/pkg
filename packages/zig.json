@@ -6,28 +6,28 @@
   "version": "0.14.1",
   "sha256": {
     "linux-arm64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
-    "linux-x86_64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
+    "linux-x64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
     "macos-arm64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
-    "macos-x86_64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa"
+    "macos-x64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa"
   },
   "url": {
     "linux-arm64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz",
-    "linux-x86_64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz",
+    "linux-x64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz",
     "macos-arm64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz",
-    "macos-x86_64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz"
+    "macos-x64": "https://ziglang.org/download/{{ version }}/zig-aarch64-macos-{{ version }}.tar.xz"
   },
   "scripts": {
     "completions": {
       "linux-arm64": [
         "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
       "macos-arm64": [
         "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ]
     },
@@ -37,7 +37,7 @@
         "mv zig-aarch64-macos-{{ version }} {{ pkg.opt_dir }}/zig",
         "ln -sf {{ pkg.opt_dir }}/zig/zig {{ pkg.bin_dir }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "tar -xf zig-aarch64-macos-{{ version }}.tar.xz",
         "mv zig-aarch64-macos-{{ version }} {{ pkg.opt_dir }}/zig",
         "ln -sf {{ pkg.opt_dir }}/zig/zig {{ pkg.bin_dir }}"
@@ -47,7 +47,7 @@
         "mv zig-aarch64-macos-{{ version }} {{ pkg.opt_dir }}/zig",
         "ln -sf {{ pkg.opt_dir }}/zig/zig {{ pkg.bin_dir }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "tar -xf zig-aarch64-macos-{{ version }}.tar.xz",
         "mv zig-aarch64-macos-{{ version }} {{ pkg.opt_dir }}/zig",
         "ln -sf {{ pkg.opt_dir }}/zig/zig {{ pkg.bin_dir }}"

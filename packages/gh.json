@@ -6,28 +6,28 @@
   "version": "2.76.2",
   "sha256": {
     "linux-arm64": "a77f6d709c5100cda8e9bbb8d8b7143120121233d9102ba2f2bc254134db18dc",
-    "linux-x86_64": "62544b0f3759bbf1155c0ac3d75838b5fe23d66dfb75cf8368f84fff8f82b93e",
+    "linux-x64": "62544b0f3759bbf1155c0ac3d75838b5fe23d66dfb75cf8368f84fff8f82b93e",
     "macos-arm64": "43cea90fbd5d3b607b6125082f4a5faf7d5fc2e548d3d349a3b0310706a4f878",
-    "macos-x86_64": "a8d27429a00f50ae3318fc75a9ed1e8400932c109a657e1570467eab76f6c419"
+    "macos-x64": "a8d27429a00f50ae3318fc75a9ed1e8400932c109a657e1570467eab76f6c419"
   },
   "url": {
     "linux-arm64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_linux_arm64.tar.gz",
-    "linux-x86_64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_linux_amd64.tar.gz",
+    "linux-x64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_linux_amd64.tar.gz",
     "macos-arm64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_macOS_arm64.zip",
-    "macos-x86_64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_macOS_amd64.zip"
+    "macos-x64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_macOS_amd64.zip"
   },
   "scripts": {
     "completions": {
       "linux-arm64": [
         "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
       ],
       "macos-arm64": [
         "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
       ]
     },
@@ -36,7 +36,7 @@
         "tar -xf gh_{{ version }}_linux_arm64.tar.gz",
         "install gh_{{ version }}_linux_arm64/bin/gh {{ pkg.bin_dir }}/gh"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "tar -xf gh_{{ version }}_linux_amd64.tar.gz",
         "install gh_{{ version }}_linux_amd64/bin/gh {{ pkg.bin_dir }}/gh"
       ],
@@ -44,7 +44,7 @@
         "unzip gh_{{ version }}_macOS_arm64.zip",
         "install gh_{{ version }}_macOS_arm64/bin/gh {{ pkg.bin_dir }}/gh"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "unzip gh_{{ version }}_macOS_amd64.zip",
         "install gh_{{ version }}_macOS_amd64/bin/gh {{ pkg.bin_dir }}/gh"
       ]

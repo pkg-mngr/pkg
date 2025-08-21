@@ -6,28 +6,28 @@
   "version": "2.4.4",
   "sha256": {
     "linux-arm64": "f8ed0f4cc09c7b84b7453f53b365b5ef9f06a72dcf6ff1311ee82b48979f1548",
-    "linux-x86_64": "e52b05627ee9c99a166624e491fbaa6edf2a4472601d736df113b6ac977fce19",
+    "linux-x64": "e52b05627ee9c99a166624e491fbaa6edf2a4472601d736df113b6ac977fce19",
     "macos-arm64": "aa6d97661f1edd5f74b70164be893171f57c213ad06a2e9e663fb803707645c0",
-    "macos-x86_64": "c986a55b9ad9bf5f62a98239dc31d03bd83e93bdbc9052fb9ebe360553bf88ef"
+    "macos-x64": "c986a55b9ad9bf5f62a98239dc31d03bd83e93bdbc9052fb9ebe360553bf88ef"
   },
   "url": {
     "linux-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-unknown-linux-gnu.zip",
-    "linux-x86_64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-unknown-linux-gnu.zip",
+    "linux-x64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-unknown-linux-gnu.zip",
     "macos-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-apple-darwin.zip",
-    "macos-x86_64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-apple-darwin.zip"
+    "macos-x64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-apple-darwin.zip"
   },
   "scripts": {
     "completions": {
       "linux-arm64": [
         "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
       ],
       "macos-arm64": [
         "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
       ]
     },
@@ -36,7 +36,7 @@
         "unzip deno-aarch64-unknown-linux-gnu.zip",
         "install deno {{ pkg.bin_dir }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "unzip deno-x86_64-unknown-linux-gnu.zip",
         "install deno {{ pkg.bin_dir }}"
       ],
@@ -44,7 +44,7 @@
         "unzip deno-aarch64-apple-darwin.zip",
         "install deno {{ pkg.bin_dir }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "unzip deno-x86_64-apple-darwin.zip",
         "install deno {{ pkg.bin_dir }}"
       ]

@@ -24,7 +24,7 @@
       "patternProperties": {
         "^[a-z]+-[a-z0-9_]+$": {
           "type": "string",
-          "description": "SHA256 checksum for a specific platform (e.g., linux-x86_64, macos-arm64, windows-amd64)"
+          "description": "SHA256 checksum for a specific platform (e.g., linux-x64, macos-arm64)"
         }
       },
       "additionalProperties": false
@@ -35,7 +35,7 @@
       "patternProperties": {
         "^[a-z]+-[a-z0-9_]+$": {
           "type": "string",
-          "description": "URL for a specific platform (e.g., linux-x86_64, macos-arm64, windows-amd64)"
+          "description": "URL for a specific platform (e.g., linux-x64, macos-arm64)"
         }
       },
       "additionalProperties": false
@@ -55,7 +55,7 @@
       "patternProperties": {
         "^[a-z]+-[a-z0-9_]+$": {
           "type": "object",
-          "description": "Configuration for a specific platform (e.g., linux-x86_64, macos-arm64, windows-amd64)",
+          "description": "Configuration for a specific platform (e.g., linux-x64, macos-arm64)",
           "properties": {
             "url": {
               "type": "string",

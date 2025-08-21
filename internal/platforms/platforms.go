@@ -19,15 +19,15 @@ func ToPlatform(platform string) Platform {
 }
 
 var Platforms = []Platform{
-	LinuxX86_64,
+	LinuxX64,
 	LinuxArm64,
-	MacosX86_64,
+	MacosX64,
 	MacosArm64,
 }
 
 var (
-	LinuxX86_64 = Platform{Name: "linux", Arch: "x86_64"}
-	LinuxArm64  = Platform{Name: "linux", Arch: "arm64"}
-	MacosX86_64 = Platform{Name: "macos", Arch: "x86_64"}
-	MacosArm64  = Platform{Name: "macos", Arch: "arm64"}
+	LinuxX64   = Platform{Name: "linux", Arch: "x64"}
+	LinuxArm64 = Platform{Name: "linux", Arch: "arm64"}
+	MacosX64   = Platform{Name: "macos", Arch: "x64"}
+	MacosArm64 = Platform{Name: "macos", Arch: "arm64"}
 )

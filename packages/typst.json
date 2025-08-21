@@ -6,15 +6,15 @@
   "version": "0.13.1",
   "sha256": {
     "linux-arm64": "78427d6c65d002945e9574a61fa2437f5e4d4ac8a3e40c9ddeebdd854056872b",
-    "linux-x86_64": "4480351a415562d564a1ee906dc675ea255ba6e7c1ea36eda6e921ebe0f5d17c",
+    "linux-x64": "4480351a415562d564a1ee906dc675ea255ba6e7c1ea36eda6e921ebe0f5d17c",
     "macos-arm64": "541e4f9eaca3f34ee865f81fc663e4839cb84d6253f71a372cd855b0a7283213",
-    "macos-x86_64": "4dabfe647f7f01ed9cc13ad8196a6c7f5e16f0732821b522d50740d3a9f5207b"
+    "macos-x64": "4dabfe647f7f01ed9cc13ad8196a6c7f5e16f0732821b522d50740d3a9f5207b"
   },
   "url": {
     "linux-arm64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-aarch64-unknown-linux-gnu.tar.xz",
-    "linux-x86_64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-x86_64-unknown-linux-gnu.tar.xz",
+    "linux-x64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-x86_64-unknown-linux-gnu.tar.xz",
     "macos-arm64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-aarch64-apple-darwin.tar.xz",
-    "macos-x86_64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-x86_64-apple-darwin.tar.xz"
+    "macos-x64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-x86_64-apple-darwin.tar.xz"
   },
   "scripts": {
     "install": {
@@ -22,7 +22,7 @@
         "tar -xf typst-aarch64-unknown-linux-gnu.tar.xz",
         "install typst-aarch64-unknown-linux-gnu/typst {{ pkg.bin_dir }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "tar -xf typst-x86_64-unknown-linux-gnu.tar.xz",
         "install typst-x86_64-unknown-linux-gnu/typst {{ pkg.bin_dir }}"
       ],
@@ -30,7 +30,7 @@
         "tar -xf typst-aarch64-apple-darwin.tar.xz",
         "install typst-aarch64-apple-darwin/typst {{ pkg.bin_dir }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "tar -xf typst-x86_64-apple-darwin.tar.xz",
         "install typst-x86_64-apple-darwin/typst {{ pkg.bin_dir }}"
       ]

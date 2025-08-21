@@ -6,15 +6,15 @@
   "version": "1.25.0",
   "sha256": {
     "linux-arm64": "05de75d6994a2783699815ee553bd5a9327d8b79991de36e38b66862782f54ae",
-    "linux-x86_64": "2852af0cb20a13139b3448992e69b868e50ed0f8a1e5940ee1de9e19a123b613",
+    "linux-x64": "2852af0cb20a13139b3448992e69b868e50ed0f8a1e5940ee1de9e19a123b613",
     "macos-arm64": "544932844156d8172f7a28f77f2ac9c15a23046698b6243f633b0a0b00c0749c",
-    "macos-x86_64": "5bd60e823037062c2307c71e8111809865116714d6f6b410597cf5075dfd80ef"
+    "macos-x64": "5bd60e823037062c2307c71e8111809865116714d6f6b410597cf5075dfd80ef"
   },
   "url": {
     "linux-arm64": "https://go.dev/dl/go{{ version }}.linux-arm64.tar.gz",
-    "linux-x86_64": "https://go.dev/dl/go{{ version }}.linux-amd64.tar.gz",
+    "linux-x64": "https://go.dev/dl/go{{ version }}.linux-amd64.tar.gz",
     "macos-arm64": "https://go.dev/dl/go{{ version }}.darwin-arm64.tar.gz",
-    "macos-x86_64": "https://go.dev/dl/go{{ version }}.darwin-amd64.tar.gz"
+    "macos-x64": "https://go.dev/dl/go{{ version }}.darwin-amd64.tar.gz"
   },
   "scripts": {
     "install": {
@@ -23,7 +23,7 @@
         "mv go {{ pkg.opt_dir }}/go",
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "tar -xf go{{ version }}.linux-amd64.tar.gz go",
         "mv go {{ pkg.opt_dir }}/go",
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
@@ -33,7 +33,7 @@
         "mv go {{ pkg.opt_dir }}/go",
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "tar -xf go{{ version }}.darwin-amd64.tar.gz go",
         "mv go {{ pkg.opt_dir }}/go",
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"

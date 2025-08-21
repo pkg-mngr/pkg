@@ -6,15 +6,15 @@
   "version": "0.11.3",
   "sha256": {
     "linux-arm64": "ed53af6b8125475003b8a44a2b73d39fa6cc38243ec39c31e2f85062c302ccaa",
-    "linux-x86_64": "02b808a3ee8fc30161e07fe3c3edfb24b28bd0295323ac5dbdd8ec7012cac67d",
+    "linux-x64": "02b808a3ee8fc30161e07fe3c3edfb24b28bd0295323ac5dbdd8ec7012cac67d",
     "macos-arm64": "17d22826f19fe28a11f9ab4bee13c43399fdcce485eabfa2bea6c5b3d660740f",
-    "macos-x86_64": "6ea6a62a611fa6e515a92b1a327dadfd7826d5b3d2c514f1f5ef1de36c710e05"
+    "macos-x64": "6ea6a62a611fa6e515a92b1a327dadfd7826d5b3d2c514f1f5ef1de36c710e05"
   },
   "url": {
     "linux-arm64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-linux-arm64.tar.gz",
-    "linux-x86_64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-linux-x86_64.tar.gz",
+    "linux-x64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-linux-x86_64.tar.gz",
     "macos-arm64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-macos-arm64.tar.gz",
-    "macos-x86_64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-macos-x86_64.tar.gz"
+    "macos-x64": "https://github.com/neovim/neovim/releases/download/v{{ version }}/nvim-macos-x86_64.tar.gz"
   },
   "scripts": {
     "install": {
@@ -23,7 +23,7 @@
         "mv nvim-linux-arm64 {{ pkg.opt_dir }}/nvim",
         "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "tar -xf nvim-linux-x86_64.tar.gz",
         "mv nvim-linux-x86_64 {{ pkg.opt_dir }}/nvim",
         "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"
@@ -33,7 +33,7 @@
         "mv nvim-macos-arm64 {{ pkg.opt_dir }}/nvim",
         "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "tar -xf nvim-macos-x86_64.tar.gz",
         "mv nvim-macos-x86_64 {{ pkg.opt_dir }}/nvim",
         "ln -sf {{ pkg.opt_dir }}/nvim/bin/* {{ pkg.bin_dir }}"

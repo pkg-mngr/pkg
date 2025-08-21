@@ -6,28 +6,28 @@
   "version": "4.4.0",
   "sha256": {
     "linux-arm64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c",
-    "linux-x86_64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c",
+    "linux-x64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c",
     "macos-arm64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c",
-    "macos-x86_64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c"
+    "macos-x64": "0f32eb08172baffdca9264c5626f6d7fd650369365079fe21f8b8ab997885d8c"
   },
   "url": {
     "linux-arm64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz",
-    "linux-x86_64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz",
+    "linux-x64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz",
     "macos-arm64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz",
-    "macos-x86_64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz"
+    "macos-x64": "https://github.com/kerl/kerl/archive/refs/tags/{{ version }}.tar.gz"
   },
   "scripts": {
     "completions": {
       "linux-arm64": [
         "mv kerl-{{ version }}/zsh_completion/_kerl {{ pkg.completions.zsh }}"
       ],
-      "linux-x86_64": [
+      "linux-x64": [
         "mv kerl-{{ version }}/zsh_completion/_kerl {{ pkg.completions.zsh }}"
       ],
       "macos-arm64": [
         "mv kerl-{{ version }}/zsh_completion/_kerl {{ pkg.completions.zsh }}"
       ],
-      "macos-x86_64": [
+      "macos-x64": [
         "mv kerl-{{ version }}/zsh_completion/_kerl {{ pkg.completions.zsh }}"
       ]
     },
@@ -36,7 +36,7 @@
           "tar -xf {{ version }}.tar.gz",
           "install kerl-{{ version }}/kerl {{ pkg.bin_dir }}"
         ],
-        "linux-x86_64": [
+        "linux-x64": [
           "tar -xf {{ version }}.tar.gz",
           "install kerl-{{ version }}/kerl {{ pkg.bin_dir }}"
         ],
@@ -44,7 +44,7 @@
           "tar -xf {{ version }}.tar.gz",
           "install kerl-{{ version }}/kerl {{ pkg.bin_dir }}"
         ],
-        "macos-x86_64": [
+        "macos-x64": [
           "tar -xf {{ version }}.tar.gz",
           "install kerl-{{ version }}/kerl {{ pkg.bin_dir }}"
         ]
