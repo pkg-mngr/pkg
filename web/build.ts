@@ -3,27 +3,21 @@ type Manifest = {
   description: string;
   homepage: string;
   version: string;
-  sha256: string | Record<string, string>;
-  url: string | Record<string, string>;
+  sha256: Record<string, string>;
+  url: Record<string, string>;
   dependencies?: string[];
   caveats?: string;
-  platforms?: Record<string, {
-    url: string;
-    sha256: string;
-    scripts?: {
-      install?: string[];
-      latest?: string[];
-      completions?: string[];
-    };
-  }>;
   scripts: {
-    install: string[] | Record<string, string[]>;
-    latest: string[] | Record<string, string[]>;
-    completions?: string[] | Record<string, string[]>;
+    install: Record<string, string[]>;
+    latest: string[];
+    completions?: Record<string, string[]>;
   };
 };
 
 await Bun.$`rm -rf packages`;
+
+// Copy manifests from ../packages to ./public
+await Bun.$`cp ../packages/*.json ./public/`;
 
 const manifests = await Promise.all(
   Array.from(new Bun.Glob("*.json").scanSync("./public")).map(
@@ -46,9 +40,9 @@ Bun.write("./packages/index.md", index);
 
 for (const pkg of manifests) {
   // Helper function to process script replacements
-  const processScript = (script: string | undefined) => {
-    if (!script) return undefined;
-    return script
+  const processScript = (scripts: string[]) => {
+    return scripts
+      .join("\n")
       .replaceAll("{{ version }}", pkg.version)
       .replaceAll("{{ pkg.bin_dir }}", "$PKG_HOME/bin")
       .replaceAll("{{ pkg.opt_dir }}", "$PKG_HOME/opt")
@@ -59,47 +53,51 @@ for (const pkg of manifests) {
       );
   };
 
-  // Determine if this is old or new format and get platforms
-  const isNewFormat = typeof pkg.sha256 === 'object' && typeof pkg.url === 'object';
-  const platforms = isNewFormat ? Object.keys(pkg.sha256 as Record<string, string>) : ['legacy'];
+  // Get platforms from sha256 keys
+  const platforms = Object.keys(pkg.sha256);
   
-  // Process install scripts
-  let installScript: string;
-  if (Array.isArray(pkg.scripts.install)) {
-    // Global install script
-    installScript = processScript(pkg.scripts.install.join("\n")) || "";
-  } else {
-    // Platform-specific install scripts - show the first platform as example
-    const firstPlatform = platforms[0];
-    const platformScript = pkg.scripts.install[firstPlatform];
-    installScript = processScript(platformScript?.join("\n")) || "";
-  }
+  // Create code groups for install scripts
+  const createInstallCodeGroup = () => {
+    const groups = platforms.map(platform => {
+      const script = processScript(pkg.scripts.install[platform] || []);
+      return `:::code-group
 
-  // Process latest scripts
-  let latestScript: string;
-  if (Array.isArray(pkg.scripts.latest)) {
-    // Global latest script
-    latestScript = processScript(pkg.scripts.latest.join("\n")) || "";
-  } else {
-    // Platform-specific latest scripts - show the first platform as example
-    const firstPlatform = platforms[0];
-    const platformScript = pkg.scripts.latest[firstPlatform];
-    latestScript = processScript(platformScript?.join("\n")) || "";
-  }
+\`\`\`sh [${platform}]
+${script}
+\`\`\`
 
-  // Process completions scripts
-  let completionsScript: string | undefined;
-  if (pkg.scripts.completions) {
-    if (Array.isArray(pkg.scripts.completions)) {
-      // Global completions script
-      completionsScript = processScript(pkg.scripts.completions.join("\n"));
-    } else {
-      // Platform-specific completions scripts - show the first platform as example
-      const firstPlatform = platforms[0];
-      const platformScript = pkg.scripts.completions[firstPlatform];
-      completionsScript = processScript(platformScript?.join("\n"));
-    }
-  }
+:::`;
+    }).join('\n\n');
+    
+    return `:::code-group
+
+${platforms.map(platform => {
+  const script = processScript(pkg.scripts.install[platform] || []);
+  return `\`\`\`sh [${platform}]
+${script}
+\`\`\``;
+}).join('\n\n')}
+
+:::`;
+  };
+
+  // Create code groups for completions scripts (if they exist)
+  const createCompletionsCodeGroup = () => {
+    if (!pkg.scripts.completions) return '';
+    
+    return `:::code-group
+
+${platforms.map(platform => {
+  const script = pkg.scripts.completions?.[platform];
+  if (!script) return '';
+  const processed = processScript(script);
+  return `\`\`\`sh [${platform}]
+${processed}
+\`\`\``;
+}).filter(Boolean).join('\n\n')}
+
+:::`;
+  };
 
   const page = `
 [← See all packages](./index.md)
@@ -120,18 +118,16 @@ Homepage: ${pkg.homepage}
 
 Manifest: [${pkg.name}.json](/${pkg.name}.json)
 
-${isNewFormat ? `## Supported Platforms
+## Supported Platforms
 
 ${platforms.map(platform => {
-  const urls = pkg.url as Record<string, string>;
-  const sha256s = pkg.sha256 as Record<string, string>;
-  const url = urls[platform];
-  const sha256 = sha256s[platform];
-  return `- **${platform}**: [Download](${url?.replace("{{ version }}", pkg.version) || "#"}) (SHA256: \`${sha256}\`)`;
-}).join("\n")}` : `## Download
-
-- **URL**: [Download](${(pkg.url as string)?.replace("{{ version }}", pkg.version) || "#"})
-- **SHA256**: \`${pkg.sha256}\``}
+  const url = pkg.url[platform];
+  const sha256 = pkg.sha256[platform];
+  return `- **${platform}**:
+  - URL: \`${url?.replace("{{ version }}", pkg.version) || "#"}\`
+  - SHA256: \`${sha256}\`
+  `;
+}).join("\n")}
 
 ${
   pkg.dependencies && pkg.dependencies.length > 0
@@ -153,65 +149,19 @@ ${pkg.caveats}
 
 ## Scripts
 
-${Array.isArray(pkg.scripts.install) ? 
-  `### Install ${isNewFormat ? "(Global)" : ""}
+### Install
+
+${createInstallCodeGroup()}
+
+### Latest Version Check
 
 \`\`\`sh
-${installScript}
-\`\`\`` :
-  `### Install Scripts by Platform
+${processScript(pkg.scripts.latest)}
+\`\`\`
 
-${platforms.map(platform => {
-    const platformScript = (pkg.scripts.install as Record<string, string[]>)[platform];
-    const processed = processScript(platformScript?.join("\n"));
-    return `#### ${platform}
+${pkg.scripts.completions ? `### Completions
 
-\`\`\`sh
-${processed || "No install script"}
-\`\`\``;
-  }).join("\n\n")}`
-}
-
-${Array.isArray(pkg.scripts.latest) ? 
-  `### Latest Version Check ${isNewFormat ? "(Global)" : ""}
-
-\`\`\`sh
-${latestScript}
-\`\`\`` :
-  `### Latest Version Check Scripts by Platform
-
-${platforms.map(platform => {
-    const platformScript = (pkg.scripts.latest as Record<string, string[]>)[platform];
-    const processed = processScript(platformScript?.join("\n"));
-    return `#### ${platform}
-
-\`\`\`sh
-${processed || "No latest script"}
-\`\`\``;
-  }).join("\n\n")}`
-}
-
-${
-  pkg.scripts.completions
-    ? Array.isArray(pkg.scripts.completions) ?
-      `### Completions ${isNewFormat ? "(Global)" : ""}
-
-\`\`\`sh
-${completionsScript}
-\`\`\`` :
-      `### Completions Scripts by Platform
-
-${platforms.map(platform => {
-    const platformScript = (pkg.scripts.completions as Record<string, string[]>)[platform];
-    const processed = processScript(platformScript?.join("\n"));
-    return processed ? `#### ${platform}
-
-\`\`\`sh
-${processed}
-\`\`\`` : "";
-  }).filter(Boolean).join("\n\n")}`
-    : ""
-}
+${createCompletionsCodeGroup()}` : ''}
 `;
 
   Bun.write(`packages/${pkg.name}.md`, page);
