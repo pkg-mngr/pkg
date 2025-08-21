@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -14,8 +15,12 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	if !skipConfirmation && !getConfirmation(script) {
 		return "", nil
 	}
+	shell := os.Getenv("SHELL")
+	if shell == "" {
+		shell = "/bin/bash"
+	}
 	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP(), script)
-	cmd := exec.Command("/bin/sh", "-c", script)
+	cmd := exec.Command(shell, "-c", script)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
