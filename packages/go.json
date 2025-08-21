@@ -29,7 +29,7 @@
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
       ],
       "macos-arm64": [
-        "tar -xf go{{ version }}.{{ platform }}.tar.gz go",
+        "tar -xf go{{ version }}.darwin-arm64.tar.gz go",
         "mv go {{ pkg.opt_dir }}/go",
         "ln -sf {{ pkg.opt_dir }}/go/bin/* {{ pkg.bin_dir }}"
       ],

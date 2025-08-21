@@ -15,7 +15,7 @@
   "scripts": {
     "install": {
       "linux-x64": [
-        "tar -xf dot-linux-x86_64.tar.xz",
+        "tar -xf dot-linux-amd64.tar.xz",
         "install dot {{ pkg.bin_dir }}/dot"
       ],
       "macos-arm64": [

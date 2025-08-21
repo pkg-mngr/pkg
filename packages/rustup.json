@@ -5,13 +5,13 @@
   "homepage": "https://rustup.rs/",
   "version": "1.28.2",
   "sha256": {
-    "linux-arm64": "20ef5516c31b1ac2290084199ba77dbbcaa1406c45c1d978ca68558ef5964ef5",
+    "linux-arm64": "e3853c5a252fca15252d07cb23a1bdd9377a8c6f3efa01531109281ae47f841c",
     "linux-x64": "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c",
     "macos-arm64": "20ef5516c31b1ac2290084199ba77dbbcaa1406c45c1d978ca68558ef5964ef5",
     "macos-x64": "9c331076f62b4d0edeae63d9d1c9442d5fe39b37b05025ec8d41c5ed35486496"
   },
   "url": {
-    "linux-arm64": "https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init",
+    "linux-arm64": "https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init",
     "linux-x64": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
     "macos-arm64": "https://static.rust-lang.org/rustup/dist/aarch64-apple-darwin/rustup-init",
     "macos-x64": "https://static.rust-lang.org/rustup/dist/x86_64-apple-darwin/rustup-init"

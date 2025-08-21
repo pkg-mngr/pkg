@@ -14,7 +14,7 @@
     "linux-arm64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_Linux_arm64.tar.gz",
     "linux-x64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_Linux_x86_64.tar.gz",
     "macos-arm64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_arm64.tar.gz",
-    "macos-x64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_amd64.tar.gz"
+    "macos-x64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_macOS_x86_64.tar.gz"
   },
   "scripts": {
     "completions": {
@@ -27,9 +27,7 @@
       "macos-arm64": [
         "flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"
       ],
-      "macos-x64": [
-        "flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"
-      ]
+      "macos-x64": ["flyctl completion zsh > {{ pkg.completions.zsh }}/_flyctl"]
     },
     "install": {
       "linux-arm64": [
@@ -45,7 +43,7 @@
         "install flyctl {{ pkg.bin_dir }}"
       ],
       "macos-x64": [
-        "tar -xf flyctl_{{ version }}_macOS_amd64.tar.gz",
+        "tar -xf flyctl_{{ version }}_macOS_x86_64.tar.gz",
         "install flyctl {{ pkg.bin_dir }}"
       ]
     },

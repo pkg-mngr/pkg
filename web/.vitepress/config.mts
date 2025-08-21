@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "pkg",
-  description: "A simple cross-platform package manager for macOS and Linux",
+  description: "A simple cross-platform package manager",
   srcExclude: ["README.md"],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

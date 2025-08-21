@@ -5,49 +5,17 @@
   "homepage": "https://pkg.zerolimits.dev",
   "version": "0.2.0",
   "sha256": {
-    "linux-arm64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
-    "linux-x64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
-    "macos-arm64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5",
-    "macos-x64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5"
+    "macos-arm64": "81df4dd839c1655aec3a91a06053411b229053a14cf3f642cb092fd6fc7a08e5"
   },
   "url": {
-    "linux-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
-    "linux-x64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
-    "macos-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz",
-    "macos-x64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz"
+    "macos-arm64": "https://github.com/noClaps/pkg/releases/download/v{{ version }}/pkg.tar.xz"
   },
   "scripts": {
     "completions": {
-      "linux-arm64": [
-        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
-      ],
-      "linux-x64": [
-        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
-      ],
-      "macos-arm64": [
-        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
-      ],
-      "macos-x64": [
-        "pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"
-      ]
+      "macos-arm64": ["pkg --completions zsh > {{ pkg.completions.zsh }}/_pkg"]
     },
     "install": {
-      "linux-arm64": [
-        "tar -xf pkg.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ],
-      "linux-x64": [
-        "tar -xf pkg.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ],
-      "macos-arm64": [
-        "tar -xf pkg.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ],
-      "macos-x64": [
-        "tar -xf pkg.tar.xz",
-        "install pkg {{ pkg.bin_dir }}/pkg"
-      ]
+      "macos-arm64": ["tar -xf pkg.tar.xz", "install pkg {{ pkg.bin_dir }}/pkg"]
     },
     "latest": [
       "gh release list -R noClaps/pkg --json tagName --jq '.[0].tagName' | cut -c 2-"

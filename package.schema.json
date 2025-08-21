@@ -22,7 +22,7 @@
       "type": "object",
       "description": "Platform-specific SHA256 checksums",
       "patternProperties": {
-        "^[a-z]+-[a-z0-9_]+$": {
+        "^(linux|macos|windows)-(arm64|x64)$": {
           "type": "string",
           "description": "SHA256 checksum for a specific platform (e.g., linux-x64, macos-arm64)"
         }
@@ -33,7 +33,7 @@
       "type": "object",
       "description": "Platform-specific URLs",
       "patternProperties": {
-        "^[a-z]+-[a-z0-9_]+$": {
+        "^(linux|macos|windows)-(arm64|x64)$": {
           "type": "string",
           "description": "URL for a specific platform (e.g., linux-x64, macos-arm64)"
         }
@@ -49,115 +49,39 @@
       "type": "string",
       "description": "Extra information the user should know after installation completes, such as setup information"
     },
-    "platforms": {
-      "type": "object",
-      "description": "Platform-specific configurations for different OS/architecture combinations",
-      "patternProperties": {
-        "^[a-z]+-[a-z0-9_]+$": {
-          "type": "object",
-          "description": "Configuration for a specific platform (e.g., linux-x64, macos-arm64)",
-          "properties": {
-            "url": {
-              "type": "string",
-              "description": "Platform-specific URL to the file being downloaded"
-            },
-            "sha256": {
-              "type": "string",
-              "description": "Platform-specific SHA256 checksum of the file being downloaded"
-            },
-            "scripts": {
-              "type": "object",
-              "description": "Platform-specific scripts",
-              "properties": {
-                "install": {
-                  "type": "array",
-                  "description": "Platform-specific install script",
-                  "items": { "type": "string" }
-                },
-                "latest": {
-                  "type": "array",
-                  "description": "Platform-specific latest version check script",
-                  "items": { "type": "string" }
-                },
-                "completions": {
-                  "type": "array",
-                  "description": "Platform-specific completions installation script",
-                  "items": { "type": "string" }
-                }
-              }
-            }
-          },
-          "required": ["url", "sha256"]
-        }
-      },
-      "additionalProperties": false
-    },
     "scripts": {
       "type": "object",
-      "description": "Scripts configuration - can be global or platform-specific",
+      "description": "Scripts configuration",
       "properties": {
         "install": {
-          "oneOf": [
-            {
+          "type": "object",
+          "description": "Platform-specific install scripts",
+          "patternProperties": {
+            "^(linux|macos|windows)-(arm64|x64)$": {
               "type": "array",
-              "description": "Global install script for all platforms",
+              "description": "Install script for a specific platform",
               "items": { "type": "string" }
-            },
-            {
-              "type": "object",
-              "description": "Platform-specific install scripts",
-              "patternProperties": {
-                "^[a-z]+-[a-z0-9_]+$": {
-                  "type": "array",
-                  "description": "Install script for a specific platform",
-                  "items": { "type": "string" }
-                }
-              }
             }
-          ]
+          }
         },
         "latest": {
-          "oneOf": [
-            {
-              "type": "array",
-              "description": "Global latest version check script for all platforms",
-              "items": { "type": "string" },
-              "default": [
-                "gh release list -R OWNER/REPO --json tagName --jq '.[0].tagName' | cut -c 2-"
-              ]
-            },
-            {
-              "type": "object",
-              "description": "Platform-specific latest version check scripts",
-              "patternProperties": {
-                "^[a-z]+-[a-z0-9_]+$": {
-                  "type": "array",
-                  "description": "Latest version check script for a specific platform",
-                  "items": { "type": "string" }
-                }
-              }
-            }
+          "type": "array",
+          "description": "Global latest version check script for all platforms",
+          "items": { "type": "string" },
+          "default": [
+            "gh release list -R OWNER/REPO --json tagName --jq '.[0].tagName' | cut -c 2-"
           ]
         },
         "completions": {
-          "oneOf": [
-            {
+          "type": "object",
+          "description": "Platform-specific completions installation scripts",
+          "patternProperties": {
+            "^(linux|macos|windows)-(arm64|x64)$": {
               "type": "array",
-              "description": "Global completions installation script for all platforms",
+              "description": "Completions installation script for a specific platform",
               "items": { "type": "string" }
-            },
-            {
-              "type": "object",
-              "description": "Platform-specific completions installation scripts",
-              "patternProperties": {
-                "^[a-z]+-[a-z0-9_]+$": {
-                  "type": "array",
-                  "description": "Completions installation script for a specific platform",
-                  "items": { "type": "string" }
-                }
-              }
             }
-          ]
+          }
         }
       },
       "required": ["install", "latest"]

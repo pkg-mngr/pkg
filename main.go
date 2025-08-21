@@ -38,10 +38,6 @@ func main() {
 	}
 
 	if args.Info.Package != "" {
-		// Check if package name contains .json and treat as local file
-		if strings.Contains(args.Info.Package, ".json") && !strings.HasPrefix(args.Info.Package, "./") {
-			args.Info.Package = "./" + args.Info.Package
-		}
 		fmt.Println(cmd.Info(args.Info.Package))
 		return
 	}
