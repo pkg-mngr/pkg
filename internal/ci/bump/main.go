@@ -83,23 +83,23 @@ func main() {
 				log.Printf("Validating checksum for %s\n", path.Base(url))
 				checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
 				pkgManifest.Sha256[platform] = checksum
-
-				log.Printf("Updating %s\n", file.Name())
-				if err := f.Truncate(0); err != nil {
-					log.Errorf("Error truncating %s\n", file.Name())
-					return
-				}
-				writer := io.NewOffsetWriter(f, 0)
-				encoder := json.NewEncoder(writer)
-				encoder.SetIndent("", "  ")
-				encoder.SetEscapeHTML(false)
-				if err := encoder.Encode(*pkgManifest); err != nil {
-					log.Errorf("Error writing manifest to %s\n", file.Name())
-				}
-				f.Close()
-
-				log.Printf("Done updating %s\n", file.Name())
 			}
+
+			log.Printf("Updating %s\n", file.Name())
+			if err := f.Truncate(0); err != nil {
+				log.Errorf("Error truncating %s\n", file.Name())
+				return
+			}
+			writer := io.NewOffsetWriter(f, 0)
+			encoder := json.NewEncoder(writer)
+			encoder.SetIndent("", "  ")
+			encoder.SetEscapeHTML(false)
+			if err := encoder.Encode(*pkgManifest); err != nil {
+				log.Errorf("Error writing manifest to %s\n", file.Name())
+			}
+			f.Close()
+
+			log.Printf("Done updating %s\n", file.Name())
 		})
 	}
 
