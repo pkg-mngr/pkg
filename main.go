@@ -62,6 +62,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("%v\n", err)
 	}
+	defer lockfile.Write()
+
 	if len(args.Add.Packages) != 0 {
 		for _, pkg := range args.Add.Packages {
 			if err := cmd.Add(pkg, args.Add.Yes, lockfile); err != nil {

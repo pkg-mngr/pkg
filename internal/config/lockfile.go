@@ -29,15 +29,13 @@ func ReadLockfile() (Lockfile, error) {
 	return *lf, nil
 }
 
-func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files []string) error {
+func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files []string) {
 	lf[name] = LockfilePackage{
 		Manifest:     manifest,
 		Version:      version,
 		Dependencies: dependencies,
 		Files:        files,
 	}
-
-	return lf.Write()
 }
 
 func (lf Lockfile) Write() error {
@@ -54,7 +52,6 @@ func (lf Lockfile) Write() error {
 	return nil
 }
 
-func (lf Lockfile) Remove(name string) error {
+func (lf Lockfile) Remove(name string) {
 	delete(lf, name)
-	return lf.Write()
 }

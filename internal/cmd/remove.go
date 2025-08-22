@@ -32,7 +32,8 @@ func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) error {
 		}
 	}
 
-	return lockfile.Remove(pkg)
+	lockfile.Remove(pkg)
+	return nil
 }
 
 func removeFiles(files []string) error {

@@ -31,7 +31,6 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 				data.Dependencies = slices.Delete(data.Dependencies, i, i+1)
 				lockfile[installed] = data
 				wasDep = true
-				lockfile.Write()
 			}
 		}
 
