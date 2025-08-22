@@ -8,15 +8,6 @@ on:
       - packages/**
       - web/**
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: macos-latest
@@ -27,17 +18,5 @@ jobs:
         working-directory: web
       - run: bun run build
         working-directory: web
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: web/.vitepress/dist
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - run: bunx wrangler deploy
+        working-directory: web
