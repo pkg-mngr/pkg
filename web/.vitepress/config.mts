@@ -5,7 +5,10 @@ export default defineConfig({
   title: "pkg",
   description: "A simple cross-platform package manager",
   srcExclude: ["README.md", "**.tmpl.md"],
+  head: [["link", { rel: "icon", href: "/pkg.png" }]],
   themeConfig: {
+    logo: "/pkg.png",
+
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       {
