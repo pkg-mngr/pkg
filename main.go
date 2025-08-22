@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"maps"
 	"slices"
@@ -47,7 +48,12 @@ func main() {
 
 	if args.Init {
 		if err := config.Init(); err != nil {
-			log.Fatalf("%v\n", err)
+			switch {
+			case errors.Is(err, config.ErrorAlreadyInitialised{}):
+				log.Printf("%v\n", err)
+			default:
+				log.Fatalf("%v\n", err)
+			}
 		}
 		return
 	}

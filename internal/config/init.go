@@ -9,19 +9,8 @@ import (
 var alreadyInitialised = true
 
 func Init() error {
-	if err := initDir(PKG_HOME); err != nil {
-		return err
-	}
-	if err := initDir(PKG_BIN); err != nil {
-		return err
-	}
-	if err := initDir(PKG_OPT); err != nil {
-		return err
-	}
-	if err := initDir(PKG_ZSH_COMPLETIONS); err != nil {
-		return err
-	}
-	if err := initDir(PKG_TMP); err != nil {
+	err := initDirs(PKG_HOME, PKG_BIN, PKG_OPT, PKG_TMP, PKG_ZSH_COMPLETIONS)
+	if err != nil {
 		return err
 	}
 
@@ -45,11 +34,13 @@ export FPATH="$PKG_HOME/share/zsh/site-functions:$FPATH"
 	return nil
 }
 
-func initDir(dir string) error {
-	if _, err := os.Stat(dir); err != nil {
-		alreadyInitialised = false
-		if err := os.MkdirAll(dir, 0o750); err != nil {
-			return fmt.Errorf("Error creating %s directory: %v\n", dir, err)
+func initDirs(dirs ...string) error {
+	for _, dir := range dirs {
+		if _, err := os.Stat(dir); err != nil {
+			alreadyInitialised = false
+			if err := os.MkdirAll(dir, 0o755); err != nil {
+				return fmt.Errorf("Error creating %s directory: %v\n", dir, err)
+			}
 		}
 	}
 	return nil
