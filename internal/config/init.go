@@ -9,43 +9,19 @@ import (
 var alreadyInitialised = true
 
 func Init() error {
-	pkgHome, err := PKG_HOME()
-	if err != nil {
+	if err := initDir(PKG_HOME); err != nil {
 		return err
 	}
-	if err := initDir(pkgHome); err != nil {
+	if err := initDir(PKG_BIN); err != nil {
 		return err
 	}
-
-	pkgBin, err := PKG_BIN()
-	if err != nil {
+	if err := initDir(PKG_OPT); err != nil {
 		return err
 	}
-	if err := initDir(pkgBin); err != nil {
+	if err := initDir(PKG_ZSH_COMPLETIONS); err != nil {
 		return err
 	}
-
-	pkgOpt, err := PKG_OPT()
-	if err != nil {
-		return err
-	}
-	if err := initDir(pkgOpt); err != nil {
-		return err
-	}
-
-	pkgZshCompletions, err := PKG_ZSH_COMPLETIONS()
-	if err != nil {
-		return err
-	}
-	if err := initDir(pkgZshCompletions); err != nil {
-		return err
-	}
-
-	pkgTmp, err := PKG_TMP()
-	if err != nil {
-		return err
-	}
-	if err := initDir(pkgTmp); err != nil {
+	if err := initDir(PKG_TMP); err != nil {
 		return err
 	}
 
@@ -64,7 +40,7 @@ export PKG_HOME="%[1]s"
 export PATH="$PKG_HOME/bin:$PATH"
 export FPATH="$PKG_HOME/share/zsh/site-functions:$FPATH"
 
-`, pkgHome)
+`, PKG_HOME)
 
 	return nil
 }
@@ -80,15 +56,11 @@ func initDir(dir string) error {
 }
 
 func initLockfile() error {
-	file, err := LOCKFILE()
-	if err != nil {
-		return err
-	}
-	if _, err := os.Stat(file); err != nil {
+	if _, err := os.Stat(LOCKFILE); err != nil {
 		alreadyInitialised = false
-		f, err := os.Create(file)
+		f, err := os.Create(LOCKFILE)
 		if err != nil {
-			return fmt.Errorf("Error creating %s file: %v\n", file, err)
+			return fmt.Errorf("Error creating %s file: %v\n", LOCKFILE, err)
 		}
 		defer f.Close()
 

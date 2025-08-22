@@ -13,11 +13,8 @@ func main() {
 	if err := config.Init(); err != nil {
 		log.Fatalf("%v\n", err)
 	}
-	pkgBin, err := config.PKG_BIN()
-	if err != nil {
-		log.Fatalf("%v\n", err)
-	}
-	os.Setenv("PATH", pkgBin+":"+os.Getenv("PATH"))
+
+	os.Setenv("PATH", config.PKG_BIN+":"+os.Getenv("PATH"))
 	lockfile, err := config.ReadLockfile()
 	if err != nil {
 		log.Fatalf("%v\n", err)

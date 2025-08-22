@@ -18,11 +18,8 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	if shell == "" {
 		shell = "/bin/bash"
 	}
-	pkgTmp, err := config.PKG_TMP()
-	if err != nil {
-		return "", err
-	}
-	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", pkgTmp, script)
+
+	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP, script)
 	cmd := exec.Command(shell, "-c", script)
 
 	stdout, err := cmd.StdoutPipe()

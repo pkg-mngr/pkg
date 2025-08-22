@@ -92,16 +92,12 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		diffFiles(filesBefore, filesAfter),
 	)
 
-	pkgTmp, err := config.PKG_TMP()
+	files, err := os.ReadDir(config.PKG_TMP)
 	if err != nil {
-		return err
-	}
-	files, err := os.ReadDir(pkgTmp)
-	if err != nil {
-		return fmt.Errorf("Error opening %s directory: %v\n", pkgTmp, err)
+		return fmt.Errorf("Error opening %s directory: %v\n", config.PKG_TMP, err)
 	}
 	for _, file := range files {
-		filename := filepath.Join(pkgTmp, file.Name())
+		filename := filepath.Join(config.PKG_TMP, file.Name())
 		if err := os.RemoveAll(filename); err != nil {
 			return fmt.Errorf("Error deleting %s: %v\n", filename, err)
 		}
@@ -118,37 +114,25 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 func listFiles() ([]string, error) {
 	files := []string{}
 
-	pkgBin, err := config.PKG_BIN()
+	entries, err := os.ReadDir(config.PKG_BIN)
 	if err != nil {
-		return nil, err
-	}
-	entries, err := os.ReadDir(pkgBin)
-	if err != nil {
-		return nil, fmt.Errorf("Error listing %s directory: %v", pkgBin, err)
+		return nil, fmt.Errorf("Error listing %s directory: %v", config.PKG_BIN, err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("bin", entry.Name()))
 	}
 
-	pkgOpt, err := config.PKG_OPT()
+	entries, err = os.ReadDir(config.PKG_OPT)
 	if err != nil {
-		return nil, err
-	}
-	entries, err = os.ReadDir(pkgOpt)
-	if err != nil {
-		return nil, fmt.Errorf("Error listing %s directory: %v\n", pkgOpt, err)
+		return nil, fmt.Errorf("Error listing %s directory: %v\n", config.PKG_OPT, err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("opt", entry.Name()))
 	}
 
-	pkgZshCompletions, err := config.PKG_ZSH_COMPLETIONS()
+	entries, err = os.ReadDir(config.PKG_ZSH_COMPLETIONS)
 	if err != nil {
-		return nil, err
-	}
-	entries, err = os.ReadDir(pkgZshCompletions)
-	if err != nil {
-		return nil, fmt.Errorf("Error listing %s directory: %v\n", pkgZshCompletions, err)
+		return nil, fmt.Errorf("Error listing %s directory: %v\n", config.PKG_ZSH_COMPLETIONS, err)
 	}
 	for _, entry := range entries {
 		files = append(files, filepath.Join("share/zsh/site-functions", entry.Name()))
@@ -158,11 +142,7 @@ func listFiles() ([]string, error) {
 }
 
 func fetchPackage(pkgManifest manifest.Manifest) error {
-	pkgTmp, err := config.PKG_TMP()
-	if err != nil {
-		return err
-	}
-	filename := filepath.Join(pkgTmp, path.Base(pkgManifest.Url))
+	filename := filepath.Join(config.PKG_TMP, path.Base(pkgManifest.Url))
 
 	g := got.New()
 	g.ProgressFunc = func(d *got.Download) {

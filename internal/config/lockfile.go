@@ -16,12 +16,7 @@ type LockfilePackage struct {
 }
 
 func ReadLockfile() (Lockfile, error) {
-	lockfile, err := LOCKFILE()
-	if err != nil {
-		return nil, err
-	}
-
-	data, err := os.ReadFile(lockfile)
+	data, err := os.ReadFile(LOCKFILE)
 	if err != nil {
 		return nil, fmt.Errorf("Error reading lockfile: %v\n", err)
 	}
@@ -46,12 +41,7 @@ func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files 
 }
 
 func (lf Lockfile) Write() error {
-	lockfile, err := LOCKFILE()
-	if err != nil {
-		return err
-	}
-
-	f, err := os.Create(lockfile)
+	f, err := os.Create(LOCKFILE)
 	if err != nil {
 		return fmt.Errorf("Error opening lockfile: %v\n", err)
 	}
