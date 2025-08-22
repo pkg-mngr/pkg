@@ -10,6 +10,7 @@ import (
 	"github.com/pkg-mngr/pkg/internal/cmd"
 	"github.com/pkg-mngr/pkg/internal/config"
 	"github.com/pkg-mngr/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/manifest"
 )
 
 type Args struct {
@@ -40,7 +41,17 @@ func main() {
 	if args.Info.Package != "" {
 		info, err := cmd.Info(args.Info.Package)
 		if err != nil {
-			log.Fatalf("%v\n", err)
+			errPnf := manifest.ErrorPackageNotFound{}
+			errPu := manifest.ErrorPackageUnsupported{}
+			switch {
+			case errors.As(err, &errPnf):
+				log.Errorf("%v\n", errPnf)
+			case errors.As(err, &errPu):
+				log.Errorf("%v\n", errPu)
+			default:
+				log.Fatalf("%v\n", err)
+			}
+			return
 		}
 		fmt.Println(info)
 		return
@@ -67,7 +78,20 @@ func main() {
 	if len(args.Add.Packages) != 0 {
 		for _, pkg := range args.Add.Packages {
 			if err := cmd.Add(pkg, args.Add.Yes, lockfile); err != nil {
-				log.Fatalf("%v\n", err)
+				errPnf := manifest.ErrorPackageNotFound{}
+				errPu := manifest.ErrorPackageUnsupported{}
+				errPai := cmd.ErrorPackageAlreadyInstalled{}
+				switch {
+				case errors.As(err, &errPnf):
+					log.Errorf("%v\n", errPnf)
+				case errors.As(err, &errPu):
+					log.Errorf("%v\n", errPu)
+				case errors.As(err, &errPai):
+					log.Errorf("%v\n", errPai)
+				default:
+					log.Fatalf("%v\n", err)
+				}
+				continue
 			}
 		}
 		return
@@ -79,7 +103,17 @@ func main() {
 			pkgs = args.Update.Packages
 		}
 		if err := cmd.Update(pkgs, args.Update.Yes, lockfile); err != nil {
-			log.Fatalf("%v\n", err)
+			errPnf := manifest.ErrorPackageNotFound{}
+			errPu := manifest.ErrorPackageUnsupported{}
+			switch {
+			case errors.As(err, &errPnf):
+				log.Errorf("%v\n", errPnf)
+			case errors.As(err, &errPu):
+				log.Errorf("%v\n", errPu)
+			default:
+				log.Fatalf("%v\n", err)
+			}
+			return
 		}
 		return
 	}

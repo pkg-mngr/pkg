@@ -35,8 +35,7 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		}
 
 		if wasDep || entry.Version == pkgManifest.Version {
-			fmt.Printf("%s is already installed.\n", pkg)
-			return nil
+			return ErrorPackageAlreadyInstalled{pkg}
 		}
 	}
 

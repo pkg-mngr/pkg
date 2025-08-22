@@ -17,3 +17,11 @@ type ErrorPackageDependencyOf struct {
 func (e ErrorPackageDependencyOf) Error() string {
 	return fmt.Sprintf("Cannot uninstall %s as it is a dependency of %s", e.Name, e.Dependent)
 }
+
+type ErrorPackageAlreadyInstalled struct {
+	Name string
+}
+
+func (e ErrorPackageAlreadyInstalled) Error() string {
+	return fmt.Sprintf("%s is already installed", e.Name)
+}
