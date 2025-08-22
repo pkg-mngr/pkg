@@ -40,20 +40,20 @@
       ]
     },
     "latest": [
-      "curl -sL 'https://ziglang.org/download/index.json' | jq -r 'keys_unsorted[1]'"
+      "curl -fsSL 'https://ziglang.org/download/index.json' | jq -r 'keys_unsorted[1]'"
     ],
     "completions": {
       "linux-arm64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+        "curl -fsSL https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
       "linux-x64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+        "curl -fsSL https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
       "macos-arm64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+        "curl -fsSL https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ],
       "macos-x64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+        "curl -fsSL https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
       ]
     }
   }

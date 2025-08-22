@@ -40,7 +40,7 @@
       ]
     },
     "latest": [
-      "curl -s https://nodejs.org/dist/index.json | jq '.[0].version' -r | cut -c 2-"
+      "curl -fsSL https://nodejs.org/dist/index.json | jq '.[0].version' -r | cut -c 2-"
     ]
   }
 }
