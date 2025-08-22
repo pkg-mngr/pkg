@@ -54,7 +54,7 @@
       ]
     },
     "latest": [
-      "gh release list -R ziglang/zig --json tagName --jq '.[0].tagName'"
+      "curl -sL 'https://ziglang.org/download/index.json' | jq -r 'keys_unsorted[1]'"
     ]
   }
 }
