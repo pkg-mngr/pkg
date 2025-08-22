@@ -10,13 +10,24 @@ import (
 
 func main() {
 	files := os.Args[1:]
-	config.Init()
-	os.Setenv("PATH", config.PKG_BIN()+":"+os.Getenv("PATH"))
-	lockfile := config.ReadLockfile()
+	if err := config.Init(); err != nil {
+		log.Fatalf("%v\n", err)
+	}
+	pkgBin, err := config.PKG_BIN()
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
+	os.Setenv("PATH", pkgBin+":"+os.Getenv("PATH"))
+	lockfile, err := config.ReadLockfile()
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
 
 	for _, file := range files {
 		log.Printf("Checking if installation works...\n")
-		cmd.Add("./"+file, true, lockfile)
+		if err := cmd.Add("./"+file, true, lockfile); err != nil {
+			log.Fatalf("%v\n", err)
+		}
 		log.Printf("Everything looks good!\n")
 	}
 }

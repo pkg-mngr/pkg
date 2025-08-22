@@ -7,22 +7,30 @@ import (
 	"github.com/pkg-mngr/pkg/internal/manifest"
 )
 
-func Update(pkgs []string, skipConfirmation bool, lockfile config.Lockfile) {
+func Update(pkgs []string, skipConfirmation bool, lockfile config.Lockfile) error {
 	allUpToDate := true
 
 	for _, pkg := range pkgs {
-		pkgManifest := manifest.GetManifest(pkg)
+		pkgManifest, err := manifest.GetManifest(pkg)
+		if err != nil {
+			return err
+		}
 		if pkgManifest.Version == lockfile[pkg].Version {
 			continue
 		}
 
 		allUpToDate = false
 		fmt.Printf("Updating %s...\n", pkg)
-		Remove(pkg, lockfile, true)
-		Add(pkg, skipConfirmation, lockfile)
+		if err := Remove(pkg, lockfile, true); err != nil {
+			return err
+		}
+		if err := Add(pkg, skipConfirmation, lockfile); err != nil {
+			return err
+		}
 	}
 
 	if allUpToDate {
 		fmt.Println("All packages are up to date")
 	}
+	return nil
 }

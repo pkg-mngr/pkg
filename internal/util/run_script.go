@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/pkg-mngr/pkg/internal/config"
-	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 func RunScript(script string, skipConfirmation bool) (string, error) {
@@ -19,7 +18,11 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	if shell == "" {
 		shell = "/bin/bash"
 	}
-	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP(), script)
+	pkgTmp, err := config.PKG_TMP()
+	if err != nil {
+		return "", err
+	}
+	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", pkgTmp, script)
 	cmd := exec.Command(shell, "-c", script)
 
 	stdout, err := cmd.StdoutPipe()
@@ -44,7 +47,7 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		log.Errorf("Error waiting for command: %v\n", err)
+		return "", fmt.Errorf("Error waiting for command: %v\nstdout:\n%s\nstderr:\n%s", err, stdoutData, stderrData)
 	}
 
 	return string(stdoutData), fmt.Errorf("%s", stderrData)

@@ -2,9 +2,8 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
-
-	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 type Lockfile map[string]LockfilePackage
@@ -16,21 +15,26 @@ type LockfilePackage struct {
 	Files        []string `json:"files"`
 }
 
-func ReadLockfile() Lockfile {
-	data, err := os.ReadFile(LOCKFILE())
+func ReadLockfile() (Lockfile, error) {
+	lockfile, err := LOCKFILE()
 	if err != nil {
-		log.Fatalf("Error reading lockfile: %v\n", err)
+		return nil, err
+	}
+
+	data, err := os.ReadFile(lockfile)
+	if err != nil {
+		return nil, fmt.Errorf("Error reading lockfile: %v\n", err)
 	}
 
 	lf := new(Lockfile)
 	if err := json.Unmarshal(data, lf); err != nil {
-		log.Fatalf("Error unmarshalling lockfile: %v\n", err)
+		return nil, fmt.Errorf("Error unmarshalling lockfile: %v\n", err)
 	}
 
-	return *lf
+	return *lf, nil
 }
 
-func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files []string) {
+func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files []string) error {
 	lf[name] = LockfilePackage{
 		Manifest:     manifest,
 		Version:      version,
@@ -38,22 +42,29 @@ func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files 
 		Files:        files,
 	}
 
-	lf.Write()
+	return lf.Write()
 }
 
-func (lf Lockfile) Write() {
-	f, err := os.Create(LOCKFILE())
+func (lf Lockfile) Write() error {
+	lockfile, err := LOCKFILE()
 	if err != nil {
-		log.Fatalf("Error opening lockfile: %v\n", err)
+		return err
+	}
+
+	f, err := os.Create(lockfile)
+	if err != nil {
+		return fmt.Errorf("Error opening lockfile: %v\n", err)
 	}
 	defer f.Close()
 
 	if err := json.NewEncoder(f).Encode(lf); err != nil {
-		log.Fatalf("Error writing to lockfile: %v\n", err)
+		return fmt.Errorf("Error writing to lockfile: %v\n", err)
 	}
+
+	return nil
 }
 
-func (lf Lockfile) Remove(name string) {
+func (lf Lockfile) Remove(name string) error {
 	delete(lf, name)
-	lf.Write()
+	return lf.Write()
 }

@@ -7,38 +7,45 @@ import (
 	"slices"
 
 	"github.com/pkg-mngr/pkg/internal/config"
-	"github.com/pkg-mngr/pkg/internal/log"
 )
 
-func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) {
+func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) error {
 	if _, ok := lockfile[pkg]; !ok {
-		fmt.Printf("%s is not installed.\n", pkg)
-		return
+		return ErrorPackageNotInstalled{Name: pkg}
 	}
 	if !isForUpdate {
 		for installed := range lockfile {
 			if slices.Contains(lockfile[installed].Dependencies, pkg) {
-				fmt.Printf("Cannot uninstall %s as it is a dependency of %s\n", pkg, installed)
-				return
+				return ErrorPackageDependencyOf{Name: pkg, Dependent: installed}
 			}
 		}
 	}
 
 	fmt.Printf("Removing %s...\n", pkg)
-	removeFiles(lockfile[pkg].Files)
+	if err := removeFiles(lockfile[pkg].Files); err != nil {
+		return err
+	}
 
 	for _, dep := range lockfile[pkg].Dependencies {
-		Remove(dep, lockfile, isForUpdate)
-	}
-
-	lockfile.Remove(pkg)
-}
-
-func removeFiles(files []string) {
-	for _, file := range files {
-		fmt.Printf("Deleting %s...\n", file)
-		if err := os.RemoveAll(filepath.Join(config.PKG_HOME(), file)); err != nil {
-			log.Errorf("Error removing file %s: %v\n", filepath.Join(config.PKG_HOME(), file), err)
+		if err := Remove(dep, lockfile, isForUpdate); err != nil {
+			return err
 		}
 	}
+
+	return lockfile.Remove(pkg)
+}
+
+func removeFiles(files []string) error {
+	for _, file := range files {
+		fmt.Printf("Deleting %s...\n", file)
+		pkgHome, err := config.PKG_HOME()
+		if err != nil {
+			return err
+		}
+		if err := os.RemoveAll(filepath.Join(pkgHome, file)); err != nil {
+			return fmt.Errorf("Error removing file %s: %v\n", filepath.Join(pkgHome, file), err)
+		}
+	}
+
+	return nil
 }

@@ -37,19 +37,30 @@ func main() {
 	}
 
 	if args.Info.Package != "" {
-		fmt.Println(cmd.Info(args.Info.Package))
+		info, err := cmd.Info(args.Info.Package)
+		if err != nil {
+			log.Fatalf("%v\n", err)
+		}
+		fmt.Println(info)
 		return
 	}
 
 	if args.Init {
-		config.Init()
+		if err := config.Init(); err != nil {
+			log.Fatalf("%v\n", err)
+		}
 		return
 	}
 
-	lockfile := config.ReadLockfile()
+	lockfile, err := config.ReadLockfile()
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
 	if len(args.Add.Packages) != 0 {
 		for _, pkg := range args.Add.Packages {
-			cmd.Add(pkg, args.Add.Yes, lockfile)
+			if err := cmd.Add(pkg, args.Add.Yes, lockfile); err != nil {
+				log.Fatalf("%v\n", err)
+			}
 		}
 		return
 	}
@@ -59,13 +70,17 @@ func main() {
 		if len(args.Update.Packages) > 0 {
 			pkgs = args.Update.Packages
 		}
-		cmd.Update(pkgs, args.Update.Yes, lockfile)
+		if err := cmd.Update(pkgs, args.Update.Yes, lockfile); err != nil {
+			log.Fatalf("%v\n", err)
+		}
 		return
 	}
 
 	if len(args.Remove.Packages) != 0 {
 		for _, pkg := range args.Remove.Packages {
-			cmd.Remove(pkg, lockfile, false)
+			if err := cmd.Remove(pkg, lockfile, false); err != nil {
+				log.Fatalf("%v\n", err)
+			}
 		}
 		return
 	}
