@@ -9,7 +9,7 @@ You'll need [Bun](https://bun.sh) and [Node](https://nodejs.org).
 Clone the repository:
 
 ```sh
-git clone https://github.com/noClaps/pkg.git
+git clone https://github.com/pkg-mngr/pkg.git
 cd pkg
 ```
 

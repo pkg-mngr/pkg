@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/noclaps/pkg/internal/manifest"
-	"github.com/noclaps/pkg/internal/util"
+	"github.com/pkg-mngr/pkg/internal/manifest"
+	"github.com/pkg-mngr/pkg/internal/util"
 )
 
 func Info(pkg string) string {

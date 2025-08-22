@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/noclaps/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 type Lockfile map[string]LockfilePackage

@@ -10,10 +10,10 @@ import (
 	"strings"
 
 	"github.com/melbahja/got"
-	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/log"
-	"github.com/noclaps/pkg/internal/manifest"
-	"github.com/noclaps/pkg/internal/util"
+	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/manifest"
+	"github.com/pkg-mngr/pkg/internal/util"
 )
 
 func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) {

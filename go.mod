@@ -1,4 +1,4 @@
-module github.com/noclaps/pkg
+module github.com/pkg-mngr/pkg
 
 go 1.25.0
 

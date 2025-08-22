@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 const MANIFEST_EXT = ".json"

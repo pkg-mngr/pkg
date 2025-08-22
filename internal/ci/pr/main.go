@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/noclaps/pkg/internal/cmd"
-	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/cmd"
+	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 func main() {

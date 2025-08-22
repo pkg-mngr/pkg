@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/noclaps/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 var alreadyInitialised = true

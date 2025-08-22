@@ -14,6 +14,6 @@ export default defineConfig({
       },
     ],
     aside: false,
-    socialLinks: [{ icon: "github", link: "https://github.com/noClaps/pkg" }],
+    socialLinks: [{ icon: "github", link: "https://github.com/pkg-mngr/pkg" }],
   },
 });

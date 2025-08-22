@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 func Remove(pkg string, lockfile config.Lockfile, isForUpdate bool) {

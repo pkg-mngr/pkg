@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/noclaps/pkg/internal/config"
-	"github.com/noclaps/pkg/internal/manifest"
+	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/manifest"
 )
 
 func Update(pkgs []string, skipConfirmation bool, lockfile config.Lockfile) {

@@ -7,10 +7,10 @@ A simple cross-platform package manager.
 You can build it from source using Go:
 
 ```sh
-go install github.com/noclaps/pkg@latest
+go install github.com/pkg-mngr/pkg@latest
 ```
 
-or download a prebuilt binary in [Releases](https://github.com/noClaps/pkg/releases).
+or download a prebuilt binary in [Releases](https://github.com/pkg-mngr/pkg/releases).
 
 ## Usage
 

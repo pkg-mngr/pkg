@@ -5,7 +5,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/noclaps/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/config"
 )
 
 func List(lockfile config.Lockfile) []string {
