@@ -3,12 +3,12 @@
   "name": "zig",
   "description": "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software.",
   "homepage": "https://ziglang.org",
-  "version": "0.14.1",
+  "version": "0.15.1",
   "sha256": {
-    "linux-arm64": "f7a654acc967864f7a050ddacfaa778c7504a0eca8d2b678839c21eea47c992b",
-    "linux-x64": "24aeeec8af16c381934a6cd7d95c807a8cb2cf7df9fa40d359aa884195c4716c",
-    "macos-arm64": "39f3dc5e79c22088ce878edc821dedb4ca5a1cd9f5ef915e9b3cc3053e8faefa",
-    "macos-x64": "b0f8bdfb9035783db58dd6c19d7dea89892acc3814421853e5752fe4573e5f43"
+    "linux-arm64": "bb4a8d2ad735e7fba764c497ddf4243cb129fece4148da3222a7046d3f1f19fe",
+    "linux-x64": "c61c5da6edeea14ca51ecd5e4520c6f4189ef5250383db33d01848293bfafe05",
+    "macos-arm64": "c4bd624d901c1268f2deb9d8eb2d86a2f8b97bafa3f118025344242da2c54d7b",
+    "macos-x64": "9919392e0287cccc106dfbcbb46c7c1c3fa05d919567bb58d7eb16bca4116184"
   },
   "url": {
     "linux-arm64": "https://ziglang.org/download/{{ version }}/zig-aarch64-linux-{{ version }}.tar.xz",
@@ -17,20 +17,6 @@
     "macos-x64": "https://ziglang.org/download/{{ version }}/zig-x86_64-macos-{{ version }}.tar.xz"
   },
   "scripts": {
-    "completions": {
-      "linux-arm64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
-      ],
-      "linux-x64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
-      ],
-      "macos-arm64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
-      ],
-      "macos-x64": [
-        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
-      ]
-    },
     "install": {
       "linux-arm64": [
         "tar -xf zig-aarch64-linux-{{ version }}.tar.xz",
@@ -55,6 +41,20 @@
     },
     "latest": [
       "curl -sL 'https://ziglang.org/download/index.json' | jq -r 'keys_unsorted[1]'"
-    ]
+    ],
+    "completions": {
+      "linux-arm64": [
+        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+      ],
+      "linux-x64": [
+        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+      ],
+      "macos-arm64": [
+        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+      ],
+      "macos-x64": [
+        "curl -L https://github.com/ziglang/shell-completions/raw/refs/heads/master/_zig -o {{ pkg.completions.zsh }}/_zig"
+      ]
+    }
   }
 }
