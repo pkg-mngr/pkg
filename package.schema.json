@@ -28,17 +28,13 @@
         "macos-arm64": { "type": "string" },
         "macos-x64": { "type": "string" },
         "linux-arm64": { "type": "string" },
-        "linux-x64": { "type": "string" },
-        "windows-arm64": { "type": "string" },
-        "windows-x64": { "type": "string" }
+        "linux-x64": { "type": "string" }
       },
       "default": {
         "macos-arm64": "",
         "macos-x64": "",
         "linux-arm64": "",
-        "linux-x64": "",
-        "windows-arm64": "",
-        "windows-x64": ""
+        "linux-x64": ""
       },
       "description": "The SHA256 checksum of the file being downloaded"
     },
@@ -48,17 +44,13 @@
         "macos-arm64": { "type": "string" },
         "macos-x64": { "type": "string" },
         "linux-arm64": { "type": "string" },
-        "linux-x64": { "type": "string" },
-        "windows-arm64": { "type": "string" },
-        "windows-x64": { "type": "string" }
+        "linux-x64": { "type": "string" }
       },
       "default": {
         "macos-arm64": "",
         "macos-x64": "",
         "linux-arm64": "",
-        "linux-x64": "",
-        "windows-arm64": "",
-        "windows-x64": ""
+        "linux-x64": ""
       },
       "description": "The URL to the file being downloaded"
     },
@@ -80,17 +72,13 @@
             "macos-arm64": { "type": "array", "items": { "type": "string" } },
             "macos-x64": { "type": "array", "items": { "type": "string" } },
             "linux-arm64": { "type": "array", "items": { "type": "string" } },
-            "linux-x64": { "type": "array", "items": { "type": "string" } },
-            "windows-arm64": { "type": "array", "items": { "type": "string" } },
-            "windows-x64": { "type": "array", "items": { "type": "string" } }
+            "linux-x64": { "type": "array", "items": { "type": "string" } }
           },
           "default": {
             "macos-arm64": [],
             "macos-x64": [],
             "linux-arm64": [],
-            "linux-x64": [],
-            "windows-arm64": [],
-            "windows-x64": []
+            "linux-x64": []
           },
           "description": "The script to run to install the package after downloading",
           "additionalProperties": false
@@ -109,17 +97,13 @@
             "macos-arm64": { "type": "array", "items": { "type": "string" } },
             "macos-x64": { "type": "array", "items": { "type": "string" } },
             "linux-arm64": { "type": "array", "items": { "type": "string" } },
-            "linux-x64": { "type": "array", "items": { "type": "string" } },
-            "windows-arm64": { "type": "array", "items": { "type": "string" } },
-            "windows-x64": { "type": "array", "items": { "type": "string" } }
+            "linux-x64": { "type": "array", "items": { "type": "string" } }
           },
           "default": {
             "macos-arm64": [],
             "macos-x64": [],
             "linux-arm64": [],
-            "linux-x64": [],
-            "windows-arm64": [],
-            "windows-x64": []
+            "linux-x64": []
           },
           "description": "The script to run to install ZSH shell completions for the package",
           "additionalProperties": false
