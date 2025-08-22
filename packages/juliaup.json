@@ -1,0 +1,57 @@
+{
+  "$schema": "../package.schema.json",
+  "name": "juliaup",
+  "description": "Julia installer and version multiplexer",
+  "homepage": "https://julialang.org",
+  "version": "1.17.19",
+  "sha256": {
+    "macos-arm64": "8e0314dc39ca92610b68b6e590f97617d2c8296a4833c4038592be49025b49b5",
+    "macos-x64": "d1b7f1a951b8178d1fff91db77f4d216c7b91c25cdc3e5e1ae09bac18323788d",
+    "linux-arm64": "fb5c2b6e5ab38c816acb5ddd7251625cf157fd8b40ff993da9d9c769f6bf7cbd",
+    "linux-x64": "7b73c2c2b8693ff0bbb2e57be2af2cdc8de56827a60ebf7c289ca40338184bb0"
+  },
+  "url": {
+    "macos-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
+    "macos-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz",
+    "linux-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-unknown-linux-musl-portable.tar.gz",
+    "linux-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-unknown-linux-musl-portable.tar.gz"
+  },
+  "caveats": "To initialise `juliaup`, set a default toolchain by running `juliaup add release`.",
+  "scripts": {
+    "install": {
+      "macos-arm64": [
+        "tar -xf juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
+      ],
+      "macos-x64": [
+        "tar -xf juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
+      ],
+      "linux-arm64": [
+        "tar -xf juliaup-{{ version }}-aarch64-unknown-linux-musl-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
+      ],
+      "linux-x64": [
+        "tar -xf juliaup-{{ version }}-x86_64-unknown-linux-musl-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
+      ]
+    },
+    "latest": [
+      "gh release list -R JuliaLang/juliaup --exclude-pre-releases --json tagName --jq '.[0].tagName' | cut -c 2-"
+    ],
+    "completions": {
+      "macos-arm64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ],
+      "macos-x64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ],
+      "linux-arm64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ],
+      "linux-x64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ]
+    }
+  }
+}
