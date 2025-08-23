@@ -7,6 +7,8 @@ import (
 
 type Platform string
 
+var PLATFORM = GetPlatform()
+
 func GetPlatform() Platform {
 	os := runtime.GOOS
 	arch := runtime.GOARCH

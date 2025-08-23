@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
-	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/util"
 )
 
 type Manifest struct {
@@ -78,8 +77,6 @@ func GetManifest(pkgName string) (Manifest, error) {
 		}
 	}
 
-	platform := GetPlatform()
-
 	manifest := Manifest{
 		ManifestUrl:  manifestUrl,
 		Name:         manifestJson.Name,
@@ -91,51 +88,38 @@ func GetManifest(pkgName string) (Manifest, error) {
 	}
 
 	// url
-	if _, ok := manifestJson.Url[platform]; !ok {
-		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: platform}
+	if _, ok := manifestJson.Url[PLATFORM]; !ok {
+		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: PLATFORM}
 	}
-	manifest.Url = formatData(manifestJson.Url[platform], *manifestJson)
+	manifest.Url = formatData(manifestJson.Url[PLATFORM], *manifestJson)
 
 	// sha256
-	if _, ok := manifestJson.Sha256[platform]; !ok {
-		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: platform}
+	if _, ok := manifestJson.Sha256[PLATFORM]; !ok {
+		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: PLATFORM}
 	}
-	manifest.Sha256 = manifestJson.Sha256[platform]
+	manifest.Sha256 = manifestJson.Sha256[PLATFORM]
 
 	// install script
-	if _, ok := manifestJson.Scripts.Install[platform]; !ok {
-		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: platform}
+	if _, ok := manifestJson.Scripts.Install[PLATFORM]; !ok {
+		return Manifest{}, ErrorPackageUnsupported{Name: pkgName, Platform: PLATFORM}
 	}
-	installScript := manifestJson.Scripts.Install[platform]
-	for i, line := range installScript {
-		installScript[i] = formatData(line, *manifestJson)
-	}
-	manifest.Scripts.Install = installScript
+	installScript := manifestJson.Scripts.Install[PLATFORM]
+	manifest.Scripts.Install = util.Map(installScript, func(line string, i int) string {
+		return formatData(line, *manifestJson)
+	})
 
 	// latest script
 	latestScript := manifestJson.Scripts.Latest
-	for i, line := range latestScript {
-		latestScript[i] = formatData(line, *manifestJson)
-	}
-	manifest.Scripts.Latest = latestScript
+	manifest.Scripts.Latest = util.Map(latestScript, func(line string, i int) string {
+		return formatData(line, *manifestJson)
+	})
 
 	// completions script
-	if completion, ok := manifestJson.Scripts.Completions[platform]; ok {
-		for i, line := range completion {
-			completion[i] = formatData(line, *manifestJson)
-		}
-		manifest.Scripts.Completions = completion
+	if completion, ok := manifestJson.Scripts.Completions[PLATFORM]; ok {
+		manifest.Scripts.Completions = util.Map(completion, func(line string, i int) string {
+			return formatData(line, *manifestJson)
+		})
 	}
 
 	return manifest, nil
-}
-
-func formatData(val string, manifest ManifestJson) string {
-	val = strings.ReplaceAll(val, "{{ version }}", manifest.Version)
-	val = strings.ReplaceAll(val, "{{ pkg.opt_dir }}", config.PKG_OPT)
-	val = strings.ReplaceAll(val, "{{ pkg.bin_dir }}", config.PKG_BIN)
-	val = strings.ReplaceAll(val, "{{ pkg.tmp_dir }}", config.PKG_TMP)
-	val = strings.ReplaceAll(val, "{{ pkg.completions.zsh }}", config.PKG_ZSH_COMPLETIONS)
-
-	return val
 }
