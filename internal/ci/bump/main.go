@@ -4,8 +4,6 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -32,30 +30,24 @@ func main() {
 	for _, file := range files {
 		wg.Go(func() {
 			log.Printf("Reading %s\n", file.Name())
-			f, err := os.OpenFile(filepath.Join("packages", file.Name()), os.O_RDWR, 0o644)
-			if err != nil {
-				log.Errorf("Error opening %s: %v\n", file.Name(), err)
-				return
-			}
 
-			log.Printf("Decoding manifest from %s\n", file.Name())
-			pkgManifest := new(manifest.ManifestJson)
-			if err := json.NewDecoder(f).Decode(pkgManifest); err != nil {
-				log.Errorf("Error unmarshalling JSON from %s: %v\n", file.Name(), err)
+			pkgManifest, stderr := manifest.GetManifestFromFile("./packages/" + file.Name())
+			if stderr != nil {
+				log.Errorf("Error getting manifest from %s: %v\n", file.Name(), stderr)
 				return
 			}
 
 			latestScript := strings.Join(pkgManifest.Scripts.Latest, "\n")
 			log.Printf("Running `latest` script: \n%s\n", latestScript)
-			output, err := util.RunScript(latestScript, true)
-			if err != nil && err.Error() != "" {
+			stdout, stderr := util.RunScript(latestScript, true)
+			if stderr != nil {
 				log.Errorf(
 					"stdout: %s\nstderr: %v\n, Error running latest script in %s\n",
-					output, err, file.Name())
+					stdout, stderr, file.Name())
 				return
 			}
 
-			latestVersion := strings.TrimSpace(output)
+			latestVersion := strings.TrimSpace(stdout)
 			log.Printf("Found latest version: %s\n", latestVersion)
 			if pkgManifest.Version == latestVersion {
 				log.Printf("%s is already up to date\n", pkgManifest.Name)
@@ -68,32 +60,29 @@ func main() {
 				url := strings.ReplaceAll(pkgManifest.Url[platform], "{{ version }}", pkgManifest.Version)
 
 				log.Printf("Fetching file from %s\n", url)
-				res, err := http.Get(url)
-				if err != nil {
+				filename := filepath.Join(config.PKG_TMP, path.Base(url))
+				if err := util.Fetch(url, filename, pkgManifest.Name); err != nil {
 					log.Errorf("Error fetching from %s: %v\n", url, err)
 					return
 				}
 
-				log.Printf("Reading file from response from %s\n", url)
-				downloadedFile, err := io.ReadAll(res.Body)
+				data, err := os.ReadFile(filename)
 				if err != nil {
-					log.Errorf("Error reading file from response body: %v\n", err)
-					return
+					log.Errorf("Error reading data from %s: %v\n", filename, err)
 				}
-				res.Body.Close()
 
 				log.Printf("Validating checksum for %s\n", path.Base(url))
-				checksum := fmt.Sprintf("%x", sha256.Sum256(downloadedFile))
+				checksum := fmt.Sprintf("%x", sha256.Sum256(data))
 				pkgManifest.Sha256[platform] = checksum
 			}
 
 			log.Printf("Updating %s\n", file.Name())
-			if err := f.Truncate(0); err != nil {
-				log.Errorf("Error truncating %s\n", file.Name())
+			f, stderr := os.Create(filepath.Join("packages", file.Name()))
+			if stderr != nil {
+				log.Errorf("Error creating file %s: %v\n", file.Name(), stderr)
 				return
 			}
-			writer := io.NewOffsetWriter(f, 0)
-			encoder := json.NewEncoder(writer)
+			encoder := json.NewEncoder(f)
 			encoder.SetIndent("", "  ")
 			encoder.SetEscapeHTML(false)
 			if err := encoder.Encode(*pkgManifest); err != nil {
