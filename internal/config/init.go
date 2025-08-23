@@ -39,28 +39,32 @@ export FPATH="$PKG_HOME/share/zsh/site-functions:$FPATH"
 
 func initDirs(dirs ...string) error {
 	for _, dir := range dirs {
-		if _, err := os.Stat(dir); err != nil {
-			alreadyInitialised = false
-			if err := os.MkdirAll(dir, 0o755); err != nil {
-				return fmt.Errorf("Error creating %s directory: %v\n", dir, err)
-			}
+		if _, err := os.Stat(dir); err == nil {
+			continue
 		}
+		alreadyInitialised = false
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return fmt.Errorf("Error creating %s directory: %v\n", dir, err)
+		}
+
 	}
 	return nil
 }
 
 func initLockfile() error {
-	if _, err := os.Stat(LOCKFILE); err != nil {
-		alreadyInitialised = false
-		f, err := os.Create(LOCKFILE)
-		if err != nil {
-			return fmt.Errorf("Error creating %s file: %v\n", LOCKFILE, err)
-		}
-		defer f.Close()
-
-		if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
-			return fmt.Errorf("Error writing to lockfile: %v\n", err)
-		}
+	if _, err := os.Stat(LOCKFILE); err == nil {
+		return nil
 	}
+	alreadyInitialised = false
+	f, err := os.Create(LOCKFILE)
+	if err != nil {
+		return fmt.Errorf("Error creating %s file: %v\n", LOCKFILE, err)
+	}
+	defer f.Close()
+
+	if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
+		return fmt.Errorf("Error writing to lockfile: %v\n", err)
+	}
+
 	return nil
 }
