@@ -26,12 +26,9 @@ func main() {
 		log.Printf("Checking if installation works...\n")
 		if err := cmd.Add("./"+file, true, lockfile); err != nil {
 			errPu := manifest.ErrorPackageUnsupported{}
-			errPai := cmd.ErrorPackageAlreadyInstalled{}
 			switch {
 			case errors.As(err, &errPu):
 				log.Errorf("%v\n", errPu)
-			case errors.As(err, &errPai):
-				log.Errorf("%v\n", errPai)
 			default:
 				log.Fatalf("%v\n", err)
 			}

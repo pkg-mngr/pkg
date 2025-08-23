@@ -75,14 +75,11 @@ func main() {
 			if err := cmd.Add(pkg, args.Add.Yes, lockfile); err != nil {
 				errPnf := manifest.ErrorPackageNotFound{}
 				errPu := manifest.ErrorPackageUnsupported{}
-				errPai := cmd.ErrorPackageAlreadyInstalled{}
 				switch {
 				case errors.As(err, &errPnf):
 					log.Errorf("%v\n", errPnf)
 				case errors.As(err, &errPu):
 					log.Errorf("%v\n", errPu)
-				case errors.As(err, &errPai):
-					log.Errorf("%v\n", errPai)
 				default:
 					log.Fatalf("%v\n", err)
 				}

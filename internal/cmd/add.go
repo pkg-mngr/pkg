@@ -11,6 +11,7 @@ import (
 
 	"github.com/melbahja/got"
 	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/log"
 	"github.com/pkg-mngr/pkg/internal/manifest"
 	"github.com/pkg-mngr/pkg/internal/util"
 )
@@ -35,7 +36,8 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		}
 
 		if wasDep || entry.Version == pkgManifest.Version {
-			return ErrorPackageAlreadyInstalled{pkg}
+			log.Printf("%s is already installed", pkg)
+			return nil
 		}
 	}
 
