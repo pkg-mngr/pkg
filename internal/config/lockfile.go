@@ -29,15 +29,6 @@ func ReadLockfile() (Lockfile, error) {
 	return *lf, nil
 }
 
-func (lf Lockfile) NewEntry(name, manifest, version string, dependencies, files []string) {
-	lf[name] = LockfilePackage{
-		Manifest:     manifest,
-		Version:      version,
-		Dependencies: dependencies,
-		Files:        files,
-	}
-}
-
 func (lf Lockfile) Write() error {
 	f, err := os.Create(LOCKFILE)
 	if err != nil {

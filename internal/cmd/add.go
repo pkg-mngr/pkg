@@ -88,13 +88,13 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		return err
 	}
 
-	lockfile.NewEntry(
-		pkgManifest.Name,
-		pkgManifest.ManifestUrl,
-		pkgManifest.Version,
-		dependencies,
-		diffFiles(filesBefore, filesAfter),
-	)
+	// add to lockfile
+	lockfile[pkgManifest.Name] = config.LockfilePackage{
+		Manifest:     pkgManifest.ManifestUrl,
+		Version:      pkgManifest.Version,
+		Dependencies: dependencies,
+		Files:        diffFiles(filesBefore, filesAfter),
+	}
 
 	files, err := os.ReadDir(config.PKG_TMP)
 	if err != nil {
