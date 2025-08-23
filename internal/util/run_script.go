@@ -28,8 +28,10 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 
 	if err := cmd.Run(); err != nil {
 		log.Errorf("Error running command: %v", err)
+		return stdout.String(), fmt.Errorf("%s", stderr.String())
 	}
-	return stdout.String(), fmt.Errorf("%s", &stderr)
+
+	return stdout.String(), nil
 }
 
 func getConfirmation(script string) bool {
