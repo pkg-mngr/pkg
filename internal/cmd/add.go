@@ -15,11 +15,7 @@ import (
 )
 
 func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
-	manifestJson, err := manifest.GetManifest(pkg)
-	if err != nil {
-		return err
-	}
-	pkgManifest, err := manifestJson.Process()
+	pkgManifest, err := manifest.GetManifest(pkg)
 	if err != nil {
 		return err
 	}

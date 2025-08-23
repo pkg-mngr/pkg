@@ -44,11 +44,20 @@ type ManifestJson struct {
 	} `json:"scripts"`
 }
 
-func GetManifest(pkgName string) (*ManifestJson, error) {
+func GetManifest(pkgName string) (Manifest, error) {
 	if isLocalFile(pkgName) {
-		return GetManifestFromFile(pkgName)
+		manifestJson, err := GetManifestFromFile(pkgName)
+		if err != nil {
+			return Manifest{}, err
+		}
+		return manifestJson.Process()
 	}
-	return GetManifestFromRemote(pkgName)
+
+	manifestJson, err := GetManifestFromRemote(pkgName)
+	if err != nil {
+		return Manifest{}, err
+	}
+	return manifestJson.Process()
 }
 
 func (manifestJson *ManifestJson) Process() (Manifest, error) {
@@ -62,23 +71,17 @@ func (manifestJson *ManifestJson) Process() (Manifest, error) {
 		Dependencies: manifestJson.Dependencies,
 	}
 
-	// url
-	if _, ok := manifestJson.Url[PLATFORM]; !ok {
-		return Manifest{}, ErrorPackageUnsupported{Name: manifestJson.Name, Platform: PLATFORM}
-	}
-	manifest.Url = formatData(manifestJson.Url[PLATFORM], *manifestJson)
+	// url, sha256, install script
+	url, urlOk := manifestJson.Url[PLATFORM]
+	sha256, sha256Ok := manifestJson.Sha256[PLATFORM]
+	installScript, installScriptOk := manifestJson.Scripts.Install[PLATFORM]
 
-	// sha256
-	if _, ok := manifestJson.Sha256[PLATFORM]; !ok {
+	if !urlOk || !sha256Ok || !installScriptOk {
 		return Manifest{}, ErrorPackageUnsupported{Name: manifestJson.Name, Platform: PLATFORM}
 	}
-	manifest.Sha256 = manifestJson.Sha256[PLATFORM]
 
-	// install script
-	if _, ok := manifestJson.Scripts.Install[PLATFORM]; !ok {
-		return Manifest{}, ErrorPackageUnsupported{Name: manifestJson.Name, Platform: PLATFORM}
-	}
-	installScript := manifestJson.Scripts.Install[PLATFORM]
+	manifest.Url = formatData(url, *manifestJson)
+	manifest.Sha256 = sha256
 	manifest.Scripts.Install = util.Map(installScript, func(line string, i int) string {
 		return formatData(line, *manifestJson)
 	})
