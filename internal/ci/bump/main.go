@@ -49,9 +49,9 @@ func main() {
 			log.Printf("Running `latest` script: \n%s\n", latestScript)
 			output, err := util.RunScript(latestScript, true)
 			if err != nil && err.Error() != "" {
-				log.Printf("stdout: %s\n", output)
-				log.Printf("stderr: %v\n", err)
-				log.Errorf("Error running latest script in %s\n", file.Name())
+				log.Errorf(
+					"stdout: %s\nstderr: %v\n, Error running latest script in %s\n",
+					output, err, file.Name())
 				return
 			}
 
