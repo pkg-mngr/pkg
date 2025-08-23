@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -21,12 +20,7 @@ import (
 
 func main() {
 	if err := config.Init(); err != nil {
-		switch {
-		case errors.Is(err, config.ErrorAlreadyInitialised{}):
-			log.Printf("%v\n", err)
-		default:
-			log.Fatalf("%v\n", err)
-		}
+		log.Fatalf("%v\n", err)
 	}
 
 	files, err := os.ReadDir("packages")

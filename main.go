@@ -59,12 +59,7 @@ func main() {
 
 	if args.Init {
 		if err := config.Init(); err != nil {
-			switch {
-			case errors.Is(err, config.ErrorAlreadyInitialised{}):
-				log.Printf("%v\n", err)
-			default:
-				log.Fatalf("%v\n", err)
-			}
+			log.Fatalf("%v\n", err)
 		}
 		return
 	}

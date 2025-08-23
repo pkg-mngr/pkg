@@ -13,12 +13,7 @@ import (
 func main() {
 	files := os.Args[1:]
 	if err := config.Init(); err != nil {
-		switch {
-		case errors.Is(err, config.ErrorAlreadyInitialised{}):
-			log.Printf("%v\n", err)
-		default:
-			log.Fatalf("%v\n", err)
-		}
+		log.Fatalf("%v\n", err)
 	}
 
 	os.Setenv("PATH", config.PKG_BIN+":"+os.Getenv("PATH"))

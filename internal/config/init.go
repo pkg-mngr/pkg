@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/pkg-mngr/pkg/internal/log"
 )
 
 var alreadyInitialised = true
@@ -19,7 +21,8 @@ func Init() error {
 	}
 
 	if alreadyInitialised {
-		return ErrorAlreadyInitialised{}
+		log.Printf("pkg is already initialised")
+		return nil
 	}
 
 	fmt.Printf(`pkg has been installed to %[1]s!
