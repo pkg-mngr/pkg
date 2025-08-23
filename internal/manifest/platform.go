@@ -1,7 +1,6 @@
 package manifest
 
 import (
-	"fmt"
 	"runtime"
 )
 
@@ -19,5 +18,5 @@ func GetPlatform() Platform {
 	if arch == "amd64" {
 		arch = "x64"
 	}
-	return Platform(fmt.Sprintf("%s-%s", os, arch))
+	return Platform(os + "-" + arch)
 }
