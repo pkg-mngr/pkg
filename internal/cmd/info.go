@@ -9,10 +9,15 @@ import (
 )
 
 func Info(pkg string) (string, error) {
-	pkgManifest, err := manifest.GetManifest(pkg)
+	manifestJson, err := manifest.GetManifest(pkg)
 	if err != nil {
 		return "", err
 	}
+	pkgManifest, err := manifestJson.Process()
+	if err != nil {
+		return "", err
+	}
+
 	output := fmt.Sprintf("\n\033[32;1m=== \033[0;1m%s: \033[0m%s\n", pkgManifest.Name, pkgManifest.Version)
 	output += fmt.Sprintln(pkgManifest.Description)
 	output += fmt.Sprintf("\033[34;4m%s\033[0m\n", pkgManifest.Homepage)
