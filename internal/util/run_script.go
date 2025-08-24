@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -19,35 +18,20 @@ func RunScript(script string, skipConfirmation bool) (string, error) {
 	if shell == "" {
 		shell = "/bin/bash"
 	}
-	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP(), script)
+
+	script = fmt.Sprintf("set -euo pipefail\ncd %s\n%s", config.PKG_TMP, script)
 	cmd := exec.Command(shell, "-c", script)
 
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return "", fmt.Errorf("Error getting stderr pipe: %v", err)
-	}
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		return "", fmt.Errorf("Error getting stderr pipe: %v", err)
-	}
-	if err := cmd.Start(); err != nil {
-		return "", fmt.Errorf("Error while starting command: %v", err)
+	var stdout, stderr strings.Builder
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		log.Errorf("Error running command: %v", err)
+		return stdout.String(), fmt.Errorf("%s", stderr.String())
 	}
 
-	stdoutData, err := io.ReadAll(stdout)
-	if err != nil {
-		return "", fmt.Errorf("Error getting data from stderr: %v", err)
-	}
-	stderrData, err := io.ReadAll(stderr)
-	if err != nil {
-		return "", fmt.Errorf("Error getting data from stderr: %v", err)
-	}
-
-	if err := cmd.Wait(); err != nil {
-		log.Errorf("Error waiting for command: %v\n", err)
-	}
-
-	return string(stdoutData), fmt.Errorf("%s", stderrData)
+	return stdout.String(), nil
 }
 
 func getConfirmation(script string) bool {

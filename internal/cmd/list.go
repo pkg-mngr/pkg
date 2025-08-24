@@ -6,15 +6,15 @@ import (
 	"slices"
 
 	"github.com/pkg-mngr/pkg/internal/config"
+	"github.com/pkg-mngr/pkg/internal/util"
 )
 
 func List(lockfile config.Lockfile) []string {
 	keys := slices.Collect(maps.Keys(lockfile))
-	output := make([]string, len(lockfile))
 
-	for i, key := range keys {
-		output[i] = fmt.Sprintf("\033[1m%s:\033[0m %s", key, lockfile[key].Version)
-	}
+	output := util.Map(keys, func(key string, i int) string {
+		return fmt.Sprintf("\033[1m%s:\033[0m %s", key, lockfile[key].Version)
+	})
 
 	slices.Sort(output)
 

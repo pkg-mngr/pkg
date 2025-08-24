@@ -1,16 +1,13 @@
 package manifest
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/pkg-mngr/pkg/internal/config"
-	"github.com/pkg-mngr/pkg/internal/log"
+	"github.com/pkg-mngr/pkg/internal/util"
 )
+
+const MANIFEST_EXT = ".json"
 
 type Manifest struct {
 	ManifestUrl  string
@@ -30,6 +27,7 @@ type Manifest struct {
 }
 
 type ManifestJson struct {
+	ManifestUrl  string              `json:"-"`
 	Schema       string              `json:"$schema,omitempty"`
 	Name         string              `json:"name"`
 	Description  string              `json:"description"`
@@ -46,44 +44,25 @@ type ManifestJson struct {
 	} `json:"scripts"`
 }
 
-func GetManifest(pkgName string) Manifest {
-	manifestJson := new(ManifestJson)
-	var manifestUrl string
-
+func GetManifest(pkgName string) (Manifest, error) {
 	if isLocalFile(pkgName) {
-		path := pkgName
-
-		data, err := os.ReadFile(path)
+		manifestJson, err := GetManifestFromFile(pkgName)
 		if err != nil {
-			log.Fatalf("Error reading data from %s: %v\n", path, err)
+			return Manifest{}, err
 		}
-
-		manifestUrl, err = filepath.Abs(path)
-		if err != nil {
-			log.Fatalf("Error getting absolute filepath to %s: %v\n", path, err)
-		}
-		if err := json.Unmarshal(data, manifestJson); err != nil {
-			log.Fatalf("Error unmarshalling data from %s: %v\n", path, err)
-		}
-	} else {
-		manifestUrl = getRemoteUrl(pkgName)
-
-		res, err := http.Get(manifestUrl)
-		if err != nil || res.StatusCode != http.StatusOK {
-			fmt.Printf("Package %s does not exist\n", pkgName)
-			os.Exit(0)
-		}
-		defer res.Body.Close()
-
-		if err := json.NewDecoder(res.Body).Decode(manifestJson); err != nil {
-			log.Fatalf("Error decoding data from manifest: %v\n", err)
-		}
+		return manifestJson.Process()
 	}
 
-	platform := GetPlatform()
+	manifestJson, err := GetManifestFromRemote(pkgName)
+	if err != nil {
+		return Manifest{}, err
+	}
+	return manifestJson.Process()
+}
 
+func (manifestJson *ManifestJson) Process() (Manifest, error) {
 	manifest := Manifest{
-		ManifestUrl:  manifestUrl,
+		ManifestUrl:  manifestJson.ManifestUrl,
 		Name:         manifestJson.Name,
 		Description:  manifestJson.Description,
 		Homepage:     manifestJson.Homepage,
@@ -92,54 +71,43 @@ func GetManifest(pkgName string) Manifest {
 		Dependencies: manifestJson.Dependencies,
 	}
 
-	// url
-	if _, ok := manifestJson.Url[platform]; !ok {
-		fmt.Printf("Package %s is not supported on this platform (%s)\n", pkgName, platform)
-		os.Exit(0)
-	}
-	manifest.Url = formatData(manifestJson.Url[platform], *manifestJson)
+	// url, sha256, install script
+	url, urlOk := manifestJson.Url[PLATFORM]
+	sha256, sha256Ok := manifestJson.Sha256[PLATFORM]
+	installScript, installScriptOk := manifestJson.Scripts.Install[PLATFORM]
 
-	// sha256
-	if _, ok := manifestJson.Sha256[platform]; !ok {
-		fmt.Printf("Package %s is not supported on this platform (%s)\n", pkgName, platform)
-		os.Exit(0)
+	if !urlOk || !sha256Ok || !installScriptOk {
+		return Manifest{}, ErrorPackageUnsupported{Name: manifestJson.Name, Platform: PLATFORM}
 	}
-	manifest.Sha256 = manifestJson.Sha256[platform]
 
-	// install script
-	if _, ok := manifestJson.Scripts.Install[platform]; !ok {
-		fmt.Printf("Package %s is not supported on this platform (%s)\n", pkgName, platform)
-		os.Exit(0)
-	}
-	installScript := manifestJson.Scripts.Install[platform]
-	for i, line := range installScript {
-		installScript[i] = formatData(line, *manifestJson)
-	}
-	manifest.Scripts.Install = installScript
+	manifest.Url = formatData(url, *manifestJson)
+	manifest.Sha256 = sha256
+	manifest.Scripts.Install = util.Map(installScript, func(line string, i int) string {
+		return formatData(line, *manifestJson)
+	})
 
 	// latest script
 	latestScript := manifestJson.Scripts.Latest
-	for i, line := range latestScript {
-		latestScript[i] = formatData(line, *manifestJson)
-	}
-	manifest.Scripts.Latest = latestScript
+	manifest.Scripts.Latest = util.Map(latestScript, func(line string, i int) string {
+		return formatData(line, *manifestJson)
+	})
 
 	// completions script
-	if completion, ok := manifestJson.Scripts.Completions[platform]; ok {
-		for i, line := range completion {
-			completion[i] = formatData(line, *manifestJson)
-		}
-		manifest.Scripts.Completions = completion
+	if completion, ok := manifestJson.Scripts.Completions[PLATFORM]; ok {
+		manifest.Scripts.Completions = util.Map(completion, func(line string, i int) string {
+			return formatData(line, *manifestJson)
+		})
 	}
 
-	return manifest
+	return manifest, nil
 }
 
 func formatData(val string, manifest ManifestJson) string {
 	val = strings.ReplaceAll(val, "{{ version }}", manifest.Version)
-	val = strings.ReplaceAll(val, "{{ pkg.opt_dir }}", config.PKG_OPT())
-	val = strings.ReplaceAll(val, "{{ pkg.bin_dir }}", config.PKG_BIN())
-	val = strings.ReplaceAll(val, "{{ pkg.tmp_dir }}", config.PKG_TMP())
-	val = strings.ReplaceAll(val, "{{ pkg.completions.zsh }}", config.PKG_ZSH_COMPLETIONS())
+	val = strings.ReplaceAll(val, "{{ pkg.opt_dir }}", config.PKG_OPT)
+	val = strings.ReplaceAll(val, "{{ pkg.bin_dir }}", config.PKG_BIN)
+	val = strings.ReplaceAll(val, "{{ pkg.tmp_dir }}", config.PKG_TMP)
+	val = strings.ReplaceAll(val, "{{ pkg.completions.zsh }}", config.PKG_ZSH_COMPLETIONS)
+
 	return val
 }

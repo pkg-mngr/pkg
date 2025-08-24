@@ -10,51 +10,61 @@ import (
 
 var alreadyInitialised = true
 
-func Init() {
-	initDir(PKG_HOME())
-	initDir(PKG_BIN())
-	initDir(PKG_OPT())
-	initDir(PKG_ZSH_COMPLETIONS())
-	initDir(PKG_TMP())
-
-	initLockfile()
-
-	if alreadyInitialised {
-		fmt.Println("pkg is already initialised!")
-		return
+func Init() error {
+	err := initDirs(PKG_HOME, PKG_BIN, PKG_OPT, PKG_TMP, PKG_ZSH_COMPLETIONS)
+	if err != nil {
+		return err
 	}
 
-	fmt.Printf(`pkg has been installed to %s!
+	if err := initLockfile(); err != nil {
+		return err
+	}
+
+	if alreadyInitialised {
+		log.Printf("pkg is already initialised")
+		return nil
+	}
+
+	fmt.Printf(`pkg has been installed to %[1]s!
 Add the following to your ~/.zshrc to complete installation:
 
-export PKG_HOME="%s"
+export PKG_HOME="%[1]s"
 export PATH="$PKG_HOME/bin:$PATH"
 export FPATH="$PKG_HOME/share/zsh/site-functions:$FPATH"
 
-`, PKG_HOME(), PKG_HOME())
+`, PKG_HOME)
+
+	return nil
 }
 
-func initDir(dir string) {
-	if _, err := os.Stat(dir); err != nil {
-		alreadyInitialised = false
-		if err := os.MkdirAll(dir, 0o750); err != nil {
-			log.Fatalf("Error creating %s directory: %v\n", dir, err)
+func initDirs(dirs ...string) error {
+	for _, dir := range dirs {
+		if _, err := os.Stat(dir); err == nil {
+			continue
 		}
+		alreadyInitialised = false
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return fmt.Errorf("Error creating %s directory: %v\n", dir, err)
+		}
+
 	}
+	return nil
 }
 
-func initLockfile() {
-	file := LOCKFILE()
-	if _, err := os.Stat(LOCKFILE()); err != nil {
-		alreadyInitialised = false
-		f, err := os.Create(LOCKFILE())
-		if err != nil {
-			log.Fatalf("Error creating %s file: %v\n", file, err)
-		}
-		defer f.Close()
-
-		if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
-			log.Fatalf("Error writing to lockfile: %v\n", err)
-		}
+func initLockfile() error {
+	if _, err := os.Stat(LOCKFILE); err == nil {
+		return nil
 	}
+	alreadyInitialised = false
+	f, err := os.Create(LOCKFILE)
+	if err != nil {
+		return fmt.Errorf("Error creating %s file: %v\n", LOCKFILE, err)
+	}
+	defer f.Close()
+
+	if err := json.NewEncoder(f).Encode(map[string]LockfilePackage{}); err != nil {
+		return fmt.Errorf("Error writing to lockfile: %v\n", err)
+	}
+
+	return nil
 }
