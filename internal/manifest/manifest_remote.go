@@ -8,15 +8,13 @@ import (
 	"github.com/pkg-mngr/pkg/internal/config"
 )
 
-func GetManifestFromRemote(pkgName string) (*ManifestJson, error) {
-	url := getRemoteUrl(pkgName)
-
+func FromRemote(url string) (*ManifestJson, error) {
 	manifestJson := new(ManifestJson)
 	manifestJson.ManifestUrl = url
 
 	res, err := http.Get(url)
 	if err != nil || res.StatusCode != http.StatusOK {
-		return nil, ErrorPackageNotFound{Name: pkgName}
+		return nil, ErrorPackageNotFound{Url: url}
 	}
 	defer res.Body.Close()
 

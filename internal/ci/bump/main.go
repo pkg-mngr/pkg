@@ -31,7 +31,7 @@ func main() {
 		wg.Go(func() {
 			log.Printf("Reading %s\n", file.Name())
 
-			pkgManifest, stderr := manifest.GetManifestFromFile("./packages/" + file.Name())
+			pkgManifest, stderr := manifest.FromFile("./packages/" + file.Name())
 			if stderr != nil {
 				log.Errorf("Error getting manifest from %s: %v\n", file.Name(), stderr)
 				return

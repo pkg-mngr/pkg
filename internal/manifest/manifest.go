@@ -44,16 +44,17 @@ type ManifestJson struct {
 	} `json:"scripts"`
 }
 
-func GetManifest(pkgName string) (Manifest, error) {
-	if isLocalFile(pkgName) {
-		manifestJson, err := GetManifestFromFile(pkgName)
+func Get(pkgName string) (Manifest, error) {
+	if IsLocalFile(pkgName) {
+		manifestJson, err := FromFile(pkgName)
 		if err != nil {
 			return Manifest{}, err
 		}
 		return manifestJson.Process()
 	}
 
-	manifestJson, err := GetManifestFromRemote(pkgName)
+	url := getRemoteUrl(pkgName)
+	manifestJson, err := FromRemote(url)
 	if err != nil {
 		return Manifest{}, err
 	}

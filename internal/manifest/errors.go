@@ -3,11 +3,11 @@ package manifest
 import "fmt"
 
 type ErrorPackageNotFound struct {
-	Name string
+	Url string
 }
 
 func (e ErrorPackageNotFound) Error() string {
-	return fmt.Sprintf("Package %s does not exist", e.Name)
+	return fmt.Sprintf("Package not found at url: %s", e.Url)
 }
 
 type ErrorPackageUnsupported struct {

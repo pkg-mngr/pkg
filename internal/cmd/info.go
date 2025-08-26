@@ -9,7 +9,7 @@ import (
 )
 
 func Info(pkg string) (string, error) {
-	pkgManifest, err := manifest.GetManifest(pkg)
+	pkgManifest, err := manifest.Get(pkg)
 	if err != nil {
 		return "", err
 	}

@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 )
 
-func GetManifestFromFile(path string) (*ManifestJson, error) {
+func FromFile(path string) (*ManifestJson, error) {
 	manifestJson := new(ManifestJson)
 	manifestJson.ManifestUrl = path
 
@@ -21,6 +22,6 @@ func GetManifestFromFile(path string) (*ManifestJson, error) {
 	return manifestJson, nil
 }
 
-func isLocalFile(s string) bool {
-	return (strings.HasPrefix(s, "./") || strings.HasPrefix(s, "/")) && strings.HasSuffix(s, MANIFEST_EXT)
+func IsLocalFile(p string) bool {
+	return (path.IsAbs(p) || strings.HasPrefix(p, "./")) && strings.HasSuffix(p, MANIFEST_EXT)
 }
