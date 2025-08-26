@@ -39,29 +39,7 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		}
 	}
 
-	// skip adding dependencies that are already installed. these were installed
-	// either due to some other package or manually by the user, so they're not
-	// lockfile dependencies of this package
-	dependencies := slices.DeleteFunc(pkgManifest.Dependencies, func(dep string) bool {
-		_, ok := lockfile[dep]
-		return ok
-	})
-	if len(dependencies) > 0 {
-		fmt.Println("Installing dependencies...")
-		for _, dep := range dependencies {
-			// add dependencies before in case they're needed for installation of
-			// current package
-			Add(dep, skipConfirmation, lockfile)
-		}
-	}
-
 	fmt.Printf("Installing %s...\n", pkg)
-
-	// list files before installation
-	filesBefore, err := listFiles()
-	if err != nil {
-		return err
-	}
 
 	filename := filepath.Join(config.PKG_TMP, path.Base(pkgManifest.Url))
 
@@ -77,46 +55,8 @@ func Add(pkg string, skipConfirmation bool, lockfile config.Lockfile) error {
 		return err
 	}
 
-	// run install and completions scripts
-	fmt.Println("Running install script...")
-	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
-	_, err = util.RunScript(installScript, skipConfirmation)
-	if err != nil && err.Error() != "" {
+	if err := install(lockfile, pkgManifest, skipConfirmation); err != nil {
 		return err
-	}
-	if len(pkgManifest.Scripts.Completions) != 0 {
-		fmt.Println("Running completions script...")
-		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
-		_, err := util.RunScript(completionsScript, skipConfirmation)
-		if err != nil && err.Error() != "" {
-			return err
-		}
-	}
-
-	// list files after installation
-	filesAfter, err := listFiles()
-	if err != nil {
-		return err
-	}
-
-	// add to lockfile
-	lockfile[pkgManifest.Name] = config.LockfilePackage{
-		Manifest:     pkgManifest.ManifestUrl,
-		Version:      pkgManifest.Version,
-		Dependencies: dependencies,
-		Files:        diffFiles(filesBefore, filesAfter),
-	}
-
-	// delete and recreate .pkg/tmp
-	if err := os.RemoveAll(config.PKG_TMP); err != nil {
-		return fmt.Errorf("Error deleting %s: %v\n", config.PKG_TMP, err)
-	}
-	if err := os.Mkdir(config.PKG_TMP, 0o755); err != nil {
-		return fmt.Errorf("Error creating %s: %v\n", config.PKG_TMP, err)
-	}
-
-	if pkgManifest.Caveats != "" {
-		fmt.Printf("\nCaveats:\n %s\n\n", pkgManifest.Caveats)
 	}
 	fmt.Printf("Finished installing %s\n", pkg)
 
@@ -152,4 +92,72 @@ func diffFiles(before, after []string) []string {
 	}
 
 	return diff
+}
+
+func install(lockfile config.Lockfile, pkgManifest manifest.Manifest, skipConfirmation bool) error {
+	// skip adding dependencies that are already installed. these were installed
+	// either due to some other package or manually by the user, so they're not
+	// lockfile dependencies of this package
+	dependencies := slices.DeleteFunc(pkgManifest.Dependencies, func(dep string) bool {
+		_, ok := lockfile[dep]
+		return ok
+	})
+	if len(dependencies) > 0 {
+		fmt.Println("Installing dependencies...")
+		for _, dep := range dependencies {
+			// add dependencies before in case they're needed for installation of
+			// current package
+			Add(dep, skipConfirmation, lockfile)
+		}
+	}
+
+	// list files before installation
+	filesBefore, err := listFiles()
+	if err != nil {
+		return err
+	}
+
+	// run install and completions scripts
+	fmt.Println("Running install script...")
+	installScript := strings.Join(pkgManifest.Scripts.Install, "\n")
+	_, err = util.RunScript(installScript, skipConfirmation)
+	if err != nil {
+		return err
+	}
+	if len(pkgManifest.Scripts.Completions) != 0 {
+		fmt.Println("Running completions script...")
+		completionsScript := strings.Join(pkgManifest.Scripts.Completions, "\n")
+		_, err := util.RunScript(completionsScript, skipConfirmation)
+		if err != nil {
+			return err
+		}
+	}
+
+	// list files after installation
+	filesAfter, err := listFiles()
+	if err != nil {
+		return err
+	}
+
+	// add to lockfile
+	lockfile[pkgManifest.Name] = config.LockfilePackage{
+		Manifest:     pkgManifest.ManifestUrl,
+		Version:      pkgManifest.Version,
+		Dependencies: dependencies,
+		Files:        diffFiles(filesBefore, filesAfter),
+	}
+
+	// delete and recreate .pkg/tmp
+	if err := os.RemoveAll(config.PKG_TMP); err != nil {
+		return fmt.Errorf("Error deleting %s: %v\n", config.PKG_TMP, err)
+	}
+	if err := os.Mkdir(config.PKG_TMP, 0o755); err != nil {
+		return fmt.Errorf("Error creating %s: %v\n", config.PKG_TMP, err)
+	}
+
+	if pkgManifest.Caveats != "" {
+		fmt.Printf("\nCaveats:\n %s\n\n", pkgManifest.Caveats)
+	}
+
+	return nil
 }
