@@ -1,4 +1,6 @@
-import fs from "node:fs";
+/// <reference types="@types/bun" />
+/// <reference types="./types.d.ts" />
+
 import packageTemplate from "./package.tmpl.md" with { type: "text" };
 import indexTemplate from "./packages-index.tmpl.md" with { type: "text" };
 
@@ -18,21 +20,16 @@ type Manifest = {
   };
 };
 
-function $(cmd: string) {
-  const [arg0, ...args] = cmd.split(" ");
-  return new Deno.Command(arg0!, { args: args }).outputSync();
-}
+await Bun.$`rm -rf packages public`;
+await Bun.$`cp -r ../packages public`;
+await Bun.$`cp pkg.png public`;
 
-$("rm -rf packages public");
-$("cp -r ../packages public");
-$("cp pkg.png public");
-$("mkdir packages");
-
-const manifests = fs.globSync("./public/*.json")
-  .map(
-    (manifest) =>
-      JSON.parse(fs.readFileSync(manifest, { encoding: "utf8" })) as Manifest,
-  ).sort((a, b) => a.name.localeCompare(b.name));
+const manifests = await Promise.all(
+  Array.from(new Bun.Glob("*.json").scanSync("./public")).map(
+    async (manifest) =>
+      (await Bun.file(`./public/${manifest}`).json()) as Manifest,
+  ),
+).then((manifests) => manifests.sort((a, b) => a.name.localeCompare(b.name)));
 
 const index = indexTemplate.replace(
   "{{ manifests }}",
@@ -43,7 +40,7 @@ const index = indexTemplate.replace(
     )
     .join("\n"),
 );
-Deno.writeTextFileSync("./packages/index.md", index);
+Bun.write("./packages/index.md", index);
 
 function formatData(data: string, pkg: Manifest): string {
   return data
@@ -115,5 +112,5 @@ ${pkg.caveats}
     .replaceAll("{{ scripts.latest }}", latestScript)
     .replaceAll("{{ completions }}", completionsScripts);
 
-  Deno.writeTextFileSync(`packages/${pkg.name}.md`, page);
+  Bun.write(`packages/${pkg.name}.md`, page);
 }

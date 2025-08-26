@@ -1,12 +1,11 @@
 {
   "devDependencies": {
-    "@types/node": "^24.3.0",
-    "vitepress": "^1.6.4",
-    "vue": "^3.5.20"
+    "@types/bun": "^1.2.21",
+    "vitepress": "^1.6.4"
   },
   "scripts": {
-    "dev": "deno run -A --unstable-raw-imports build.ts && vitepress dev",
-    "build": "deno run -A --unstable-raw-imports build.ts && vitepress build",
+    "dev": "bun run  build.ts && vitepress dev",
+    "build": "bun run build.ts && vitepress build",
     "preview": "vitepress preview"
   }
 }

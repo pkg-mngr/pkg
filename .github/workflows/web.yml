@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: denoland/setup-deno@v2
-      - run: deno install
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
         working-directory: web
-      - run: deno run build
+      - run: bun run build
         working-directory: web
-      - run: npx wrangler deploy
+      - run: bun x wrangler deploy
         working-directory: web
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
