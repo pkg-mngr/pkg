@@ -73,7 +73,8 @@ func main() {
 			log.Fatalf("%v\n", err)
 		}
 		if len(results) == 0 {
-			fmt.Println("\n\033[31;1m ===\033[0;1m No results found\033[0m")
+			fmt.Println("\n\033[31;1m===\033[0;1m No results found\033[0m")
+			fmt.Println()
 			return
 		}
 		fmt.Println("\n\033[32;1m===\033[0;1m Search results\033[0m")
