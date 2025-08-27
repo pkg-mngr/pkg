@@ -15,19 +15,19 @@ import (
 
 type Args struct {
 	Add struct {
-		Packages []string `help:"Packages to install."`
-		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts."`
-	} `help:"Install packages."`
+		Packages []string `help:"Packages to install"`
+		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts"`
+	} `help:"Install packages"`
 	Update *struct {
-		Packages []string `help:"Packages to update." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
-		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts."`
-	} `help:"Update packages."`
+		Packages []string `help:"Packages to update" completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
+		Yes      bool     `type:"option" short:"y" help:"Skip confirmation to run scripts"`
+	} `help:"Update packages"`
 	Remove struct {
-		Packages []string `help:"Packages to remove." completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
-	} `help:"Remove packages."`
+		Packages []string `help:"Packages to remove" completion:"$(jq -r 'keys[]' $PKG_HOME/pkg.lock | tr '\n' ' ')"`
+	} `help:"Remove packages"`
 	Info struct {
 		Package string `help:"The package to get the info for"`
-	} `help:"Get the info for a package."`
+	} `help:"Get the info for a package"`
 	Search struct {
 		Name string `help:"The search query"`
 	} `help:"Search for packages"`

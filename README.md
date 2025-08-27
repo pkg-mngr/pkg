@@ -15,13 +15,14 @@ or download a prebuilt binary in [Releases](https://github.com/pkg-mngr/pkg/rele
 ## Usage
 
 ```
-USAGE: pkg [add | update | remove | info | list] [--init]
+USAGE: pkg [add | update | remove | info | search | list] [--init]
 
 COMMANDS:
-  add               Install packages.
-  update            Update packages.
-  remove            Remove packages.
-  info              Get the info for a package.
+  add               Install packages
+  update            Update packages
+  remove            Remove packages
+  info              Get the info for a package
+  search            Search for packages
   list              List installed packages
 
 OPTIONS:
@@ -63,6 +64,12 @@ You can list installed packages with:
 
 ```sh
 pkg list
+```
+
+You can search for packages with:
+
+```sh
+pkg search pkg
 ```
 
 You can view the help by using `-h` or `--help`:
