@@ -114,3 +114,9 @@ ${pkg.caveats}
 
   Bun.write(`packages/${pkg.name}.md`, page);
 }
+
+const indexJson: Record<string, { version: string; description: string }> = {};
+for (const { name, version, description } of manifests) {
+  indexJson[name] = { version, description };
+}
+Bun.write("public/index.json", JSON.stringify(indexJson));

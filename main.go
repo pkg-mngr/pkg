@@ -28,6 +28,9 @@ type Args struct {
 	Info struct {
 		Package string `help:"The package to get the info for"`
 	} `help:"Get the info for a package."`
+	Search struct {
+		Name string `help:"The search query"`
+	} `help:"Search for packages"`
 	List bool `type:"command" help:"List installed packages"`
 	Init bool `type:"option" help:"Initialise pkg"`
 }
@@ -61,6 +64,23 @@ func main() {
 		if err := config.Init(); err != nil {
 			log.Fatalf("%v\n", err)
 		}
+		return
+	}
+
+	if args.Search.Name != "" {
+		results, err := cmd.Search(args.Search.Name)
+		if err != nil {
+			log.Fatalf("%v\n", err)
+		}
+		if len(results) == 0 {
+			fmt.Println("\n\033[31;1m ===\033[0;1m No results found\033[0m")
+			return
+		}
+		fmt.Println("\n\033[32;1m===\033[0;1m Search results\033[0m")
+		for _, result := range results {
+			fmt.Println(result)
+		}
+		fmt.Println()
 		return
 	}
 
