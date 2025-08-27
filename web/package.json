@@ -4,8 +4,8 @@
     "vitepress": "^1.6.4"
   },
   "scripts": {
-    "dev": "bun run  build.ts && vitepress dev",
-    "build": "bun run build.ts && vitepress build",
+    "dev": "bun run gen/build.ts && vitepress dev",
+    "build": "bun run gen/build.ts && vitepress build",
     "preview": "vitepress preview"
   }
 }

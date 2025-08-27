@@ -22,7 +22,7 @@ type Manifest = {
 
 await Bun.$`rm -rf packages public`;
 await Bun.$`cp -r ../packages public`;
-await Bun.$`cp pkg.png public`;
+await Bun.$`cp gen/pkg.png public`;
 
 const manifests = await Promise.all(
   Array.from(new Bun.Glob("*.json").scanSync("./public")).map(
