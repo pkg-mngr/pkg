@@ -27,7 +27,8 @@ func Search(query string) ([]string, error) {
 	packages := make([]string, 0, len(index))
 	for name, data := range index {
 		line := fmt.Sprintf("\033[1m%s:\033[0m %s - %s", name, data.Version, data.Description)
-		if strings.Contains(strings.ToLower(line), strings.ToLower(query)) {
+		searchLine := strings.ToLower(fmt.Sprintf("%s %s", name, data.Description))
+		if strings.Contains(searchLine, strings.ToLower(query)) {
 			packages = append(packages, line)
 		}
 	}
