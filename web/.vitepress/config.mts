@@ -8,15 +8,12 @@ export default defineConfig({
   head: [["link", { rel: "icon", href: "/pkg.png" }]],
   themeConfig: {
     logo: "/pkg.png",
-
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      {
-        text: "Packages",
-        link: "/packages",
-      },
+    sidebar: [
+      { text: "CLI", link: "/" },
+      { text: "Packages", link: "/packages" },
+      { text: "Self-hosting", link: "/self-hosting" },
     ],
-    aside: false,
+    outline: [2, 6],
     socialLinks: [{ icon: "github", link: "https://github.com/pkg-mngr/pkg" }],
   },
 });
