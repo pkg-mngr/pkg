@@ -22,6 +22,8 @@ If your manifests are in a subdirectory, be sure to include that subdirectory in
 
 Each package manifest must follow the schema in https://github.com/pkg-mngr/pkg/blob/main/package.schema.json. If they do not, the `pkg` CLI may fail to install them, or result in unexpected behavior for certain commands.
 
+Once a package is installed, the manifest URL where that package was installed from gets saved into the lockfile, and all updates from that point onwards will happen from that URL, not from the currently set `PKG_MANIFEST_HOST`. If you'd like to change the remote for a package, you should reinstall the package from the new remote.
+
 ### CLI Search Command
 
 In order to support the `pkg search` command, you need to have an `index.json` served from the same path as the other package manifests. The `index.json` must have all of your packages listed in the following format:
