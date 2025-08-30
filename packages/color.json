@@ -37,20 +37,6 @@
     },
     "latest": [
       "gh release list -R noClaps/color --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ],
-    "completions": {
-      "linux-arm64": [
-        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
-      ],
-      "linux-x64": [
-        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
-      ],
-      "macos-arm64": [
-        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
-      ],
-      "macos-x64": [
-        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
-      ]
-    }
+    ]
   }
 }
