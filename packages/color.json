@@ -3,17 +3,25 @@
   "name": "color",
   "description": "A tool to quickly convert between color formats.",
   "homepage": "https://github.com/noClaps/color",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "sha256": {
-    "linux-x64": "accb8f9a065d04ab9b461aee71729273ad0c1e968cfe9b91ea39839c72cc870d",
-    "macos-arm64": "7e05c9670145a08713d7e1f6a0296a84022e42082ec3c45a7ef2ce1e6432f51b"
+    "linux-arm64": "43f27e6a2f57c070387d2683f5983fa4b154019fc4fdc2d1b6fae21a6ab3afdc",
+    "linux-x64": "258c24b43e28b9aed171fa757c7cd9d048508c68ea96ca05f74b7ea784474fd0",
+    "macos-arm64": "fc385cb6ceb5dc884d524f670fafa3866b14d289ec54b7123477c584825ac119",
+    "macos-x64": "e98261d6faa742384eb0b30c8781de251e8a2b4390c2bfe09015caedaac845c1"
   },
   "url": {
+    "linux-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-linux-arm64.tar.xz",
     "linux-x64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-linux-amd64.tar.xz",
-    "macos-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz"
+    "macos-arm64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-arm64.tar.xz",
+    "macos-x64": "https://github.com/noClaps/color/releases/download/v{{ version }}/color-darwin-amd64.tar.xz"
   },
   "scripts": {
     "install": {
+      "linux-arm64": [
+        "tar -xf color-linux-arm64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
+      ],
       "linux-x64": [
         "tar -xf color-linux-amd64.tar.xz",
         "install color {{ pkg.bin_dir }}/color"
@@ -21,10 +29,28 @@
       "macos-arm64": [
         "tar -xf color-darwin-arm64.tar.xz",
         "install color {{ pkg.bin_dir }}/color"
+      ],
+      "macos-x64": [
+        "tar -xf color-darwin-amd64.tar.xz",
+        "install color {{ pkg.bin_dir }}/color"
       ]
     },
     "latest": [
       "gh release list -R noClaps/color --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ]
+    ],
+    "completions": {
+      "linux-arm64": [
+        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
+      ],
+      "linux-x64": [
+        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
+      ],
+      "macos-arm64": [
+        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
+      ],
+      "macos-x64": [
+        "color --completions zsh > {{ pkg.completions.zsh }}/_color"
+      ]
+    }
   }
 }
