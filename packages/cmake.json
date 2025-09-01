@@ -20,19 +20,27 @@
     "install": {
       "macos-arm64": [
         "tar -xf cmake-{{ version }}-macos-universal.tar.gz",
-        "install cmake-{{ version }}-macos-universal/CMake.app/Contents/bin/cmake {{ pkg.bin_dir }}"
+        "mkdir -p {{ pkg.opt_dir }}/cmake",
+        "mv cmake-{{ version }}-macos-universal/CMake.app/Contents/{bin,doc,man,share} {{ pkg.opt_dir }}/cmake/",
+        "rm {{ pkg.opt_dir }}/cmake/bin/cmake-gui",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
       ],
       "macos-x64": [
         "tar -xf cmake-{{ version }}-macos-universal.tar.gz",
-        "install cmake-{{ version }}-macos-universal/CMake.app/Contents/bin/cmake {{ pkg.bin_dir }}"
+        "mkdir -p {{ pkg.opt_dir }}/cmake",
+        "mv cmake-{{ version }}-macos-universal/CMake.app/Contents/{bin,doc,man,share} {{ pkg.opt_dir }}/cmake/",
+        "rm {{ pkg.opt_dir }}/cmake/bin/cmake-gui",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
       ],
       "linux-arm64": [
         "tar -xf cmake-{{ version }}-linux-aarch64.tar.gz",
-        "install cmake-{{ version }}-linux-aarch64/bin/cmake {{ pkg.bin_dir }}"
+        "mv cmake-{{ version }}-linux-aarch64 {{ pkg.opt_dir }}/cmake",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
       ],
       "linux-x64": [
         "tar -xf cmake-{{ version }}-linux-x86_64.tar.gz",
-        "install cmake-{{ version }}-linux-x86_64/bin/cmake {{ pkg.bin_dir }}"
+        "mv cmake-{{ version }}-linux-x86_64 {{ pkg.opt_dir }}/cmake",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
       ]
     },
     "latest": [
