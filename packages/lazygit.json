@@ -3,12 +3,12 @@
   "name": "lazygit",
   "description": "simple terminal UI for git commands",
   "homepage": "https://github.com/jesseduffield/lazygit",
-  "version": "0.54.2",
+  "version": "0.55.0",
   "sha256": {
-    "linux-arm64": "f7d35dcf41db87fabc0f505539c329f94f3dfc89bf12932d4d25080e410e8f62",
-    "linux-x64": "cf98decf3c29f9f47e78967cb56cafc06021f616107be0200e6aefbe6fe50cd0",
-    "macos-arm64": "3325b15d93740501a8ad933bc836c77aa8b47c38352d6291728df30583ceda1b",
-    "macos-x64": "1e901177d024e02e45df6a7436bfb7d66b193707227c54372949b1680329f887"
+    "linux-arm64": "6730250c140cd02e464f3e49b838deb4422ee61ada3227d4d88bd23fa881b8f0",
+    "linux-x64": "e7c1c2d127ebdb241398f3daf05907a71a0c977ff12beba6b8ebdb069f9dba6a",
+    "macos-arm64": "a3679901c0618c906424c0f9cf49abb4b687b2c610f47ff344420b9a494becf4",
+    "macos-x64": "4114a044f8323b0bd2224841536103d7c6b63ddbb589242a336eb34d4ca615cf"
   },
   "url": {
     "linux-arm64": "https://github.com/jesseduffield/lazygit/releases/download/v{{ version }}/lazygit_{{ version }}_linux_arm64.tar.gz",
