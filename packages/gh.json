@@ -3,12 +3,12 @@
   "name": "gh",
   "description": "GitHub's official command line tool",
   "homepage": "https://cli.github.com/",
-  "version": "2.78.0",
+  "version": "2.79.0",
   "sha256": {
-    "linux-arm64": "9e3ca75b227a5503f6ef92c4b8b6dbf94e34bfdd8069ac0f16b8739856ebba7b",
-    "linux-x64": "ac309f70c5d6b122c82e6138ce82cb65ca5d8595cc09d11751fbc4e3907e1a05",
-    "macos-arm64": "62290b0dbc9965ebbc20d2b481fe83aa167fadc28e0d81a5d93eec6efc9d3b72",
-    "macos-x64": "a8d27429a00f50ae3318fc75a9ed1e8400932c109a657e1570467eab76f6c419"
+    "linux-arm64": "1b91e546b30181a8ee6d8c72bbf59eaadbb0600bab014dfbcc199676c83ea102",
+    "linux-x64": "e7af0c72a607c0528fda1989f7c8e3be85e67d321889002af0e2938ad9c8fb68",
+    "macos-arm64": "5454f9509e3dbb8f321310e9e344877d9a01ebb8f8703886b1afb0936d60ffaa",
+    "macos-x64": "c1672616fcb3745a0e4285110143b1cc93c241bd867bf108084defdea3d49331"
   },
   "url": {
     "linux-arm64": "https://github.com/cli/cli/releases/download/v{{ version }}/gh_{{ version }}_linux_arm64.tar.gz",
@@ -39,10 +39,18 @@
       "gh release list -R cli/cli --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": {
-      "linux-arm64": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"],
-      "linux-x64": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"],
-      "macos-arm64": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"],
-      "macos-x64": ["gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"]
+      "linux-arm64": [
+        "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
+      ],
+      "linux-x64": [
+        "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
+      ],
+      "macos-arm64": [
+        "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
+      ],
+      "macos-x64": [
+        "gh completion -s zsh > {{ pkg.completions.zsh }}/_gh"
+      ]
     }
   }
 }
