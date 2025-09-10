@@ -3,12 +3,12 @@
   "name": "uv",
   "description": "An extremely fast Python package and project manager, written in Rust.",
   "homepage": "https://docs.astral.sh/uv/",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "sha256": {
-    "linux-arm64": "6ede0fefa7db7be3d5d9eda8784a8e43b1cf5410720eb3da60ab1d2f66678e82",
-    "linux-x64": "be9878e9d08ebcb621a683aba52e7fb8bbf92b2532e0d759026ffcc067673042",
-    "macos-arm64": "103367962c5cb00bf7370d84cbaa3fec5a9807be9cc833ea9d8eea400c119fa2",
-    "macos-x64": "2bbef70982e97dfc36454de173f35ec1a5e83ae11e3885df6a50db3fd76171cb"
+    "linux-arm64": "22a3cbaf87776b73c2657ba5d63f8565c1235b65eaf57dffda66061f7a09913b",
+    "linux-x64": "fc94e50e8ef93a97d723b83faa42888e7710c4443a5b8a1af3aac2cda5390f3a",
+    "macos-arm64": "87e4b51b735e8445f6c445c7b4c0398273e40d34cd192bad8158736653600cd6",
+    "macos-x64": "07491a998fd741090501df9bbfe538f85568901a3a66c9e0368636509158727a"
   },
   "url": {
     "linux-arm64": "https://github.com/astral-sh/uv/releases/download/{{ version }}/uv-aarch64-unknown-linux-gnu.tar.gz",
