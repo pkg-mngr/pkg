@@ -3,12 +3,12 @@
   "name": "deno",
   "description": "A modern runtime for JavaScript and TypeScript.",
   "homepage": "https://deno.com",
-  "version": "2.4.5",
+  "version": "2.5.0",
   "sha256": {
-    "linux-arm64": "4e3e86739fe527c6891dbfa73799a5ec1b11f45898aaebf73bf3247c2e6a53dd",
-    "linux-x64": "6f9d8115bb3df582c0c5674507e906323b680be0f0b15e735d0cd5ec6be44444",
-    "macos-arm64": "d21374dc6aa02b493467ec2f6d865cab95cffebb89aab242dc1acf95274681ee",
-    "macos-x64": "cd46e3d5c06fbd21ef12742def67cc12ef83a2f99d44e00419615f99de056574"
+    "linux-arm64": "81d2ef446954429f0dcbcb24cdce115e5bb2c3a3548b79c01b49ec959682ac9b",
+    "linux-x64": "4561adb06b13f287a3785276cb29f377b7ffb49d54290178223b037e161446d3",
+    "macos-arm64": "dcc5f190ed80f021a9766ffd3ec9379d3b877752e18606cc30f7d2a07066798b",
+    "macos-x64": "7b81603c8219a7ff034def4c1b1d04a25b27f5bf2388265f0d32a8c137d5ab95"
   },
   "url": {
     "linux-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-unknown-linux-gnu.zip",
@@ -17,20 +17,6 @@
     "macos-x64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-x86_64-apple-darwin.zip"
   },
   "scripts": {
-    "completions": {
-      "linux-arm64": [
-        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
-      ],
-      "linux-x64": [
-        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
-      ],
-      "macos-arm64": [
-        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
-      ],
-      "macos-x64": [
-        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
-      ]
-    },
     "install": {
       "linux-arm64": [
         "unzip deno-aarch64-unknown-linux-gnu.zip",
@@ -51,6 +37,20 @@
     },
     "latest": [
       "gh release list -R denoland/deno --json tagName --jq '.[0].tagName' | cut -c 2-"
-    ]
+    ],
+    "completions": {
+      "linux-arm64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "linux-x64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "macos-arm64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ],
+      "macos-x64": [
+        "deno completions zsh > {{ pkg.completions.zsh }}/_deno"
+      ]
+    }
   }
 }
