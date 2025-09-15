@@ -3,30 +3,22 @@
   "name": "juliaup",
   "description": "Julia installer and version multiplexer",
   "homepage": "https://julialang.org",
-  "version": "1.17.19",
+  "version": "1.18.0",
   "sha256": {
-    "macos-arm64": "8e0314dc39ca92610b68b6e590f97617d2c8296a4833c4038592be49025b49b5",
-    "macos-x64": "d1b7f1a951b8178d1fff91db77f4d216c7b91c25cdc3e5e1ae09bac18323788d",
-    "linux-arm64": "fb5c2b6e5ab38c816acb5ddd7251625cf157fd8b40ff993da9d9c769f6bf7cbd",
-    "linux-x64": "7b73c2c2b8693ff0bbb2e57be2af2cdc8de56827a60ebf7c289ca40338184bb0"
+    "linux-arm64": "660bbf03b6224d32b726b1aefdff249def3f498366861d7aa6882266ee7d3367",
+    "linux-x64": "484eda607df2c9cbb8e3bfe75b15d844e6fbb5dc3442f5611776989cfcc6d44f",
+    "macos-arm64": "b96c06a6f1fad8fddde58478a78e56aca3cef2545d7ddcd9b4d7d41c6bdd0ced",
+    "macos-x64": "10cf1092d16379beef9066be68c0f121b269d750f39eb56631ddc45299318e67"
   },
   "url": {
-    "macos-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
-    "macos-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz",
     "linux-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-unknown-linux-musl-portable.tar.gz",
-    "linux-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-unknown-linux-musl-portable.tar.gz"
+    "linux-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-unknown-linux-musl-portable.tar.gz",
+    "macos-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
+    "macos-x64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz"
   },
   "caveats": "To initialise `juliaup`, set a default toolchain by running `juliaup add release`.",
   "scripts": {
     "install": {
-      "macos-arm64": [
-        "tar -xf juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
-        "install julia juliaup {{ pkg.bin_dir }}"
-      ],
-      "macos-x64": [
-        "tar -xf juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz",
-        "install julia juliaup {{ pkg.bin_dir }}"
-      ],
       "linux-arm64": [
         "tar -xf juliaup-{{ version }}-aarch64-unknown-linux-musl-portable.tar.gz",
         "install julia juliaup {{ pkg.bin_dir }}"
@@ -34,22 +26,30 @@
       "linux-x64": [
         "tar -xf juliaup-{{ version }}-x86_64-unknown-linux-musl-portable.tar.gz",
         "install julia juliaup {{ pkg.bin_dir }}"
+      ],
+      "macos-arm64": [
+        "tar -xf juliaup-{{ version }}-aarch64-apple-darwin-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
+      ],
+      "macos-x64": [
+        "tar -xf juliaup-{{ version }}-x86_64-apple-darwin-portable.tar.gz",
+        "install julia juliaup {{ pkg.bin_dir }}"
       ]
     },
     "latest": [
       "gh release list -R JuliaLang/juliaup --exclude-pre-releases --json tagName --jq '.[0].tagName' | cut -c 2-"
     ],
     "completions": {
-      "macos-arm64": [
-        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
-      ],
-      "macos-x64": [
-        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
-      ],
       "linux-arm64": [
         "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
       ],
       "linux-x64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ],
+      "macos-arm64": [
+        "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
+      ],
+      "macos-x64": [
         "juliaup completions zsh > {{ pkg.completions.zsh }}/_juliaup"
       ]
     }
