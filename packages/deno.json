@@ -3,12 +3,12 @@
   "name": "deno",
   "description": "A modern runtime for JavaScript and TypeScript.",
   "homepage": "https://deno.com",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "sha256": {
-    "linux-arm64": "81d2ef446954429f0dcbcb24cdce115e5bb2c3a3548b79c01b49ec959682ac9b",
-    "linux-x64": "4561adb06b13f287a3785276cb29f377b7ffb49d54290178223b037e161446d3",
-    "macos-arm64": "dcc5f190ed80f021a9766ffd3ec9379d3b877752e18606cc30f7d2a07066798b",
-    "macos-x64": "7b81603c8219a7ff034def4c1b1d04a25b27f5bf2388265f0d32a8c137d5ab95"
+    "linux-arm64": "fa9822bf4fae820126b4fe3f1925010c14ca5f626f5ad743b3d6c3c20e33ad1a",
+    "linux-x64": "bceddde4ff520f21c3767d893fe3d2d83df788346d3ad6f03d8abcd0392eb3ab",
+    "macos-arm64": "f742a8eb400a370557fc988418dcfc95ac59c3f5bf996b47db92d868b158eb0a",
+    "macos-x64": "4d15276fa2d5e3d4ad13569fb95acb40ee2f03ba1f662a4215fcc2c60ff46216"
   },
   "url": {
     "linux-arm64": "https://github.com/denoland/deno/releases/download/v{{ version }}/deno-aarch64-unknown-linux-gnu.zip",
