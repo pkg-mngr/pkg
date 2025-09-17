@@ -3,12 +3,12 @@
   "name": "flyctl",
   "description": "Command line tools for fly.io services",
   "homepage": "https://fly.io",
-  "version": "0.3.180",
+  "version": "0.3.181",
   "sha256": {
-    "linux-arm64": "cbce3d81caa1535f69a37ce192d3f267d22e3c78c91bbd5a59608a41ca961b09",
-    "linux-x64": "f2e63712f466e1aa6917718bf20ad343161b24fba45e3eed68f401f48028a4ea",
-    "macos-arm64": "f0c8b7fa0e0e8a030228e9d60a2c1546e51ecd2c7637f7c58a963302e80b09a9",
-    "macos-x64": "7c0245ab304a924bd9dfa18b85ae23f6ae386236c390b1763ce27b1f738b29b9"
+    "linux-arm64": "04ea4a1ed0a4f3e51c1bb6cf0572782ece7acf7c15071b35921a332e446e52d3",
+    "linux-x64": "dfe87f643f9966e483a3df5fd1d976ae90d4da8591b386a7972c933a16d4d404",
+    "macos-arm64": "3634a3e7ad3525d06994e88974f0646b9fce55e18f257c0897cf88a335e1ecc1",
+    "macos-x64": "0c7b6c9a3cb9b37ca0a60e1461c93ef1e5ef8aa7f815970a7b21998cfc788a91"
   },
   "url": {
     "linux-arm64": "https://github.com/superfly/flyctl/releases/download/v{{ version }}/flyctl_{{ version }}_Linux_arm64.tar.gz",
