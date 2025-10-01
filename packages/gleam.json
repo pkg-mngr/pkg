@@ -3,12 +3,12 @@
   "name": "gleam",
   "description": "A friendly language for building type-safe, scalable systems!",
   "homepage": "https://gleam.run",
-  "version": "1.12.0",
+  "version": "1.13.0-rc1",
   "sha256": {
-    "linux-arm64": "eb9707e42e452d5bbfb48b12d81571a098238a5afb4b7d16c1d07df7089e2bde",
-    "linux-x64": "039a87bd7294d3cfd2425f56e8ffef508b170ecec42e760806833fb1e0319d49",
-    "macos-arm64": "885396e845fbbc014253dd95da493439b785641022fb92c45657b2b936cf317f",
-    "macos-x64": "fca2a8cf5424cfa096710c191bbf8c02b635ed0e6c0e2ed38b95eba5e8df0302"
+    "linux-arm64": "8725b6457fe0f2fbfe044046a2941b200d8e05a11bea961da9fd17047fc3d50d",
+    "linux-x64": "3fdc4becaf5e3f6f53ed1e89527e415241a4eab7d81316aeac9a73b55da62922",
+    "macos-arm64": "a8f095d9f38413b2ad66a82b32465eaea6cf39c34927ea5a07b3aacaf0ae9d49",
+    "macos-x64": "2237e801b0d7a01df3ffd67c1de06d04045dc496ecb8d6d33c727504398f2972"
   },
   "url": {
     "linux-arm64": "https://github.com/gleam-lang/gleam/releases/download/v{{ version }}/gleam-v{{ version }}-aarch64-unknown-linux-musl.tar.gz",
