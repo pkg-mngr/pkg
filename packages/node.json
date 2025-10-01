@@ -3,12 +3,12 @@
   "name": "node",
   "description": "Node.js JavaScript runtime",
   "homepage": "https://nodejs.org",
-  "version": "24.8.0",
+  "version": "24.9.0",
   "sha256": {
-    "linux-arm64": "5eb16b14af5a5f494ed54770822144e847c744fe590f8df093ad4927cf3dd7fd",
-    "linux-x64": "daf68404b478b4c3616666580d02500a24148c0f439e4d0134d65ce70e90e655",
-    "macos-arm64": "d81191a1866760eb918caa976c023036bc1fc7405ea31b148905211522045767",
-    "macos-x64": "6fd8496b59baa8f86a24e3eb03308b763091716ffc6b6e1094d1a5e5696dd6dd"
+    "linux-arm64": "dab232a90169737a48149149dd6707e7fdcbaefbaa94b4871047a38e93db947f",
+    "linux-x64": "d57d6c28a35785f58f33899a0aa0bfc83f7a8ef4448b6cf3f7d0961efc7b9189",
+    "macos-arm64": "961024296c2a8e60daed0784f8b61e0fab5c51d197502a92eff052c72b53209b",
+    "macos-x64": "6c9ac12d3160538d96d456dc59a8fec1479e3f8b20bfc0d61bc809eb9ec11417"
   },
   "url": {
     "linux-arm64": "https://nodejs.org/dist/v{{ version }}/node-v{{ version }}-linux-arm64.tar.gz",
