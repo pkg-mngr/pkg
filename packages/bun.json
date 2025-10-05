@@ -3,12 +3,12 @@
   "name": "bun",
   "description": "Incredibly fast JavaScript runtime, bundler, test runner, and package manager – all in one",
   "homepage": "https://bun.com",
-  "version": "1.2.22",
+  "version": "1.2.23",
   "sha256": {
-    "linux-arm64": "a97c687fb5e54de4e2fb0869a7ac9a2d9c3af75ac182e2b68138c1dd8f98131b",
-    "linux-x64": "4c446af1a01d7b40e1e11baebc352f9b2bfd12887e51b97dd3b59879cee2743a",
-    "macos-arm64": "eb8c7e09cbea572414a0a367848e1acbf05294a946a594405a014b1fb3b3fc76",
-    "macos-x64": "a7484721a7ead45887c812e760b124047e663173cf2a3ba7c5aa1992cb22cd3e"
+    "linux-arm64": "6a7a98c546d084a845deda62eb2a5b94a6a14a63ea81cf9186d46bf55bf910a9",
+    "linux-x64": "cf0ed0a920799d576ffde4e0cae66d732bf23c2530407f26f59c7831dffe1f0e",
+    "macos-arm64": "22f5fa3fff72b0d3b8e7e0f8051ecadf2e41920d474ac62db5279144809c9005",
+    "macos-x64": "9729c400e50bc3c86b6640e42af2ff5c057b5df3b27c93b40ed47c16b5e6a5e6"
   },
   "url": {
     "linux-arm64": "https://github.com/oven-sh/bun/releases/download/bun-v{{ version }}/bun-linux-aarch64.zip",
