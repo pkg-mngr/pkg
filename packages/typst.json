@@ -3,12 +3,12 @@
   "name": "typst",
   "description": "A new markup-based typesetting system that is powerful and easy to learn.",
   "homepage": "https://typst.app",
-  "version": "0.13.1",
+  "version": "0.14.0-rc.1",
   "sha256": {
-    "linux-arm64": "4f5b7ee6e57fb639019ee0f6bffcf940edad228ede6ff5269a9f05a1544ceed4",
-    "linux-x64": "7d214bfeffc2e585dc422d1a09d2b144969421281e8c7f5d784b65fc69b5673f",
-    "macos-arm64": "541e4f9eaca3f34ee865f81fc663e4839cb84d6253f71a372cd855b0a7283213",
-    "macos-x64": "4dabfe647f7f01ed9cc13ad8196a6c7f5e16f0732821b522d50740d3a9f5207b"
+    "linux-arm64": "77463dbd878636f2fdfd77d6f76d27b8a6da2fc09960cb52cbd8e8f08b64d76e",
+    "linux-x64": "4e659425e8920d6ebb0917c34d581d16f7afa1b25bb73d1f8a77beb5707900f5",
+    "macos-arm64": "423beda867e917f58c6df8edf966965efc28d82edf3904b877f21fa2c25210dd",
+    "macos-x64": "ccf8a052567fa9cca438796f3262fe8cd9bfc8ab17ce3be0febddf6c6eb01438"
   },
   "url": {
     "linux-arm64": "https://github.com/typst/typst/releases/download/v{{ version }}/typst-aarch64-unknown-linux-musl.tar.xz",

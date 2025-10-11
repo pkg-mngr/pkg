@@ -3,12 +3,12 @@
   "name": "juliaup",
   "description": "Julia installer and version multiplexer",
   "homepage": "https://julialang.org",
-  "version": "1.18.0",
+  "version": "1.18.3",
   "sha256": {
-    "linux-arm64": "660bbf03b6224d32b726b1aefdff249def3f498366861d7aa6882266ee7d3367",
-    "linux-x64": "484eda607df2c9cbb8e3bfe75b15d844e6fbb5dc3442f5611776989cfcc6d44f",
-    "macos-arm64": "b96c06a6f1fad8fddde58478a78e56aca3cef2545d7ddcd9b4d7d41c6bdd0ced",
-    "macos-x64": "10cf1092d16379beef9066be68c0f121b269d750f39eb56631ddc45299318e67"
+    "linux-arm64": "55a6ece7b763e58f2f26bfb569f098a057545467bc86c94544d37789d08bc952",
+    "linux-x64": "1d8c076d970d84f3aa77a2ddc4deec4af503bce67cbb0169ed8f1c40378db1fa",
+    "macos-arm64": "5a061d747a851e112a35ac9012e18d29005601f8f1a2624602a2ac8fe4eece8d",
+    "macos-x64": "ca81b393aed25a9acba9907d51d95546928d0e6a18870977860b998acfbee2b8"
   },
   "url": {
     "linux-arm64": "https://github.com/JuliaLang/juliaup/releases/download/v{{ version }}/juliaup-{{ version }}-aarch64-unknown-linux-musl-portable.tar.gz",
