@@ -3,12 +3,12 @@
   "name": "jj",
   "description": "A Git-compatible VCS that is both simple and powerful",
   "homepage": "https://jj-vcs.github.io/jj/",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "sha256": {
-    "linux-arm64": "2ce8822f2161d4eaee96ce2bc7d6f791ace38913db02487116103d41c8b58ca4",
-    "linux-x64": "2703e13b3d5623aa67e19358b257fe5a761faa883bd0bd716d0b1c801a214093",
-    "macos-arm64": "1ba71332ab6ddf578cfb0d74f781c3e06a48125312b31cdd44789941ff6f8b5c",
-    "macos-x64": "63c48d3899b52eb26ac0a3258101fff4765f74c4ceb70eae3dd8350126a73cf5"
+    "linux-arm64": "39b5d689bcdc37256fe5f9ed9caccf5e73b310d1f86848fdf610a7bea9d75c14",
+    "linux-x64": "1e8e1ede656fecba91ceb8248a76402a110017ad677d0ecfd1f2040f5543cfa3",
+    "macos-arm64": "8893d34ff0c76e16fdf46ba8771ea2498294957aec5efb0618de15cc493aee27",
+    "macos-x64": "807417125e574432b71c4568a0e2d6168c30af3b59e64ce02a45a54cf0880bd7"
   },
   "url": {
     "linux-arm64": "https://github.com/jj-vcs/jj/releases/download/v{{ version }}/jj-v{{ version }}-aarch64-unknown-linux-musl.tar.gz",
