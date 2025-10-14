@@ -3,21 +3,31 @@
   "name": "cmake",
   "description": "A Powerful Software Build System",
   "homepage": "https://cmake.org",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "sha256": {
-    "macos-arm64": "3cd1da5341618645bdc85a3b99e273f29c4d48db2f545925a658db992e61f6f9",
-    "macos-x64": "3cd1da5341618645bdc85a3b99e273f29c4d48db2f545925a658db992e61f6f9",
-    "linux-arm64": "a34bc76b1ebe76ca0bbd6067f68d4614b93221912770dc08f466aec1923e9bef",
-    "linux-x64": "5a6c61cb62b38e153148a2c8d4af7b3d387f0c8c32b6dbceb5eb4af113efd65a"
+    "linux-arm64": "0634996f918b3bab11f45522899c81c987b09c9a64d15f6a0d2bb51c42099534",
+    "linux-x64": "773cc679c3a7395413bd096523f8e5d6c39f8718af4e12eb4e4195f72f35e4ab",
+    "macos-arm64": "3be85f5b999e327b1ac7d804cbc9acd767059e9f603c42ec2765f6ab68fbd367",
+    "macos-x64": "3be85f5b999e327b1ac7d804cbc9acd767059e9f603c42ec2765f6ab68fbd367"
   },
   "url": {
-    "macos-arm64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-macos-universal.tar.gz",
-    "macos-x64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-macos-universal.tar.gz",
     "linux-arm64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-linux-aarch64.tar.gz",
-    "linux-x64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-linux-x86_64.tar.gz"
+    "linux-x64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-linux-x86_64.tar.gz",
+    "macos-arm64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-macos-universal.tar.gz",
+    "macos-x64": "https://github.com/Kitware/CMake/releases/download/v{{ version }}/cmake-{{ version }}-macos-universal.tar.gz"
   },
   "scripts": {
     "install": {
+      "linux-arm64": [
+        "tar -xf cmake-{{ version }}-linux-aarch64.tar.gz",
+        "mv cmake-{{ version }}-linux-aarch64 {{ pkg.opt_dir }}/cmake",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
+      ],
+      "linux-x64": [
+        "tar -xf cmake-{{ version }}-linux-x86_64.tar.gz",
+        "mv cmake-{{ version }}-linux-x86_64 {{ pkg.opt_dir }}/cmake",
+        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
+      ],
       "macos-arm64": [
         "tar -xf cmake-{{ version }}-macos-universal.tar.gz",
         "mkdir -p {{ pkg.opt_dir }}/cmake",
@@ -30,16 +40,6 @@
         "mkdir -p {{ pkg.opt_dir }}/cmake",
         "mv cmake-{{ version }}-macos-universal/CMake.app/Contents/{bin,doc,man,share} {{ pkg.opt_dir }}/cmake/",
         "rm {{ pkg.opt_dir }}/cmake/bin/cmake-gui",
-        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
-      ],
-      "linux-arm64": [
-        "tar -xf cmake-{{ version }}-linux-aarch64.tar.gz",
-        "mv cmake-{{ version }}-linux-aarch64 {{ pkg.opt_dir }}/cmake",
-        "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
-      ],
-      "linux-x64": [
-        "tar -xf cmake-{{ version }}-linux-x86_64.tar.gz",
-        "mv cmake-{{ version }}-linux-x86_64 {{ pkg.opt_dir }}/cmake",
         "ln -sf {{ pkg.opt_dir }}/cmake/bin/* {{ pkg.bin_dir }}"
       ]
     },
